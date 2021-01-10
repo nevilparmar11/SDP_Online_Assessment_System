@@ -1,6 +1,20 @@
 from django.contrib import admin
-from django.contrib.auth.models import User
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.forms import UserChangeForm
 from .models import User
-# Register your models here.
 
-admin.site.register(User)
+
+class MyUserChangeForm(UserChangeForm):
+    class Meta(UserChangeForm.Meta):
+        model = User
+
+# This will make sure that password is not shown in plaintext in admin site
+class MyUserAdmin(UserAdmin):
+    form = MyUserChangeForm
+
+    fieldsets = UserAdmin.fieldsets + (
+        (None, {'fields': ('isStudent' ,'profilePicture')}),
+    )
+
+
+admin.site.register(User, MyUserAdmin)
