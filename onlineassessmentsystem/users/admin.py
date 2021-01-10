@@ -8,13 +8,12 @@ class MyUserChangeForm(UserChangeForm):
     class Meta(UserChangeForm.Meta):
         model = User
 
-# This will make sure that password is not shown in plaintext in admin site
+# To store password from Admin Panel in HashedForm instead of storing directly
 class MyUserAdmin(UserAdmin):
     form = MyUserChangeForm
 
     fieldsets = UserAdmin.fieldsets + (
         (None, {'fields': ('isStudent' ,'profilePicture')}),
     )
-
 
 admin.site.register(User, MyUserAdmin)
