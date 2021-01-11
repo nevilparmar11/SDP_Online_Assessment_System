@@ -1,7 +1,6 @@
 from django.db import models
 from classroom.models import Classroom
 
-
 # Create your models here.
 
 class Lab(models.Model):

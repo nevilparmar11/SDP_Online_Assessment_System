@@ -3,7 +3,6 @@ from contest.models import Contest
 from lab.models import Lab
 from users.models import User
 
-
 # Create your models here.
 
 class Problem(models.Model):
@@ -21,12 +20,12 @@ class Problem(models.Model):
     difficulty = models.CharField(choices=DIFFICULTY, max_length=6)
     points = models.IntegerField()
     durationTime = models.IntegerField()
-    doesBelongToContest = models.BooleanField(default=False)  # TRUE => CONTEST , FALSE => LAB
+    doesBelongToContest = models.BooleanField(default=False)
 
 
 class ProblemComment(models.Model):
     pcId = models.AutoField(primary_key=True)
-    userId = models.ForeignKey(User, on_delete=models.DO_NOTHING)  # TODO: CHANGE IT TO FOREIGN KEY OF USER TABLE
+    userId = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     problemId = models.ForeignKey(Problem, on_delete=models.CASCADE)
     comment = models.CharField(max_length=2000)
 

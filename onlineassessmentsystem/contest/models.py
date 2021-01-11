@@ -1,11 +1,8 @@
 from enum import Enum
-
 from django.db import models
 from classroom.models import Classroom
 
-
 # Create your models here.
-
 
 class Contest(models.Model):
     contestId = models.AutoField(primary_key=True)
