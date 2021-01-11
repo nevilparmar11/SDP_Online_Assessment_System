@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'onlineassessmentsystem.urls'
@@ -135,6 +136,7 @@ STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/uploads/'
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 # CUSTOM
 AUTH_USER_MODEL = 'users.User'
@@ -144,3 +146,5 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'onlineassessment.sdp@gmail.com' # this also can be done using the system variable , i.e. OS ENV variable
 EMAIL_HOST_PASSWORD = 'sdp@2020' # this can be done using the system variable also
+
+django_heroku.settings(locals())
