@@ -26,6 +26,12 @@ def loginUser(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
+            request.session['userId'] = user.id
+            request.session['userName'] = username
+            if user.isStudent:
+                request.session['role'] = 'student'
+            else:
+                request.session['role'] = 'faculty'
             return redirect('/users/home')
         else:
             return render(request, "users/login.html",
