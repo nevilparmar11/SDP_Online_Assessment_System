@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import User
+from .decorators import student_required,faculty_required
 
 '''
 Function to show homepage of the site
@@ -73,7 +74,7 @@ Function to redirect user to custom 404 Error Page
 '''   
 
 
-def internalServerError(request,exception):
+def internalServerError(request):
     response  = render (request,'500.html')
     response.status_code = 500
     return response
