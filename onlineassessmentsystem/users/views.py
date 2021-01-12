@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from .models import User
 
 '''
 Function to show homepage of the site
 '''
-
 
 def index(request):
     return render(request, 'index.html')
@@ -40,7 +40,7 @@ def loginUser(request):
 Function to redirect user to home page
 '''
 
-
+@login_required(login_url='/users/login')
 def home(request):
     if request.user.isStudent:
         return render(request, 'users/studentDashboard.html')
@@ -50,6 +50,30 @@ def home(request):
 '''
 Function to Logout user
 '''
+
+
 def logoutUser(request):
     logout(request)
     return redirect('/users/login')
+
+
+'''
+Function to redirect user to custom 404 Error Page 
+'''   
+
+
+def pageNotFound(request,exception):
+    response  = render (request,'404.html')
+    response.status_code = 404
+    return response
+
+
+'''
+Function to redirect user to custom 404 Error Page 
+'''   
+
+
+def internalServerError(request,exception):
+    response  = render (request,'500.html')
+    response.status_code = 500
+    return response

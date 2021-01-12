@@ -17,6 +17,9 @@ from django.contrib import admin
 from django.urls import path,include
 from users import views as user_views
 
+handler404 = 'users.views.pageNotFound'
+handler500 = 'users.views.internalServerError'
+
 urlpatterns = [
     path('', user_views.index),
     path('admin/', admin.site.urls),
