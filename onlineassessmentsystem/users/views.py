@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from .models import User
 
 '''
@@ -46,3 +46,10 @@ def home(request):
         return render(request, 'users/studentDashboard.html')
     else:
         return render(request, 'users/facultyDashboard.html')
+
+'''
+Function to Logout user
+'''
+def logoutUser(request):
+    logout(request)
+    return redirect('/users/login')

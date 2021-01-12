@@ -1,3 +1,6 @@
 faculty
 <br>
-{{ request.user.profile.username }}
+{{ user.username }}
+{{ user.is_active }}
+<br>
+<a href="/users/logout">Logout</a>
