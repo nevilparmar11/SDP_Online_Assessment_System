@@ -10,4 +10,4 @@ def get_file_path(instance, filename):
 
 class User(AbstractUser):
     isStudent = models.BooleanField(default=False, verbose_name="student")
-    profilePicture = models.ImageField(upload_to=get_file_path, default="profiles/default.png")
+    profilePicture = models.ImageField(upload_to=get_file_path, default="profiles/default.png", verbose_name="Profile Picture")
