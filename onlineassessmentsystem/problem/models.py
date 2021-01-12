@@ -3,6 +3,7 @@ from contest.models import Contest
 from lab.models import Lab
 from users.models import User
 
+
 # Create your models here.
 
 class Problem(models.Model):
