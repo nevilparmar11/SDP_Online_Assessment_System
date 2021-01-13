@@ -23,14 +23,14 @@ def create(request):
     if request.method == "GET":
         return render(request, "classroom/create.html")
 
-    userId = request.user
+    user = request.user
     name = request.POST['name']
     description = request.POST['description']
     semester = request.POST['semester']
     year = int(datetime.now().strftime('%Y'))
     classroomCode = uuid.uuid4()
     branch = request.POST['branch']
-    newClassroom = Classroom(userId=userId, name=name, description=description,
+    newClassroom = Classroom(user=user, name=name, description=description,
                              semester=semester, year=year,
                              classroomCode=classroomCode, branch=branch)
     newClassroom.save()
