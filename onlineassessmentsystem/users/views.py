@@ -1,8 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import User
 from .decorators import student_required,faculty_required
+from urllib.parse import urlencode
+
+#To encode a login redirect message string into query string parameter
+loginRedirectMessage = urlencode({'msg' : 'Please Login' })
 
 '''
 Function to show homepage of the site
@@ -19,7 +23,14 @@ Function to authenticate a user.
 
 def loginUser(request):
     if request.method == "GET":
-        return render(request, "users/login.html")
+        data = {}
+        msg = request.GET.get('msg')
+        if msg is not None:
+            data["errorMessage"] = msg
+        nextUrl = request.GET.get('next')
+        if nextUrl is not None:
+            data["next"] = nextUrl
+        return render(request, "users/login.html",data)
     else:
         username = request.POST["username"]
         password = request.POST["password"]
@@ -27,7 +38,9 @@ def loginUser(request):
         if user is not None:
             login(request, user)
             request.session['userId'] = user.id
-            request.session['userName'] = username
+            request.session['userName'] = username    
+            if 'next' in request.POST:
+                return redirect(request.POST['next'])
             if user.isStudent:
                 request.session['role'] = 'student'
             else:
@@ -47,7 +60,7 @@ def loginUser(request):
 Function to redirect user to home page
 '''
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?'+loginRedirectMessage)
 def home(request):
     if request.user.isStudent:
         return render(request, 'users/studentDashboard.html')
