@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Join Classroom</title>
+</head>
+<body>
+    <form method="POST" action="/classroom/join/" novalidate="">
+        {% csrf_token %}
+        <div>
+            {% if errorMessage %}
+                {{ errorMessage }}
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="classroomCode">Classroom Code</label>
+            <input id="classroomCode" type="text" value="{{ classroomCode }}"
+                   name="classroomCode" value="" required autofocus>
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-primary btn-block">
+                Join
+            </button>
+        </div>
+
+    </form>
+</body>
+</html>

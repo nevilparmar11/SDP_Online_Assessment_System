@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Classroom</title>
+</head>
+<body>
+
+        Classroom Id : {{ classroom.classId }}<br>
+        Name : {{ classroom.name }}<br>
+        Description : {{ classroom.description }}<br>
+        Owner : {{ classroom.user.username }}<br>
+        Semester : {{ classroom.semester }}<br>
+        Year : {{ classroom.year }}<br>
+        Branch : {{ classroom.branch }}<br>
+        Class Code : {{ classroom.classroomCode }}<br>
+        {% if user.isStudent %}
+        {% else %}
+            <a href="/classroom/edit?id={{ classroom.classId }}">
+                <button type="submit" class="btn btn-primary btn-block">
+                    Edit
+                </button>
+            </a>
+            <a href="/classroom/delete?id={{ classroom.classId }}">
+                <button type="submit" class="btn btn-primary btn-block">
+                    Delete
+                </button>
+            </a>
+        {% endif %}
+
+</body>
+</html>
