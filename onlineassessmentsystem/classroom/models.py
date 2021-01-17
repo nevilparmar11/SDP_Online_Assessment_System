@@ -22,3 +22,9 @@ class ClassComments(models.Model):
     classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
     comment = models.CharField(max_length=2000)
     attachmentPath = models.FileField(upload_to="classAttachments/", max_length=254)
+
+
+class ClassroomStudents(models.Model):
+    classStudentId = models.AutoField(primary_key=True)
+    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)

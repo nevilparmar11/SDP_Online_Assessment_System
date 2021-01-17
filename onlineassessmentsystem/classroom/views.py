@@ -2,7 +2,9 @@ import uuid
 from datetime import datetime
 
 from django.shortcuts import render, redirect
-from .models import Classroom
+from .models import Classroom, ClassroomStudents
+from users.decorators import faculty_required, student_required
+from django.core.exceptions import ObjectDoesNotExist
 
 '''
     Function to get all Classroom list details
@@ -10,8 +12,13 @@ from .models import Classroom
 
 
 def list(request):
-    classrooms = Classroom.objects.all()
-    return render(request, './classroom/list.html', {'classrooms': classrooms})
+    user = request.user
+    if user.isStudent:
+        classroomStudents = ClassroomStudents.objects.all().select_related('student')
+        return render(request, './classroom/list.html', {'classroomStudents': classroomStudents})
+    else:
+        classrooms = Classroom.objects.filter(user=user)
+        return render(request, './classroom/list.html', {'classrooms': classrooms})
 
 
 '''
@@ -19,6 +26,7 @@ def list(request):
 '''
 
 
+@faculty_required()
 def create(request):
     if request.method == "GET":
         return render(request, "classroom/create.html")
@@ -43,8 +51,12 @@ def create(request):
 
 
 def view(request):
-    classId = request.GET['id']
-    classroom = Classroom.objects.get(classId=classId)
+    try:
+        classId = request.GET['id']
+        classroom = Classroom.objects.get(classId=classId)
+    except ObjectDoesNotExist:
+        return render(request, '404.html', {})
+
     return render(request, './classroom/view.html', {'classroom': classroom})
 
 
@@ -53,14 +65,22 @@ def view(request):
 '''
 
 
+@faculty_required()
 def edit(request):
     if request.method == "GET":
-        classId = request.GET['id']
-        classroom = Classroom.objects.get(classId=classId)
+        try:
+            classId = request.GET['id']
+            classroom = Classroom.objects.get(classId=classId)
+        except ObjectDoesNotExist:
+            return render(request, '404.html', {})
+
         return render(request, "classroom/edit.html", {'classroom': classroom})
 
-    classId = request.POST['classId']
-    classroom = Classroom.objects.get(classId=classId)
+    try:
+        classId = request.POST['classId']
+        classroom = Classroom.objects.get(classId=classId)
+    except ObjectDoesNotExist:
+        return render(request, '404.html', {})
 
     classroom.name = request.POST['name']
     classroom.description = request.POST['description']
@@ -75,12 +95,69 @@ def edit(request):
 '''
 
 
+@faculty_required()
 def delete(request):
     if request.method == "GET":
-        classId = request.GET['id']
-        classroom = Classroom.objects.get(classId=classId)
+        try:
+            classId = request.GET['id']
+            classroom = Classroom.objects.get(classId=classId)
+        except ObjectDoesNotExist:
+            return render(request, '404.html', {})
+
         return render(request, "classroom/delete.html", {'classroom': classroom})
 
-    classId = request.POST['classId']
-    classroom = Classroom.objects.get(classId=classId).delete()
+    try:
+        classId = request.POST['classId']
+        classroom = Classroom.objects.get(classId=classId)
+    except ObjectDoesNotExist:
+        return render(request, '404.html', {})
+
+    classroom.delete()
+    return redirect('/classroom/')
+
+
+'''
+    Function to join classroom by Student
+'''
+
+
+@student_required()
+def joinClassroom(request):
+    if request.method == "GET":
+        return render(request, "classroom/joinClassroom.html", {})
+
+    # if classroom code is not valid or classroom not exists then
+    try:
+        user = request.user
+        classroomCode = request.POST["classroomCode"]
+        classroom = Classroom.objects.get(classroomCode=classroomCode)
+    except ObjectDoesNotExist:
+        return render(request, '404.html', {})
+
+    # if Student had already joined the same class then
+    try:
+        classroomStudent = ClassroomStudents.objects.get(classroom=classroom, student=user)
+        return render(request, "classroom/joinClassroom.html", {"errorMessage": "You Have already Joined the Classroom"})
+    except ObjectDoesNotExist:
+        newClassroomStudent = ClassroomStudents(classroom=classroom, student=user)
+        newClassroomStudent.save()
+        return redirect('/classroom/')
+
+
+'''
+    Function to leave classroom by Student 
+'''
+
+
+@student_required()
+def leaveClassroom(request):
+    try:
+        user = request.user
+        classroomCode = request.POST["classroomCode"]
+        classroom = Classroom.objects.get(classroomCode=classroomCode)
+        classroomStudent = ClassroomStudents.objects.get(classroom=classroom, student=user)
+    except ObjectDoesNotExist:
+        return render(request, '404.html', {})
+
+    classroomStudent.delete()
     return redirect('/classroom/')
