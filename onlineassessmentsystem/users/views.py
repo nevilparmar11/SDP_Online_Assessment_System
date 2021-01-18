@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import User
 from .decorators import student_required, faculty_required
 from urllib.parse import urlencode
 

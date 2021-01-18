@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\nevil\PycharmProjects\onlineassessmentsystem\venv
+set VIRTUAL_ENV=F:\Ayan\Sem6\SDP\Project\SDP_Online_Assessment_System\onlineassessmentsystem\venv
 
 if not defined PROMPT set PROMPT=$P$G
 
