@@ -1,3 +1,14 @@
 faculty
 <br>
-{{ request.user.profile.username }}
+{{ user.username }}
+{{ user.is_active }}
+<br>
+<a href="/classroom/">Classrooms</a>
+<a href="/users/logout">Logout</a>
+
+<hr>
+
+using session :- <br>
+{{ request.session.userId }}
+{{ request.session.userName }}
+{{ request.session.role }}

@@ -114,4 +114,7 @@ dmypy.json
 .pyre/
 
 #pycharm metadata
-.idea
+.idea/
+/onlineassessmentsystem/.idea
+/onlineassessmentsystem/venv
+/onlineassessmentsystem/db.sqlite3

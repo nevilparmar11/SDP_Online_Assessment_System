@@ -32,6 +32,9 @@
                                     {% if errorMessage %}
                                         {{ errorMessage }}
                                     {% endif %}
+									{% if next %}
+										<input type="hidden" name="next" value="{{ next }}">
+									{% endif %}
                                 </div>
                                 <div class="form-group">
 									<label for="username">Username</label>

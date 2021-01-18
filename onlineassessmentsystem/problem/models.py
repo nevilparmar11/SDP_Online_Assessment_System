@@ -3,12 +3,13 @@ from contest.models import Contest
 from lab.models import Lab
 from users.models import User
 
+
 # Create your models here.
 
 class Problem(models.Model):
     problemId = models.AutoField(primary_key=True)
-    contestId = models.ForeignKey(Contest, on_delete=models.CASCADE, default="")
-    labId = models.ForeignKey(Lab, on_delete=models.CASCADE, default="")
+    contest = models.ForeignKey(Contest, on_delete=models.CASCADE, default="")
+    lab = models.ForeignKey(Lab, on_delete=models.CASCADE, default="")
     title = models.CharField(null=False, max_length=50, default="DEFAULT-TITLE")
     description = models.CharField(null=False, max_length=1000, default="Default Problem description")
 
@@ -25,13 +26,13 @@ class Problem(models.Model):
 
 class ProblemComment(models.Model):
     pcId = models.AutoField(primary_key=True)
-    userId = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    problemId = models.ForeignKey(Problem, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
     comment = models.CharField(max_length=2000)
 
 
 class TestCase(models.Model):
     testCaseId = models.AutoField(primary_key=True)
-    problemId = models.ForeignKey(Problem, on_delete=models.CASCADE)
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
     inputFile = models.FileField(upload_to=None, max_length=254)
     outputFile = models.FileField(upload_to=None, max_length=254)

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Classroom List</title>
+</head>
+<body>
+    <a href="/users/home">Home</a>
+    {% if user.isStudent %}
+
+        <a href="/classroom/join">
+            <button type="submit" class="btn btn-primary btn-block">
+                Join New Classroom
+            </button>
+        </a>
+        <br><hr>
+
+        {% for classroomStudent in classroomStudents %}
+            Classroom Id : {{ classroomStudent.classroom.classId }}<br>
+            Name : {{ classroomStudent.classroom.name }}<br>
+            Semester : {{ classroomStudent.classroom.semester }}<br>
+            branch : {{ classroomStudent.classroom.branch }}
+            classroomCode : {{ classroomStudent.classroom.classroomCode }}<br>
+            <a href="/classroom/view?id={{ classroomStudent.classroom.classId }}">
+                <button type="submit" class="btn btn-primary btn-block">
+                    Select
+                </button>
+            </a>
+            <form method="POST" action="/classroom/leave/" novalidate="">
+                {% csrf_token %}
+                <input id="classroomCode" type="hidden" value="{{ classroomStudent.classroom.classroomCode }}"
+                       name="classroomCode" >
+                <div>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Leave Class
+                    </button>
+                </div>
+            </form>
+        <br><br>
+    {% endfor %}
+
+    {% else %}
+
+        <a href="/classroom/create">
+            <button type="submit" class="btn btn-primary btn-block">
+                Create New Classroom
+            </button>
+        </a>
+        <br><hr>
+        {% for classroom in classrooms %}
+            Classroom Id : {{ classroom.classId }}<br>
+            Name : {{ classroom.name }}<br>
+            Semester : {{ classroom.semester }}<br>
+            branch : {{ classroom.branch }}
+            classroomCode : {{ classroom.classroomCode }}<br>
+            <a href="/classroom/view?id={{ classroom.classId }}">
+                <button type="submit" class="btn btn-primary btn-block">
+                    Select
+                </button>
+            </a>
+            <br><br>
+        {% endfor %}
+
+    {% endif %}
+
+</body>
+</html>

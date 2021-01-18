@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static%}
+<head>
+    <meta charset="UTF-8">
+    <title>Create Class</title>
+</head>
+<body>
+    <form method="POST" action="/classroom/create/" novalidate="">
+        {% csrf_token %}
+        <div>
+            {% if errorMessage %}
+                {{ errorMessage }}
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input id="name" type="text" value="{{ name }}"
+                   name="name" value="" required autofocus>
+        </div>
+
+        <div>
+            <label for="description">Description</label>
+            <textarea id="description" type="text" value="{{ description }}"
+                   name="description" value="" required autofocus>
+            </textarea>
+        </div>
+
+        Semester
+        <input id="semester" type="number" value="{{ semester }}" min="1" max="8"
+                   name="semester" value="" required autofocus>
+
+        Branch
+        <input id="branch" type="text" value="{{ branch }}"
+                   name="branch" value="" required autofocus>
+
+        <div>
+            <button type="submit" class="btn btn-primary btn-block">
+                Create
+            </button>
+        </div>
+    </form>
+</body>
+</html>
