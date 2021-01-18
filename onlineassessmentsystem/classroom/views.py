@@ -5,14 +5,19 @@ from django.shortcuts import render, redirect
 from .models import Classroom, ClassroomStudents
 from users.decorators import faculty_required, student_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth.decorators import login_required
 
 '''
     Function to get all Classroom list details
 '''
 
 
+@login_required(login_url='/users/login')
 def list(request):
+
     user = request.user
+
+    # classroom list will be shown according to th user type
     if user.isStudent:
         classroomStudents = ClassroomStudents.objects.all().select_related('student')
         return render(request, './classroom/list.html', {'classroomStudents': classroomStudents})
@@ -28,6 +33,7 @@ def list(request):
 
 @faculty_required()
 def create(request):
+
     if request.method == "GET":
         return render(request, "classroom/create.html")
 
@@ -50,14 +56,33 @@ def create(request):
 '''
 
 
+@login_required(login_url='/users/login')
 def view(request):
+
+    user = request.user
+
+    # if requested classroom not exists then
     try:
         classId = request.GET['id']
         classroom = Classroom.objects.get(classId=classId)
     except ObjectDoesNotExist:
         return render(request, '404.html', {})
 
-    return render(request, './classroom/view.html', {'classroom': classroom})
+    if user.isStudent:
+
+        # if student has joined classroom then only it is to be viewed
+        try:
+            classroomStudent = ClassroomStudents.objects.get(student=user, classroom=classroom)
+            return render(request, './classroom/view.html', {'classroom': classroom})
+        except ObjectDoesNotExist:
+            return render(request, "accessDenied.html", {})
+    else:
+
+        # if faculty has created classroom then only it is to be viewed
+        if classroom.user == user:
+            return render(request, './classroom/view.html', {'classroom': classroom})
+        else:
+            return render(request, "accessDenied.html", {})
 
 
 '''
@@ -67,10 +92,17 @@ def view(request):
 
 @faculty_required()
 def edit(request):
+
     if request.method == "GET":
+
+        # if classroom not exists
         try:
             classId = request.GET['id']
             classroom = Classroom.objects.get(classId=classId)
+            # if classroom is not belonging to logged faculty user then
+            if classroom.user != request.user:
+                return render(request, 'accessDenied.html', {})
+
         except ObjectDoesNotExist:
             return render(request, '404.html', {})
 
@@ -79,6 +111,8 @@ def edit(request):
     try:
         classId = request.POST['classId']
         classroom = Classroom.objects.get(classId=classId)
+        if classroom.user != request.user:
+            return render(request, 'accessDenied.html', {})
     except ObjectDoesNotExist:
         return render(request, '404.html', {})
 
@@ -98,9 +132,14 @@ def edit(request):
 @faculty_required()
 def delete(request):
     if request.method == "GET":
+
+        # if classroom not exists then
         try:
             classId = request.GET['id']
             classroom = Classroom.objects.get(classId=classId)
+            # if classroom is not belonging to logged faculty user then
+            if classroom.user != request.user:
+                return render(request, 'accessDenied.html', {})
         except ObjectDoesNotExist:
             return render(request, '404.html', {})
 
@@ -109,6 +148,8 @@ def delete(request):
     try:
         classId = request.POST['classId']
         classroom = Classroom.objects.get(classId=classId)
+        if classroom.user != request.user:
+            return render(request, 'accessDenied.html', {})
     except ObjectDoesNotExist:
         return render(request, '404.html', {})
 
@@ -137,7 +178,8 @@ def joinClassroom(request):
     # if Student had already joined the same class then
     try:
         classroomStudent = ClassroomStudents.objects.get(classroom=classroom, student=user)
-        return render(request, "classroom/joinClassroom.html", {"errorMessage": "You Have already Joined the Classroom"})
+        return render(request, "classroom/joinClassroom.html",
+                      {"errorMessage": "You Have already Joined the Classroom"})
     except ObjectDoesNotExist:
         newClassroomStudent = ClassroomStudents(classroom=classroom, student=user)
         newClassroomStudent.save()
@@ -151,6 +193,8 @@ def joinClassroom(request):
 
 @student_required()
 def leaveClassroom(request):
+
+    # if student haven't joined classroom or classroom not exists
     try:
         user = request.user
         classroomCode = request.POST["classroomCode"]
