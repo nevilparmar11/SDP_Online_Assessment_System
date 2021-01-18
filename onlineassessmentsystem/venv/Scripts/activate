@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\nevil\PycharmProjects\onlineassessmentsystem\venv"
+VIRTUAL_ENV="F:\Ayan\Sem6\SDP\Project\SDP_Online_Assessment_System\onlineassessmentsystem\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
