@@ -26,16 +26,11 @@
                     Select
                 </button>
             </a>
-            <form method="POST" action="/classroom/leave/" novalidate="">
-                {% csrf_token %}
-                <input id="classroomCode" type="hidden" value="{{ classroomStudent.classroom.classroomCode }}"
-                       name="classroomCode" >
-                <div>
-                    <button type="submit" class="btn btn-primary btn-block">
-                        Leave Class
-                    </button>
-                </div>
-            </form>
+            <a href="/classroom/leave?id={{ classroomStudent.classroom.classId }}">
+                <button type="submit" class="btn btn-primary btn-block">
+                    Leave Class
+                </button>
+            </a>
         <br><br>
     {% endfor %}
 
