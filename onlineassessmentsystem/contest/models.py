@@ -10,8 +10,8 @@ class Contest(models.Model):
     classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
     title = models.CharField(null=False, max_length=50, default="DEFAULT-CONTEST")
     description = models.CharField(null=False, max_length=1000, default="Default Contest description")
-    startTime = models.DateField()
-    endTime = models.DateField()
+    startTime = models.DateTimeField()
+    endTime = models.DateTimeField()
     isPrivate = models.BooleanField(default=True)
     registeredUsersCount = models.IntegerField(default=0)
 

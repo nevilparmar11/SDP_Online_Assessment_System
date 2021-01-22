@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contest list</title>
+</head>
+<body>
+    {% if user.isStudent %}
+    {% else %}
+        <a href="/contests/create?classId={{ classId }}">
+            <button type="submit" class="btn btn-primary btn-block">
+                Create New Contest
+            </button>
+        </a>
+        <br><hr>
+    {% endif %}
+    {% for contest in contests %}
+        Contest Id : {{ contest.contestId }}
+        Classroom Id : {{ contest.classroom.classId }}<br>
+        Title : {{ contest.title }}<br>
+        Description : {{ contest.description }}<br>
+        StartTime : {{ contest.startTime }}
+        EndTime : {{ contest.endTime }}<br>
+        IsPrivate : {{ contest.isPrivate }}<br>
+        registeredUsersCount : {{ contest.registeredUsersCount }}<br>
+        Difficulty : {{ contest.difficulty }}
+        <a href="/contests/view?id={{ contest.contestId }}">
+            <button type="submit" class="btn btn-primary btn-block">
+                Select
+            </button>
+        </a>
+        <br><br>
+    {% endfor %}
+</body>
+</html>
