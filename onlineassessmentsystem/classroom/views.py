@@ -6,6 +6,8 @@ from .models import Classroom, ClassroomStudents
 from users.decorators import faculty_required, student_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
+from django.utils.datastructures import MultiValueDictKeyError
+
 
 '''
     Function to get all Classroom list details
@@ -65,7 +67,7 @@ def view(request):
     try:
         classId = request.GET['id']
         classroom = Classroom.objects.get(classId=classId)
-    except ObjectDoesNotExist:
+    except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
         return render(request, '404.html', {})
 
     if user.isStudent:
@@ -103,7 +105,7 @@ def edit(request):
             if classroom.user != request.user:
                 return render(request, 'accessDenied.html', {})
 
-        except ObjectDoesNotExist:
+        except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
             return render(request, '404.html', {})
 
         return render(request, "classroom/edit.html", {'classroom': classroom})
@@ -113,7 +115,7 @@ def edit(request):
         classroom = Classroom.objects.get(classId=classId)
         if classroom.user != request.user:
             return render(request, 'accessDenied.html', {})
-    except ObjectDoesNotExist:
+    except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
         return render(request, '404.html', {})
 
     classroom.name = request.POST['name']
@@ -140,7 +142,7 @@ def delete(request):
             # if classroom is not belonging to logged faculty user then
             if classroom.user != request.user:
                 return render(request, 'accessDenied.html', {})
-        except ObjectDoesNotExist:
+        except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
             return render(request, '404.html', {})
 
         return render(request, "classroom/delete.html", {'classroom': classroom})
@@ -150,7 +152,7 @@ def delete(request):
         classroom = Classroom.objects.get(classId=classId)
         if classroom.user != request.user:
             return render(request, 'accessDenied.html', {})
-    except ObjectDoesNotExist:
+    except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
         return render(request, '404.html', {})
 
     classroom.delete()
@@ -172,7 +174,7 @@ def joinClassroom(request):
         user = request.user
         classroomCode = request.POST["classroomCode"]
         classroom = Classroom.objects.get(classroomCode=classroomCode)
-    except ObjectDoesNotExist:
+    except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
         return render(request, '404.html', {})
 
     # if Student had already joined the same class then
@@ -193,6 +195,22 @@ def joinClassroom(request):
 
 @student_required()
 def leaveClassroom(request):
+    user = request.user
+    if request.method == "GET":
+
+        # if requested classroom not exists then
+        try:
+            classId = request.GET['id']
+            classroom = Classroom.objects.get(classId=classId)
+        except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
+            return render(request, '404.html', {})
+
+        # if student has joined classroom then only it is to be viewed
+        try:
+            classroomStudent = ClassroomStudents.objects.get(student=user, classroom=classroom)
+            return render(request, './classroom/leaveClassroom.html', {'classroom': classroom})
+        except ObjectDoesNotExist:
+            return render(request, "accessDenied.html", {})
 
     # if student haven't joined classroom or classroom not exists
     try:
@@ -200,7 +218,7 @@ def leaveClassroom(request):
         classroomCode = request.POST["classroomCode"]
         classroom = Classroom.objects.get(classroomCode=classroomCode)
         classroomStudent = ClassroomStudents.objects.get(classroom=classroom, student=user)
-    except ObjectDoesNotExist:
+    except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
         return render(request, '404.html', {})
 
     classroomStudent.delete()
