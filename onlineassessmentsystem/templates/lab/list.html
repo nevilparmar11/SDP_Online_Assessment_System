@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab list</title>
+</head>
+<body>
+    {% if user.isStudent %}
+    {% else %}
+        <a href="/labs/create?classId={{ classId }}">
+            <button type="submit" class="btn btn-primary btn-block">
+                Create New Lab
+            </button>
+        </a>
+        <br><hr>
+    {% endif %}
+    {% for lab in labs %}
+        Lab Id : {{ lab.labId }} <br>
+        Classroom Id : {{ lab.classroom.classId }}<br>
+        Title : {{ lab.title }}<br>
+        Description : {{ lab.description }}<br>
+        Subject : {{ lab.subject }}<br>
+        Deadline : {{ lab.deadline }} <br>
+        <a href="/labs/view?id={{ lab.labId }}">
+            <button type="submit" class="btn btn-primary btn-block">
+                Select
+            </button>
+        </a>
+        <br><br>
+    {% endfor %}
+</body>
+</html>
