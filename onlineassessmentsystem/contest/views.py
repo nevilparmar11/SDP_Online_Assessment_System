@@ -88,8 +88,10 @@ def getClassroom(request):
 '''
 
 
-#def convertDjangoDateTimeToHTMLDateTime(contest):
-
+def convertDjangoDateTimeToHTMLDateTime(contest):
+    startTimeString = str(contest.startTime.strftime("%Y-%m-%dT%H:%M"))
+    endTimeString = str(contest.endTime.strftime("%Y-%m-%dT%H:%M"))
+    return startTimeString, endTimeString
 
 
 '''
@@ -146,8 +148,6 @@ def create(request):
     endTime = request.POST['endTime']
     startTimeDate = datetime.fromisoformat(startTime)
     endTimeDate = datetime.fromisoformat(endTime)
-    print(startTimeDate, endTimeDate)
-
     # Remaining Implementation of isPrivate in create.html and views.py
     isPrivate = False
     difficulty = request.POST['difficulty']
@@ -193,7 +193,7 @@ def edit(request):
             return render(request, '404.html', {})
         if not customRoleBasedContestAuthorization(request, contest):
             return render(request, 'accessDenied.html', {})
- #       startTimeString, endTimeString = convertDjangoDateTimeToHTMLDateTime(contest)
+        startTimeString, endTimeString = convertDjangoDateTimeToHTMLDateTime(contest)
         return render(request, 'contest/edit.html', {'contest': contest, 'startTime': startTimeString, 'endTime': endTimeString})
 
     # When request is POST
