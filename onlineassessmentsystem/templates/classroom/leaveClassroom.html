@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Leave Classroom</title>
+</head>
+<body>
+        <form method="POST" action="/classroom/leave/" novalidate="">
+        {% csrf_token %}
+        <div>
+            {% if errorMessage %}
+                {{ errorMessage }}
+            {% endif %}
+        </div>
+
+        <input id="classroomCode" type="hidden" value="{{ classroom.classroomCode }}"
+               name="classroomCode">
+
+        Are You sure want to Leave the Classroom? <br><hr>
+
+        Name : {{ classroom.name }}<br>
+        Description : {{ classroom.description }}<br>
+        Teacher : {{ classroom.user.username }}<br>
+        Semester : {{ classroom.semester }}<br>
+        Year : {{ classroom.year }}<br>
+        Branch : {{ classroom.branch }}<br>
+        <div class="form-group m-0">
+            <button type="submit" class="btn btn-danger btn-block">
+                Confirm Leave
+            </button>
+        </div>
+
+    </form>
+</body>
+</html>
