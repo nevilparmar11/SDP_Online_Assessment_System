@@ -56,6 +56,8 @@ def customRoleBasedContestAuthorization(request, contest):
 def getContest(request):
 
     try:
+
+        # GET request
         if request.method == "GET":
             contestId = request.GET["id"]
         else:
@@ -73,6 +75,8 @@ def getContest(request):
 
 def getClassroom(request):
     try:
+
+        # If request method is GET
         if request.method == "GET":
             classId = request.GET["classId"]
         else:
@@ -89,6 +93,8 @@ def getClassroom(request):
 
 
 def convertDjangoDateTimeToHTMLDateTime(contest):
+
+    # Converting Datetime field into HTML formatted string
     startTimeString = str(contest.startTime.strftime("%Y-%m-%dT%H:%M"))
     endTimeString = str(contest.endTime.strftime("%Y-%m-%dT%H:%M"))
     return startTimeString, endTimeString
