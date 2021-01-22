@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Confirmed Lab</title>
+</head>
+<body>
+    <form method="POST" action="/labs/delete/" novalidate="">
+        {% csrf_token %}
+        <div>
+            {% if errorMessage %}
+                {{ errorMessage }}
+            {% endif %}
+        </div>
+
+        <input id="labId" type="hidden" value="{{ lab.labId }}"
+               name="labId">
+
+        Are You sure want to delete Lab? <br><hr>
+
+        Lab Id : {{ lab.labId }} <br>
+        Classroom Id : {{ lab.classroom.classId }}<br>
+        Title : {{ lab.title }}<br>
+        Description : {{ lab.description }}<br>
+        Subject : {{ lab.subject }}<br>
+        Deadline : {{ lab.deadline }}<br>
+
+        <div class="form-group m-0">
+            <button type="submit" class="btn btn-danger btn-block">
+                Delete
+            </button>
+        </div>
+
+     <a href="/labs/view?id={{ lab.labId }}">
+                Cancel
+     </a>
+    </form>
+</body>
+</html>
