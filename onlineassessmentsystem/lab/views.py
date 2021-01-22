@@ -90,7 +90,8 @@ def getClassroom(request):
     Function which will convert Django DateTime to HTML DateTime
 '''
 
-# def convertDjangoDateTimeToHTMLDateTime(lab):
+def convertDjangoDateTimeToHTMLDateTime(lab):
+    return lab.deadline.strftime('%Y-%m-%dT%H:%M')
 
 
 '''
@@ -179,9 +180,10 @@ def edit(request):
             return render(request, '404.html', {})
         if not customRoleBasedLabAuthorization(request, lab):
             return render(request, 'accessDenied.html', {})
-        #       startTimeString, endTimeString = convertDjangoDateTimeToHTMLDateTime(contest)
+
+        lab_deadline = convertDjangoDateTimeToHTMLDateTime(lab)
         return render(request, 'lab/edit.html',
-                      {'lab': lab})
+                      {'lab': lab, 'lab_deadline' : lab_deadline})
 
     # When request is POST
     # If contest not exist and If Contest is not belonging to Faculty
