@@ -1,34 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Edit Contest</title>
 </head>
+
 <body>
     <form method="POST" action="/contests/edit/" novalidate="">
         {% csrf_token %}
         <div>
-            {% if errorMessage %}
-                {{ errorMessage }}
-            {% endif %}
+            {% if errorMessage %} {{ errorMessage }} {% endif %}
         </div>
 
-        Contest Id : <input type="number" value="{{ contest.contestId }}"
-                   disabled autofocus>
+        Contest Id : <input type="number" value="{{ contest.contestId }}" disabled autofocus>
         <br>
 
-        <input id="contestId" type="hidden" value="{{ contest.contestId }}"
-                   name="contestId">
-        <br>
-
-        Classroom Id : {{ contest.classroom.classId }}
+        <input id="contestId" type="hidden" value="{{ contest.contestId }}" name="contestId">
+        <br> Classroom Id : {{ contest.classroom.classId }}
 
         <br>
 
         <div class="form-group">
             <label for="title">Title</label>
-            <input id="title" type="text" value="{{ contest.title }}"
-                   name="title" required autofocus>
+            <input id="title" type="text" value="{{ contest.title }}" name="title" required autofocus>
         </div>
 
         <div>
@@ -40,26 +35,20 @@
 
         <div class="form-group">
             <label for="startTime">Start Time</label>
-            <input id="startTime" type="datetime-local" value="{{ startTime }}"
-                   name="startTime" required autofocus>
+            <input id="startTime" type="datetime-local" value="{{ startTime }}" name="startTime" required autofocus>
         </div>
 
         <div class="form-group">
             <label for="endTime">End Time</label>
-            <input id="endTime" type="datetime-local" value="{{ endTime }}"
-                   name="endTime" required autofocus>
+            <input id="endTime" type="datetime-local" value="{{ endTime }}" name="endTime" required autofocus>
         </div>
 
-{#            <div class="form-group">#}
-{#                <label for="isPrivate">Is it Private ?</label>#}
-{#                <input type="checkbox" id="isPrivate" name="isPrivate"#}
-{#                        value="True" required>#}
-{#            </div>#}
+        {#
+        <div class="form-group">#} {# <label for="isPrivate">Is it Private ?</label>#} {# <input type="checkbox" id="isPrivate" name="isPrivate" #} {# value="True" required>#} {# </div>#}
 
         <div class="form-group">
             <label for="difficulty">Difficulty</label>
-            <select id="difficulty"
-                    name="difficulty" required>
+            <select id="difficulty" name="difficulty" required>
                 <option id="selectEasy" value="EASY">Easy</option>
                 <option id="selectMedium" value="MEDIUM">Medium</option>
                 <option id="selectHard" value="HARD">Hard</option>
@@ -76,9 +65,9 @@
 
 <script type="text/javascript">
     let temp = "{{ contest.difficulty }}";
-    if(temp=="EASY")
+    if (temp == "EASY")
         document.getElementById('selectEasy').selected = 'selected';
-    else if(temp=="MEDIUM")
+    else if (temp == "MEDIUM")
         document.getElementById('selectMedium').selected = 'selected';
     else
         document.getElementById('selectHard').selected = 'selected';

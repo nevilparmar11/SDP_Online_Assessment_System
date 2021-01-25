@@ -2,14 +2,16 @@ from django.db import models
 from contest.models import Contest
 from lab.models import Lab
 from users.models import User
+from django.conf.urls.static import static
+from django.conf import settings
 
 
 # Create your models here.
 
 class Problem(models.Model):
     problemId = models.AutoField(primary_key=True)
-    contest = models.ForeignKey(Contest, on_delete=models.CASCADE, default="")
-    lab = models.ForeignKey(Lab, on_delete=models.CASCADE, default="")
+    contest = models.ForeignKey(Contest, on_delete=models.CASCADE, blank=True, null=True)
+    lab = models.ForeignKey(Lab, on_delete=models.CASCADE, blank=True, null=True)
     title = models.CharField(null=False, max_length=50, default="DEFAULT-TITLE")
     description = models.CharField(null=False, max_length=1000, default="Default Problem description")
 
@@ -20,8 +22,8 @@ class Problem(models.Model):
 
     difficulty = models.CharField(choices=DIFFICULTY, max_length=6)
     points = models.IntegerField()
-    durationTime = models.IntegerField()
-    doesBelongToContest = models.BooleanField(default=False)
+    timeLimit = models.IntegerField()
+    doesBelongToContest = models.BooleanField()
 
 
 class ProblemComment(models.Model):
@@ -31,8 +33,15 @@ class ProblemComment(models.Model):
     comment = models.CharField(max_length=2000)
 
 
+# helper method # used
+def testCaseFileName(instance, filename):
+    totalTestCases = TestCase.objects.all().filter(problem=instance.problem).count() + 1
+    mediaUrl = settings.MEDIA_URL + "problems/"
+    return mediaUrl.join(['problems', instance.problem.problemId.__str__(), totalTestCases, filename])
+
+
 class TestCase(models.Model):
     testCaseId = models.AutoField(primary_key=True)
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
-    inputFile = models.FileField(upload_to=None, max_length=254)
-    outputFile = models.FileField(upload_to=None, max_length=254)
+    inputFile = models.FileField(upload_to=testCaseFileName, max_length=254)
+    outputFile = models.FileField(upload_to=testCaseFileName, max_length=254)

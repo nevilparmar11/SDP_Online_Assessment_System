@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Problem</title>
+</head>
+<body>
+   Problem Id : {{ problem.problemId }}<br>
+        Contest Id : {{ problem.contest.contestId }}<br>
+        Lab Id : {{ problem.lab.labId }}<br>
+        Title : {{ problem.title }}<br>
+        Description : {{ problem.description }}<br>
+        Difficulty : {{ problem.difficulty }}<br>
+        Points : {{ problem.points }}<br>
+        TimeLimit : {{ problem.timeLimit }}<br>
+    {% if user.isStudent %}
+    {% else %}
+        <a href="/problems/edit?pid={{ problem.problemId }}&&{{ idName }}={{ idValue }}">
+            <button type="submit" class="btn btn-primary btn-block">
+                Edit
+            </button>
+        </a>
+        <a href="/problems/delete?pid={{ problem.problemId }}&&{{ idName }}={{ idValue }}">
+            <button type="submit" class="btn btn-primary btn-block">
+                Delete
+            </button>
+        </a>
+    {% endif %}
+    <a href="/problems/?{{ idName }}={{ idValue }}">
+        <button type="submit" class="btn btn-primary btn-block">
+           Go To Problems
+        </button>
+    </a>
+</body>
+</html>

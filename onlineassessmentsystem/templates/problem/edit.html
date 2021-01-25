@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Create Contest</title>
+</head>
+
+<body>
+    <form method="POST" action="/problems/edit/" novalidate="">
+        {% csrf_token %}
+        <div>
+            {% if errorMessage %} {{ errorMessage }} {% endif %}
+        </div>
+        <div>
+            <input type="hidden" name="{{ idName }}" id="{{ idName }}" value="{{ idValue }}">
+        </div>
+
+        <div>
+            <input type="hidden" name="pid" id="pid" value="{{ problem.problemId }}">
+        </div>
+
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input id="title" type="text" value="{{ problem.title }}" name="title" required autofocus>
+        </div>
+
+        <div>
+            <label for="description">Description</label>
+            <textarea id="description" type="text" name="description" required autofocus>
+                    {{ problem.description }}
+                </textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="difficulty">Difficulty</label>
+            <select id="difficulty" name="difficulty" required>
+                    <option id="selectEasy" value="EASY">Easy</option>
+                    <option id="selectMedium" value="MEDIUM">Medium</option>
+                    <option id="selectHard" value="HARD">Hard</option>
+                </select>
+        </div>
+
+        <div>
+            <label for="points">Points</label>
+            <input id="points" type="number" value="{{ problem.points }}" name="points" required autofocus>
+            </input>
+        </div>
+
+
+        <div>
+            <label for="timeLimit">Time Limit</label>
+            <input id="timeLimit" type="number" value="{{ problem.timeLimit }}" name="timeLimit" required autofocus>
+            </input>
+        </div>
+
+        <div>
+            <button type="submit" class="btn btn-primary btn-block">
+                    Update
+                </button>
+        </div>
+    </form>
+</body>
+
+<script type="text/javascript">
+    let temp = "{{ problem.difficulty }}";
+    if (temp == "EASY")
+        document.getElementById('selectEasy').selected = 'selected';
+    else if (temp == "MEDIUM")
+        document.getElementById('selectMedium').selected = 'selected';
+    else
+        document.getElementById('selectHard').selected = 'selected';
+</script>
+
+</html>

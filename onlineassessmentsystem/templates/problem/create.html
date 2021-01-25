@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Contest</title>
+</head>
+<body>
+        <form method="POST" action="/problems/create/?{{ idName }}={{ idValue }}" novalidate="">
+        {% csrf_token %}
+            <div>
+                {% if errorMessage %}
+                    {{ errorMessage }}
+                {% endif %}
+            </div>
+            <div>
+                <input type="hidden" name="{{ idName }}" id="{{ idName }}"
+                        value="{{ idValue }}">
+            </div>
+
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input id="title" type="text" value="{{ title }}"
+                       name="title" value="" required autofocus>
+            </div>
+
+            <div>
+                <label for="description">Description</label>
+                <textarea id="description" type="text" value="{{ description }}"
+                       name="description" value="" required autofocus>
+                </textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="difficulty">Difficulty</label>
+                <select id="difficulty"
+                        name="difficulty" required>
+                    <option value="EASY">Easy</option>
+                    <option value="MEDIUM">Medium</option>
+                    <option value="HARD">Hard</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="points">Points</label>
+                <input id="points" type="number" value="{{ points }}"
+                       name="points" required autofocus>
+                </input>
+            </div>
+
+
+            <div>
+                <label for="timeLimit">Time Limit</label>
+                <input id="timeLimit" type="number" value="{{ timeLimit }}"
+                       name="timeLimit" required autofocus>
+                </input>
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    Create
+                </button>
+            </div>
+        </form>
+</body>
+
+</html>
+
+

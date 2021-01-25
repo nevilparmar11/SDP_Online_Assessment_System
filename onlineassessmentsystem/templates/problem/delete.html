@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Confirmed Problem</title>
+</head>
+<body>
+    <form method="POST" action="/problems/delete/" novalidate="">
+        {% csrf_token %}
+        <div>
+            {% if errorMessage %}
+                {{ errorMessage }}
+            {% endif %}
+        </div>
+
+        <div>
+            <input type="hidden" name="{{ idName }}" id="{{ idName }}" value="{{ idValue }}">
+        </div>
+
+        <div>
+            <input type="hidden" name="pid" id="pid" value="{{ problem.problemId }}">
+        </div>
+
+        Are You sure want to delete Problem? <br><hr>
+
+        Problem Id : {{ problem.problemId }}<br>
+        Contest Id : {{ problem.contest.contestId }}<br>
+        Lab Id : {{ problem.lab.labId }}<br>
+        Title : {{ problem.title }}<br>
+        Description : {{ problem.description }}<br>
+        Difficulty : {{ problem.difficulty }}<br>
+        Points : {{ problem.points }}<br>
+        TimeLimit : {{ problem.timeLimit }}<br>
+
+        <div class="form-group m-0">
+            <button type="submit" class="btn btn-danger btn-block">
+                Delete
+            </button>
+        </div>
+
+     <a href="/problems/?{{ idName }}={{ idValue }}">
+        Cancel, Go To Problems
+    </a>
+    </form>
+</body>
+</html>

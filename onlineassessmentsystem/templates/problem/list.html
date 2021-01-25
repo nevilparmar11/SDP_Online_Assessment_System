@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Problem list</title>
+</head>
+<body>
+    {% if user.isStudent %}
+    {% else %}
+        <a href="/problems/create?{{ idName }}={{ idValue }}">
+            <button type="submit" class="btn btn-primary btn-block">
+                Create New Problem
+            </button>
+        </a>
+        <br><hr>
+    {% endif %}
+    {% for problem in problems %}
+        Problem Id : {{ problem.problemId }}<br>
+        Contest Id : {{ problem.contest.contestId }}<br>
+        Lab Id : {{ problem.lab.labId }}<br>
+        Title : {{ problem.title }}<br>
+        Description : {{ problem.description }}<br>
+        Difficulty : {{ problem.difficulty }}<br>
+        Points : {{ problem.points }}<br>
+        TimeLimit : {{ problem.timeLimit }}<br>
+        <a href="/problems/view?pid={{ problem.problemId }}&&{{ idName }}={{ idValue }}">
+            <button type="submit" class="btn btn-primary btn-block">
+                Select
+            </button>
+        </a>
+        <br><br>
+    {% endfor %}
+</body>
+</html>
