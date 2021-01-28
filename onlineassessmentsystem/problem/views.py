@@ -7,6 +7,8 @@ from users.decorators import faculty_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.utils.datastructures import MultiValueDictKeyError
+import os
+
 '''
     Function for Role based authorization of Problem; upon provided the pid to the request parameter 
 '''
@@ -26,10 +28,26 @@ def customRoleBasedProblemAuthorization(request, problem, isItLab):
         except ObjectDoesNotExist:
             return False
     else:
-        if ((isItLab and problem.lab.classroom.user != user ) or (not isItLab and problem.contest.classroom.user != user)):
+        if ((isItLab and problem.lab.classroom.user != user) or (
+                not isItLab and problem.contest.classroom.user != user)):
             return False
 
     return True
+
+
+'''
+    Function for Role based authorization of Problem of Test case; upon provided the pid to the request parameter 
+'''
+
+
+def customRoleBasedTestProblemAuthorization(request, problem):
+    user = request.user
+
+    if ((not problem.doesBelongToContest and problem.lab.classroom.user != user) or (
+            problem.doesBelongToContest and problem.contest.classroom.user != user)):
+        return False
+    return True
+
 
 '''
     Function for Role based authorization of Lab; upon provided the labId to the request parameter 
@@ -72,6 +90,7 @@ def customRoleBasedContestAuthorization(request, contest):
             return False
     return True
 
+
 '''
     Function to get Problem based on provided pid
 '''
@@ -89,6 +108,7 @@ def getProblem(request):
         return True, pid, problem
     except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
         return False, None, None
+
 
 '''
     Function to get Contest/Lab based on provided Id
@@ -141,7 +161,51 @@ def convertDjangoDateTimeToHTMLDateTime(contest):
 
 
 '''
-    Function to get all Classroom list details
+    Function to get list of all Test Cases belonging to the Problem
+'''
+
+
+@faculty_required()
+def testList(request):
+    # If problem not exist and If Contest/Lab is not belonging to Faculty or Student
+    result, pid, problem = getProblem(request)
+    if not result:
+        return render(request, '404.html', {})
+    if not customRoleBasedTestProblemAuthorization(request, problem):
+        return render(request, 'accessDenied.html', {})
+
+    testCases = TestCase.objects.filter(problem=problem)
+    return render(request, 'problem/testsList.html', {'tests': testCases, 'pid': pid})
+
+
+'''
+    Function to create Test Case belonging to the Problem
+'''
+
+
+@faculty_required()
+def testCreate(request):
+    # If problem not exist and If Contest/Lab is not belonging to Faculty or Student
+    result, pid, problem = getProblem(request)
+    if not result:
+        return render(request, '404.html', {})
+    if not customRoleBasedTestProblemAuthorization(request, problem):
+        return render(request, 'accessDenied.html', {})
+
+    outputFile = request.FILES['outputFile']
+    inputFile = request.FILES['inputFile']
+    inputFileName, inputFileExtension = os.path.splitext(inputFile.name)
+    outputFileName, outputFileExtension = os.path.splitext(outputFile.name)
+
+    if (inputFileExtension == '.txt') and (outputFileExtension == '.txt'):
+        newTestcase = TestCase(problem=problem, inputFile=inputFile, outputFile=outputFile)
+        newTestcase.save()
+        return redirect('/problems/tests?pid=' + str(pid))
+    return redirect('/problems/tests/?pid=' + pid)
+
+
+'''
+    Function to get list of all Problems
 '''
 
 
@@ -165,7 +229,7 @@ def list(request):
         problems = Problem.objects.filter(lab=object, doesBelongToContest=False)
     else:
         idName = "contestId"
-        problems = Problem.objects.filter(contest=object,  doesBelongToContest=True)
+        problems = Problem.objects.filter(contest=object, doesBelongToContest=True)
 
     return render(request, 'problem/list.html', {'problems': problems, 'idName': idName, 'idValue': objectId})
 
@@ -290,6 +354,7 @@ def edit(request):
     problem.timeLimit = request.POST['timeLimit']
     problem.save()
     return redirect('/problems/view?pid=' + str(problem.problemId) + "&&" + idName + "=" + objectId)
+
 
 '''
     Function to delete particular Problem

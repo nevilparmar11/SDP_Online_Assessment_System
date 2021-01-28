@@ -9,6 +9,8 @@ urlpatterns = [
     path('edit/', views.edit),
     path('delete/', views.delete),
     path('view/', views.view),
+    path('tests/', views.testList),
+    path('testCreate/', views.testCreate)
 ]
 
 if settings.DEBUG:
