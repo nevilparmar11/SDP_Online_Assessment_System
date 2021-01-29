@@ -35,16 +35,16 @@ class ProblemComment(models.Model):
     comment = models.CharField(max_length=2000)
 
 
-# helper method # used
+# helper method used for saving input file to upload in specific folder with proper name
 def testCaseInputFileName(instance, filename):
     totalTestCases = TestCase.objects.all().filter(problem=instance.problem).count() + 1
-    return 'problems/' + instance.problem.problemId.__str__() + "/" + totalTestCases .__str__()+"_input_" + filename
+    return 'problems/' + instance.problem.problemId.__str__() + "/" + totalTestCases .__str__()+"_input.txt"
 
 
-# helper method # used
+# helper method used for saving output file to upload in specific folder with proper name
 def testCaseOutputFileName(instance, filename):
     totalTestCases = TestCase.objects.all().filter(problem=instance.problem).count() + 1
-    return 'problems/' + instance.problem.problemId.__str__() + "/" + totalTestCases .__str__()+"_output_" + filename
+    return 'problems/' + instance.problem.problemId.__str__() + "/" + totalTestCases .__str__()+"_output.txt"
 
 
 # Helper Validator method

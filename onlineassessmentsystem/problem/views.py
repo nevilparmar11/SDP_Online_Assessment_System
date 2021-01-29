@@ -235,7 +235,7 @@ def list(request):
 
 
 '''
-    Function to create Classroom
+    Function to create Problem
 '''
 
 
@@ -280,7 +280,7 @@ def create(request):
 
 
 '''
-    Function to get Classroom details
+    Function to get Problem details
 '''
 
 
@@ -312,7 +312,7 @@ def view(request):
 
 
 '''
-    Function to edit the Classroom details
+    Function to edit the Problem details
 '''
 
 
