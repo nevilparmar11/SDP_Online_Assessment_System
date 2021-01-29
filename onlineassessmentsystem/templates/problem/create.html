@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Create Contest</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 </head>
 <body>
         <form method="POST" action="/problems/create/?{{ idName }}={{ idValue }}" novalidate="">
@@ -24,9 +26,13 @@
             </div>
 
             <div>
-                <label for="description">Description</label>
-                <textarea id="description" type="text" value="{{ description }}"
-                       name="description" value="" required autofocus>
+                <input type="hidden" name="description" id="description"
+                        value="">
+            </div>
+            <div>
+                <label for="MDDescription">Description</label><br>
+                <textarea id="MDDescription" type="text" rows="10" cols="50" value="{{ description }}"
+                       name="MDDescription" value="" required autofocus>
                 </textarea>
             </div>
 
@@ -56,12 +62,25 @@
             </div>
 
             <div>
-                <button type="submit" class="btn btn-primary btn-block">
+                <button type="submit" class="btn btn-primary btn-block" OnClick="return validate();">
                     Create
                 </button>
             </div>
         </form>
 </body>
+
+<script>
+
+    let simplemde = new SimpleMDE({
+        element: document.getElementById("MDDescription"),
+        toolbar: ["bold", "italic", "heading"],
+    });
+
+    function validate(){
+        console.log(simplemde.value());
+        document.getElementById("description").value = simplemde.value();
+    }
+</script>
 
 </html>
 
