@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from users import views as user_views
+from django.conf.urls.static import static
+from django.conf import settings
 
 handler404 = 'users.views.pageNotFound'
 handler500 = 'users.views.internalServerError'
@@ -27,4 +29,7 @@ urlpatterns = [
     path('classroom/', include('classroom.urls')),
     path('labs/', include('lab.urls')),
     path('contests/', include('contest.urls')),
+    path('problems/', include('problem.urls'))
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
