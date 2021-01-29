@@ -41,6 +41,12 @@
         Problem Id : {{ test.problem.problemId }}<br>
         Input File : {{  test.inputFile }}<br>
         Output File : {{ test.outputFile }}<br>
+        <a href="/problems/testDelete?pid={{ test.problem.problemId }}&&{{ tid }}={{ test.testCaseId }}">
+            <button type="submit" class="btn btn-primary btn-block">
+                Remove
+            </button>
+        </a>
+        <br><br>
     {% endfor %}
 </body>
 </html>

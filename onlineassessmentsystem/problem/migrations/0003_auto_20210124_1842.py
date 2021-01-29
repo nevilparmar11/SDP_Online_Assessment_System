@@ -14,11 +14,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='testcase',
             name='inputFile',
-            field=models.FileField(max_length=254, upload_to=problem.models.testCaseFileName),
+            field=models.FileField(max_length=254, upload_to=problem.models.testCaseInputFileName),
         ),
         migrations.AlterField(
             model_name='testcase',
             name='outputFile',
-            field=models.FileField(max_length=254, upload_to=problem.models.testCaseFileName),
+            field=models.FileField(max_length=254, upload_to=problem.models.testCaseOutputFileName),
         ),
     ]

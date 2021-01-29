@@ -1,10 +1,12 @@
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from contest.models import Contest
 from lab.models import Lab
 from users.models import User
 from django.conf.urls.static import static
 from django.conf import settings
-
+import os
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 
@@ -34,14 +36,27 @@ class ProblemComment(models.Model):
 
 
 # helper method # used
-def testCaseFileName(instance, filename):
+def testCaseInputFileName(instance, filename):
     totalTestCases = TestCase.objects.all().filter(problem=instance.problem).count() + 1
-    mediaUrl = settings.MEDIA_URL + "problems/"
-    return mediaUrl.join(['problems', instance.problem.problemId.__str__(), totalTestCases, filename])
+    return 'problems/' + instance.problem.problemId.__str__() + "/" + totalTestCases .__str__()+"_input_" + filename
+
+
+# helper method # used
+def testCaseOutputFileName(instance, filename):
+    totalTestCases = TestCase.objects.all().filter(problem=instance.problem).count() + 1
+    return 'problems/' + instance.problem.problemId.__str__() + "/" + totalTestCases .__str__()+"_output_" + filename
+
+
+# Helper Validator method
+def validate_file_extension(value):
+    ext = os.path.splitext(value.name)[1]
+    valid_extensions = ['.txt']
+    if not ext.lower() in valid_extensions:
+        raise ValidationError(u'Unsupported file extension.')
 
 
 class TestCase(models.Model):
     testCaseId = models.AutoField(primary_key=True)
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
-    inputFile = models.FileField(upload_to=testCaseFileName, max_length=254)
-    outputFile = models.FileField(upload_to=testCaseFileName, max_length=254)
+    inputFile = models.FileField(validators=[FileExtensionValidator(['txt'])], upload_to=testCaseInputFileName)
+    outputFile = models.FileField(validators=[FileExtensionValidator(['txt'])], upload_to=testCaseOutputFileName)
