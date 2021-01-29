@@ -5,7 +5,7 @@
     <title>Test List</title>
 </head>
 <body>
-        <form method="POST" action="/problems/testCreate/" novalidate="" enctype="multipart/form-data">
+        <form method="POST" name="form" action="/problems/testCreate/" novalidate="" enctype="multipart/form-data">
         {% csrf_token %}
             Add New Test Case : (Only .txt files are allowed)<br>
             <div>
@@ -29,7 +29,7 @@
                        name="outputFile" value="" required autofocus accept="text/plain">
             </div>
             <div>
-                <button type="submit" class="btn btn-primary btn-block">
+                <button type="submit" class="btn btn-primary btn-block" onClick="return validate();">
                     Create
                 </button>
             </div>
@@ -62,4 +62,22 @@
         <br><br>
     {% endfor %}
 </body>
+<script>
+    function validate(){
+        let inputFile= form.inputFile.value;
+        let outputFile= form.outputFile.value;
+        if(inputFile=="" || outputFile=="")
+        {
+    	   alert("Files are not selected");
+    	   return false;
+        }
+
+        let reg = /(.*?)\.(txt)$/;
+        if(!inputFile.match(reg) || !outputFile.match(reg))
+        {
+    	   alert("Invalid File format");
+    	   return false;
+        }
+    }
+</script>
 </html>

@@ -212,8 +212,12 @@ def testCreate(request):
     if not customRoleBasedTestProblemAuthorization(request, problem):
         return render(request, 'accessDenied.html', {})
 
-    outputFile = request.FILES['outputFile']
-    inputFile = request.FILES['inputFile']
+    try:
+        outputFile = request.FILES['outputFile']
+        inputFile = request.FILES['inputFile']
+    except MultiValueDictKeyError:
+        return render(request, 'problem/testsList.html', {"errorMessage": "Files are not selected"})
+
     newTestcase = TestCase(problem=problem, inputFile=inputFile, outputFile=outputFile)
     newTestcase.save()
     return redirect('/problems/tests?pid=' + pid)
