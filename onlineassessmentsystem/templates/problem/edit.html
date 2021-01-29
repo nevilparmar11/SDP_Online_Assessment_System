@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Create Contest</title>
+
+    <!--Markdown CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
     <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 </head>
@@ -27,15 +29,15 @@
             <input id="title" type="text" value="{{ problem.title }}" name="title" required autofocus>
         </div>
 
+        <!-- Hidden fields required for passing the data of markdown editor after submitting the form -->
+        <!--Textarea required for attaching markdown editor -->
         <div>
             <input type="hidden" name="description" id="description"
                    value="">
             </div>
         <div>
             <label for="MDDescription">Description</label>
-            <textarea id="MDDescription" type="text" name="MDDescription" required autofocus>
-
-                </textarea>
+            <textarea id="MDDescription" type="text" name="MDDescription" required autofocus></textarea>
         </div>
 
         <div class="form-group">
@@ -77,16 +79,16 @@
     else
         document.getElementById('selectHard').selected = 'selected';
 
-    let simplemde = new SimpleMDE({
+    // initialization of markdown editor with the custom toolbar
+    let simpleMDE = new SimpleMDE({
         element: document.getElementById("MDDescription"),
         toolbar: ["bold", "italic", "heading"],
     });
 
-
-    simplemde.value("{{ problem.description }}");
+    //setting markdown data with existing description, passing data to the hidden field in the form
+    simpleMDE.value("{{ problem.description }}");
     function validate(){
-        console.log(simplemde.value());
-        document.getElementById("description").value = simplemde.value();
+        document.getElementById("description").value = simpleMDE.value();
     }
 
 </script>

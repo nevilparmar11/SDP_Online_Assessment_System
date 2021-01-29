@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Create Contest</title>
+
+    <!--Markdown CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
     <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 </head>
@@ -25,6 +27,8 @@
                        name="title" value="" required autofocus>
             </div>
 
+            <!-- Hidden fields required for passing the data of markdown editor after submitting the form -->
+            <!--Textarea required for attaching markdown editor -->
             <div>
                 <input type="hidden" name="description" id="description"
                         value="">
@@ -32,8 +36,7 @@
             <div>
                 <label for="MDDescription">Description</label><br>
                 <textarea id="MDDescription" type="text" rows="10" cols="50" value="{{ description }}"
-                       name="MDDescription" value="" required autofocus>
-                </textarea>
+                       name="MDDescription" value="" required autofocus></textarea>
             </div>
 
             <div class="form-group">
@@ -71,14 +74,16 @@
 
 <script>
 
-    let simplemde = new SimpleMDE({
+    // initialization of markdown editor with the custom toolbar
+    let simpleMDE = new SimpleMDE({
         element: document.getElementById("MDDescription"),
         toolbar: ["bold", "italic", "heading"],
     });
 
+    //passing data to the hidden field in the form
     function validate(){
-        console.log(simplemde.value());
-        document.getElementById("description").value = simplemde.value();
+        console.log(simpleMDE.value());
+        document.getElementById("description").value = simpleMDE.value();
     }
 </script>
 
