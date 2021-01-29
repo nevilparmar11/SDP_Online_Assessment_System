@@ -111,6 +111,26 @@ def getProblem(request):
 
 
 '''
+    Function to get Test Case based on provided tid
+'''
+
+
+def getTestCase(request):
+    try:
+
+        # If request method is GET
+        if request.method == "GET":
+            return False, None, None
+        else:
+            tid = request.POST["tid"]
+        print(tid)
+        testCase = TestCase.objects.get(testCaseId=tid)
+        return True, tid, testCase
+    except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
+        return False, None, None
+
+
+'''
     Function to get Contest/Lab based on provided Id
 '''
 
@@ -194,14 +214,30 @@ def testCreate(request):
 
     outputFile = request.FILES['outputFile']
     inputFile = request.FILES['inputFile']
-    inputFileName, inputFileExtension = os.path.splitext(inputFile.name)
-    outputFileName, outputFileExtension = os.path.splitext(outputFile.name)
+    newTestcase = TestCase(problem=problem, inputFile=inputFile, outputFile=outputFile)
+    newTestcase.save()
+    return redirect('/problems/tests?pid=' + pid)
 
-    if (inputFileExtension == '.txt') and (outputFileExtension == '.txt'):
-        newTestcase = TestCase(problem=problem, inputFile=inputFile, outputFile=outputFile)
-        newTestcase.save()
-        return redirect('/problems/tests?pid=' + str(pid))
-    return redirect('/problems/tests/?pid=' + pid)
+
+'''
+    Function to create Test Case belonging to the Problem
+'''
+
+
+@faculty_required()
+def testDelete(request):
+
+    result, tid, testCase = getTestCase(request)
+    if not result:
+        return render(request, '404.html', {})
+    else:
+        if not customRoleBasedTestProblemAuthorization(request, testCase.problem):
+            return render(request, 'accessDenied.html', {})
+
+    testCase.inputFile.delete()
+    testCase.outputFile.delete()
+    testCase.delete()
+    return redirect('/problems/tests/?pid=' + str(testCase.problem.problemId))
 
 
 '''

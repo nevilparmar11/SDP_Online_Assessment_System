@@ -10,7 +10,9 @@ urlpatterns = [
     path('delete/', views.delete),
     path('view/', views.view),
     path('tests/', views.testList),
-    path('testCreate/', views.testCreate)
+    path('testCreate/', views.testCreate),
+    path('testDelete/', views.testDelete)
+
 ]
 
 if settings.DEBUG:
