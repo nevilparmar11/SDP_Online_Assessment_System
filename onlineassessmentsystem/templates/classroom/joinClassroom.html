@@ -1,30 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Join Classroom</title>
-</head>
-<body>
-    <form method="POST" action="/classroom/join/" novalidate="">
-        {% csrf_token %}
-        <div>
-            {% if errorMessage %}
-                {{ errorMessage }}
-            {% endif %}
-        </div>
+{% extends 'layouts/base.html' %}
+{% load static %}
 
-        <div class="form-group">
-            <label for="classroomCode">Classroom Code</label>
-            <input id="classroomCode" type="text" value="{{ classroomCode }}"
-                   name="classroomCode" value="" required autofocus>
+{% block content %}
+    <br><br><br>
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header" style="text-align: center;">
+                    <div class="h3 text-primary font-weight-bold">Join Classroom</div>
+                </div>
+                <div class="card-body">
+                    <form class="forms-sample" method="post">
+                        {% csrf_token %}
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                {% if errorMessage %}
+                                    <div class="text-danger">{{ errorMessage }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="classroomCode" class="col-sm-4  col-form-label font-weight-bold">Classroom
+                                Code</label>
+                            <div class="col-sm-8">
+                                <input id="classroomCode" class="form-control" type="text" value="{{ classroomCode }}"
+                                       placeholder="Enter Classroom Code" name="classroomCode" value="" required
+                                       autofocus>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group row">
+                            <label for="classroomCode" class="col-sm-4  col-form-label font-weight-bold"></label>
+                            <div class="col-sm-8">
+                                <button type="submit" class="btn btn-primary btn-md mr-2">Join Classroom</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
+        <div class="col-sm-3"></div>
+    </div>
+{% endblock %}
 
-        <div>
-            <button type="submit" class="btn btn-primary btn-block">
-                Join
-            </button>
-        </div>
-
-    </form>
-</body>
-</html>
+{% block javascripts %}
+{% endblock %}

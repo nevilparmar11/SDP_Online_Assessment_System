@@ -1,9 +1,11 @@
+@import "variable.css";
+
 html,body {
 	height: 100%;
 }
 
 body.my-login-page {
-	background-color: #f7f9fb;
+	background-color: var(--primary-bg);
 	font-size: 14px;
 }
 
@@ -13,7 +15,7 @@ body.my-login-page {
 	overflow: hidden;
 	border-radius: 50%;
 	margin: 40px auto;
-	box-shadow: 0 4px 8px rgba(0,0,0,.05);
+	/* box-shadow: 0 4px 8px rgba(255, 255, 255, 0.05); */
 	position: relative;
 	z-index: 1;
 }
