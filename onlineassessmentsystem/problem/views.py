@@ -271,7 +271,7 @@ def list(request):
         idName = "contestId"
         problems = Problem.objects.filter(contest=object, doesBelongToContest=True)
 
-    return render(request, 'problem/list.html', {'problems': problems, 'idName': idName, 'idValue': objectId})
+    return render(request, 'problem/list.html', {'problems': problems, 'idName': idName, 'idValue': objectId, 'isItLab': isItLab, "object": object})
 
 
 '''

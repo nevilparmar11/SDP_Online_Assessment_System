@@ -14,7 +14,35 @@
         </a>
         <br><hr>
     {% endif %}
+
+     {% if isItLab %}
+
+    Lab Id : {{ object.labId }} <br>
+    Classroom Id : {{ object.classroom.classId }}<br>
+    Title : {{ object.title }}<br>
+    Description : {{ object.description }}<br>
+    Subject : {{ object.subject }}<br>
+    Deadline  : {{ object.deadline }}<br>
+
+    {% else %}
+
+      Contest Id : {{ object.contestId }}
+    Classroom Id : {{ object.classroom.classId }}<br>
+    Title : {{ object.title }}<br>
+    Description : {{ object.description }}<br>
+    registeredUsersCount : {{ object.registeredUsersCount }}<br>
+    Start Time : {{ object.startTime }}<br>
+    End Time : {{ object.endTime }}<br>
+    Is Private? : {{ object.isPrivate }}<br>
+    Difficulty : {{ object.difficulty }}<br>
+
+    {% endif %}
+
+    <br><br>
+    <hr>
+
     {% for problem in problems %}
+        <hr>
         Problem Id : {{ problem.problemId }}<br>
         Contest Id : {{ problem.contest.contestId }}<br>
         Lab Id : {{ problem.lab.labId }}<br>
@@ -29,6 +57,7 @@
             </button>
         </a>
         <br><br>
+        <hr>
     {% endfor %}
 </body>
 </html>

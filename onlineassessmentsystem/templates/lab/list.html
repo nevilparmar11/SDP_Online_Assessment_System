@@ -14,6 +14,7 @@
         </a>
         <br><hr>
     {% endif %}
+
     {% for lab in labs %}
         Lab Id : {{ lab.labId }} <br>
         Classroom Id : {{ lab.classroom.classId }}<br>
@@ -21,7 +22,7 @@
         Description : {{ lab.description }}<br>
         Subject : {{ lab.subject }}<br>
         Deadline : {{ lab.deadline }} <br>
-        <a href="/labs/view?id={{ lab.labId }}">
+        <a href="/problems/?labId={{ lab.labId }}">
             <button type="submit" class="btn btn-primary btn-block">
                 Select
             </button>
