@@ -15,7 +15,7 @@
                         Are You Sure you want to delete '{{ contest.title }}' ?
                     </h4><br>
                     {% if errorMessage %}
-                        <h5 class="text-danger">{{errorMessage}}</h5>
+                        <h5 class="text-danger">{{ errorMessage }}</h5>
                     {% endif %}
                     <div>
                         <div class="p-1"><b>Name :- </b>{{ contest.title }}</div>
@@ -25,7 +25,8 @@
                     </div>
 
                     <div class="float-right">
-                        <a class="btn btn-secondary" href="/contests/?classId={{ contest.classroom.classId }}">Cancel</a>
+                        <a class="btn btn-secondary"
+                           href="/contests/?classId={{ contest.classroom.classId }}">Cancel</a>
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </div>
                     <br>

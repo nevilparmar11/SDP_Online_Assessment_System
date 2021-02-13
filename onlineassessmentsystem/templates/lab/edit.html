@@ -53,7 +53,8 @@
                         <div class="form-group">
                             <label for="deadline" class="col-form-label">Deadline</label>
                             <div class="input-group">
-                                <input type="datetime-local" id="deadline" class="form-control" value="{{ lab_deadline }}"
+                                <input type="datetime-local" id="deadline" class="form-control"
+                                       value="{{ lab_deadline }}"
                                        placeholder="Enter Branch" name="deadline" required/>
                             </div>
                         </div>
@@ -75,61 +76,3 @@
 {% block javascripts %}
 {% endblock %}
 
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Edit Lab</title>
-</head>
-<body>
-<form method="POST" action="/labs/edit/" novalidate="">
-    {% csrf_token %}
-    <div>
-        {% if errorMessage %}
-            {{ errorMessage }}
-        {% endif %}
-    </div>
-
-    Contest Id : <input type="number" value="{{ lab.labId }}"
-                        disabled autofocus>
-    <br>
-
-    <input id="labId" type="hidden" value="{{ lab.labId }}"
-           name="labId">
-    <br>
-
-    Classroom Id : {{ lab.classroom.classId }}
-    <br>
-
-    <div class="form-group">
-        <label for="title">Title</label>
-        <input id="title" type="text" value="{{ lab.title }}"
-               name="title" required autofocus>
-    </div>
-
-    <div>
-        <label for="description">Description</label>
-        <textarea id="description" type="text" name="description" required autofocus>{{ lab.description }}</textarea>
-    </div>
-
-    <div>
-        <label for="subject">Subject</label>
-        <textarea id="subject" type="text" name="subject" required autofocus>{{ lab.subject }}</textarea>
-    </div>
-
-    <div class="form-group">
-        <label for="deadline">Deadline</label>
-        <input id="deadline" type="datetime-local" value="{{ lab_deadline }}"
-               name="deadline" required autofocus>
-    </div>
-
-    <div>
-        <button type="submit" class="btn btn-primary btn-block">
-            Update
-        </button>
-    </div>
-</form>
-</body>
-</html>

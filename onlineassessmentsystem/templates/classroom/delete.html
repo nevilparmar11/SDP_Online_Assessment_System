@@ -6,7 +6,7 @@
         {% csrf_token %}
 
         <input id="classId" type="hidden" value="{{ classroom.classId }}"
-           name="classId">
+               name="classId">
 
         <div class="row">
             <div class="col-sm-12">
@@ -36,43 +36,3 @@
     </form>
 {% endblock %}
 
-
-<!DOCTYPE html>
-<html lang="en">
-{% load static %}
-<head>
-    <meta charset="UTF-8">
-    <title>Delete Confirmed Classroom</title>
-</head>
-<body>
-<form method="POST" action="/classroom/delete/" novalidate="">
-    {% csrf_token %}
-    <div>
-        {% if errorMessage %}
-            {{ errorMessage }}
-        {% endif %}
-    </div>
-
-    <input id="classId" type="hidden" value="{{ classroom.classId }}"
-           name="classId">
-
-    Are You sure want to delete Classroom? <br>
-    <hr>
-
-    Classroom Id : {{ classroom.classId }}<br>
-    Name : {{ classroom.name }}<br>
-    Description : {{ classroom.description }}<br>
-    Owner : {{ classroom.user.username }}<br>
-    Semester : {{ classroom.semester }}<br>
-    Year : {{ classroom.year }}<br>
-    Branch : {{ classroom.branch }}<br>
-    Class Code : {{ classroom.classroomCode }}<br>
-    <div class="form-group m-0">
-        <button type="submit" class="btn btn-danger btn-block">
-            Delete
-        </button>
-    </div>
-
-</form>
-</body>
-</html>

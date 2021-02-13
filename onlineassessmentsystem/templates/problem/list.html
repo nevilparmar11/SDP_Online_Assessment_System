@@ -15,7 +15,8 @@
                         <li class="breadcrumb-item"><a href="/labs/?classId={{ object.classroom.classId }}">Labs</a>
                         </li>
                     {% else %}
-                        <li class="breadcrumb-item"><a href="/contests/?classId={{ object.classroom.classId }}">Contests</a>
+                        <li class="breadcrumb-item"><a
+                                href="/contests/?classId={{ object.classroom.classId }}">Contests</a>
                         </li>
                     {% endif %}
                     <li class="breadcrumb-item active" aria-current="page">{{ object.title }}</li>
@@ -80,7 +81,8 @@
                             <tr>
                                 <td>{{ forloop.counter }}</td>
                                 <td>
-                                    <a class="coloured-link" href="/problems/view?pid={{ problem.problemId }}&&{{ idName }}={{ idValue }}">{{ problem.title }}</a>
+                                    <a class="coloured-link"
+                                       href="/problems/view?pid={{ problem.problemId }}&&{{ idName }}={{ idValue }}">{{ problem.title }}</a>
                                 </td>
                                 <td>{{ problem.difficulty }}</td>
                                 <td>{{ problem.points }}</td>

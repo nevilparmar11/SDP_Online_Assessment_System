@@ -30,7 +30,8 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form id="addTestForm" method="POST" name="form" action="/problems/testCreate/" novalidate=""
+                                        <form id="addTestForm" method="POST" name="form" action="/problems/testCreate/"
+                                              novalidate=""
                                               enctype="multipart/form-data">
                                             {% csrf_token %}
                                             <div class="mb-2">Add New Test Case : (Only .txt files are allowed)</div>
@@ -73,7 +74,8 @@
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
                                         </button>
                                         <button type="submit" form="addTestForm" class="btn btn-primary"
-                                                        onClick="return validate();">Add</button>
+                                                onClick="return validate();">Add
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -92,8 +94,10 @@
                         {% for test in tests %}
                             <tr>
                                 <td>{{ forloop.counter }}</td>
-                                <td><a class="coloured-link" href="{{ test.inputFile.url }}">{{ test.inputFile }}</a></td>
-                                <td><a class="coloured-link" href="{{ test.outputFile.url }}">{{ test.outputFile }}</a></td>
+                                <td><a class="coloured-link" href="{{ test.inputFile.url }}">{{ test.inputFile }}</a>
+                                </td>
+                                <td><a class="coloured-link" href="{{ test.outputFile.url }}">{{ test.outputFile }}</a>
+                                </td>
                                 <td>
                                     <form method="POST" action="/problems/testDelete/" novalidate="">
                                         {% csrf_token %}
@@ -139,6 +143,7 @@
                 return false;
             }
         }
+
         $(document).ready(function () {
             $(".custom-file-input").on("change", function () {
                 var fnm = $(this).val().split("\\").pop();
@@ -147,86 +152,3 @@
         })
     </script>
 {% endblock %}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Test List</title>
-</head>
-<body>
-<form method="POST" name="form" action="/problems/testCreate/" novalidate="" enctype="multipart/form-data">
-    {% csrf_token %}
-    Add New Test Case : (Only .txt files are allowed)<br>
-    <div>
-        {% if errorMessage %}
-            {{ errorMessage }}
-        {% endif %}
-    </div>
-    <div>
-        <input type="hidden" name="pid" id="pid"
-               value="{{ pid }}">
-    </div>
-    <div class="form-group">
-        <label for="inputFile">Input File</label>
-        <input id="inputFile" type="file" value="{{ inputFile }}"
-               name="inputFile" value="" required autofocus accept="text/plain">
-    </div>
-
-    <div>
-        <label for="outputFile">Output File</label>
-        <input id="outputFile" type="file" value="{{ outputFile }}"
-               name="outputFile" value="" required autofocus accept="text/plain">
-    </div>
-    <div>
-        <button type="submit" class="btn btn-primary btn-block" onClick="return validate();">
-            Create
-        </button>
-    </div>
-</form>
-
-</a>
-<br>
-<hr>
-{% for test in tests %}
-    Test Case Id : {{ test.testCaseId }}<br>
-    Problem Id : {{ test.problem.problemId }}<br>
-    Input File : <a href="{{ test.inputFile.url }}">{{ test.inputFile }}</a><br>
-    Output File : <a href="{{ test.outputFile.url }}">{{ test.outputFile }}</a><br>
-    <form method="POST" action="/problems/testDelete/" novalidate="">
-        {% csrf_token %}
-        <div>
-            {% if errorMessage %}
-                {{ errorMessage }}
-            {% endif %}
-        </div>
-        <div>
-            <input type="hidden" name="tid" id="tid"
-                   value="{{ test.testCaseId }}">
-        </div>
-        <div>
-            <button type="submit" class="btn btn-primary btn-block">
-                Remove Test Case
-            </button>
-        </div>
-    </form>
-    <br><br>
-{% endfor %}
-</body>
-<script>
-    function validate() {
-        let inputFile = form.inputFile.value;
-        let outputFile = form.outputFile.value;
-        if (inputFile == "" || outputFile == "") {
-            alert("Files are not selected");
-            return false;
-        }
-
-        let reg = /(.*?)\.(txt)$/;
-        if (!inputFile.match(reg) || !outputFile.match(reg)) {
-            alert("Invalid File format");
-            return false;
-        }
-    }
-</script>
-</html>
