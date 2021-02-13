@@ -1,3 +1,88 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+    <br>
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-header" style="text-align: center;">
+                    <div class="h3 text-primary font-weight-bold">Create Contest</div>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="/contests/create/">
+                        {% csrf_token %}
+                        {% if errorMessage %}
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="text-danger">{{ errorMessage }}</div>
+
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div>
+                            <input type="hidden" name="classId" id="classId"
+                                   value="{{ classId }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-form-label">Title</label>
+                            <div class="input-group">
+                                <input id="title" class="form-control" type="text" value="{{ title }}"
+                                       name="title" value="" placeholder="Enter Lab Title" required
+                                       autofocus>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="col-form-label">Description</label>
+                            <div class="input-group">
+                                <textarea id="description" class="form-control"
+                                          placeholder="Enter Description" name="description" value=""
+                                          required>{{ description }}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="startTime" class="col-form-label">Start Time</label>
+                            <div class="input-group">
+                                <input type="datetime-local" id="startTime" class="form-control" value="{{ startTime }}"
+                                       placeholder="Enter Start TIme" name="startTime" value="" required/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="endTime" class="col-form-label">End Time</label>
+                            <div class="input-group">
+                                <input type="datetime-local" id="deadline" class="form-control" value="{{ endTime }}"
+                                       placeholder="Enter End Time" name="endTime" value="" required/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="difficulty" class="col-form-label">Difficulty</label>
+                            <select id="difficulty" class="form-control form-select form-select-lg mb-3"
+                                    name="difficulty" required>
+                                <option value="EASY">Easy</option>
+                                <option value="MEDIUM">Medium</option>
+                                <option value="HARD">Hard</option>
+                            </select>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="classroomCode" class="col-form-label"></label>
+                            <div class="inline-group">
+                                <button type="submit" class="btn btn-primary btn-block btn-md mr-2">Create</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 

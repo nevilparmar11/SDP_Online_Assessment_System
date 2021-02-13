@@ -2,68 +2,70 @@
 {% load static %}
 
 {% block content %}
-    <br><br><br>
+    <br>
     <div class="row">
-        <div class="col-sm-3"></div>
-        <div class="col-sm-6">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
             <div class="card">
                 <div class="card-header" style="text-align: center;">
                     <div class="h3 text-primary font-weight-bold">Create Classroom</div>
                 </div>
                 <div class="card-body">
-                    <form class="forms-sample" method="post">
+                    <form method="post">
                         {% csrf_token %}
-                        <div class="form-group row">
-                            <div class="col-sm-12">
-                                {% if errorMessage %}
+                        {% if errorMessage %}
+                            <div class="form-group">
+                                <div class="col-sm-12">
                                     <div class="text-danger">{{ errorMessage }}</div>
-                                {% endif %}
+
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="name" class="col-sm-4  col-form-label font-weight-bold">Name</label>
-                            <div class="col-sm-8">
+                        {% endif %}
+                        <div class="form-group">
+                            <label for="name" class="col-form-label">Name</label>
+                            <div class="input-group">
                                 <input id="name" class="form-control" type="text" value="{{ name }}"
                                        placeholder="Enter Classroom Name" name="name" value="" required
                                        autofocus>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label for="description" class="col-sm-4  col-form-label font-weight-bold">Description</label>
-                            <div class="col-sm-8">
-                                <textarea id="description" class="form-control"value="{{ description }}"
-                                       placeholder="Enter Description" name="description" value="" required
+                        <div class="form-group">
+                            <label for="description" class="col-form-label">Description</label>
+                            <div class="input-group">
+                                <textarea id="description" class="form-control" value="{{ description }}"
+                                          placeholder="Enter Description" name="description" value="" required
                                           autofocus></textarea>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label for="semester" class="col-sm-4  col-form-label font-weight-bold">Semester</label>
-                            <div class="col-sm-8">
-                                <input type="text" id="semester" class="form-control"value="{{ semester }}"
-                                       placeholder="Enter Semester" name="semester" value="" required />
+                        <div class="form-group">
+                            <label for="semester" class="col-form-label">Semester</label>
+                            <div class="input-group">
+                                <input type="text" id="semester" class="form-control" value="{{ semester }}"
+                                       placeholder="Enter Semester" name="semester" value="" required/>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label for="branch" class="col-sm-4  col-form-label font-weight-bold">Branch</label>
-                            <div class="col-sm-8">
-                                <input type="text" id="branch" class="form-control"value="{{ semester }}"
-                                       placeholder="Enter Branch" name="branch" value="" required />
+                        <div class="form-group">
+                            <label for="branch" class="col-form-label">Branch</label>
+                            <div class="input-group">
+                                <input type="text" id="branch" class="form-control" value="{{ branch }}"
+                                       placeholder="Enter Branch" name="branch" value="" required/>
                             </div>
                         </div>
                         <br>
-                        <div class="form-group row">
-                            <label for="classroomCode" class="col-sm-4  col-form-label font-weight-bold"></label>
-                            <div class="col-sm-8">
-                                <button type="submit" class="btn btn-primary btn-md mr-2">Create</button>
+                        <div class="form-group">
+                            <label for="classroomCode" class="col-form-label"></label>
+                            <div class="inline-group">
+                                <button type="submit" class="btn btn-primary btn-block btn-md mr-2">Create</button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-        <div class="col-sm-3"></div>
+        <div class="col-sm-2"></div>
     </div>
 {% endblock %}
 
 {% block javascripts %}
 {% endblock %}
+

@@ -1,40 +1,114 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>View Problem</title>
-</head>
-<body>
-   Problem Id : {{ problem.problemId }}<br>
-        Contest Id : {{ problem.contest.contestId }}<br>
-        Lab Id : {{ problem.lab.labId }}<br>
-        Title : {{ problem.title }}<br>
-        Description : {{ problem.description }}<br>
-        Difficulty : {{ problem.difficulty }}<br>
-        Points : {{ problem.points }}<br>
-        TimeLimit : {{ problem.timeLimit }}<br>
-    {% if user.isStudent %}
-    {% else %}
-        <a href="/problems/edit?pid={{ problem.problemId }}&&{{ idName }}={{ idValue }}">
-            <button type="submit" class="btn btn-primary btn-block">
-                Edit
-            </button>
-        </a>
-        <a href="/problems/delete?pid={{ problem.problemId }}&&{{ idName }}={{ idValue }}">
-            <button type="submit" class="btn btn-primary btn-block">
-                Delete
-            </button>
-        </a>
-        <a href="/problems/tests?pid={{ problem.problemId }}">
-            <button type="submit" class="btn btn-primary btn-block">
-                Test Cases
-            </button>
-        </a>
-    {% endif %}
-    <a href="/problems/?{{ idName }}={{ idValue }}">
-        <button type="submit" class="btn btn-primary btn-block">
-           Go To Problems
-        </button>
-    </a>
-</body>
-</html>
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block headContent %}
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        #description > * {
+            color: black !important;
+            font-size: 17px;
+        }
+        #editor{
+            font-size: 17px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/users/home">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/classroom">My Classrooms</a></li>
+                    {% if problem.doesBelongToContest %}
+                        <li class="breadcrumb-item"><a href="/classroom/view/?id={{ problem.contest.classroom.classId }}">{{ problem.contest.classroom.name }}</a></li>
+                        <li class="breadcrumb-item"><a href="/contests/?classId={{ problem.contest.classroom.classId }}">Contests</a></li>
+                        <li class="breadcrumb-item"><a href="/problems/?contestId={{ problem.contest.contestId }}">{{ problem.contest.title }}</a></li>
+                    {% else %}
+                        <li class="breadcrumb-item"><a href="/classroom/view/?id={{ problem.lab.classroom.classId }}">{{ problem.lab.classroom.name }}</a></li>
+                        <li class="breadcrumb-item"><a href="/labs/?classId={{ problem.lab.classroom.classId }}">Labs</a></li>
+                        <li class="breadcrumb-item"><a href="/problems/?labId={{ problem.lab.labId }}">{{ problem.lab.title }}</a></li>
+                    {% endif %}
+                    <li class="breadcrumb-item active" aria-current="page">{{ problem.title }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header p-5 bg-light" style="background-color: white !important;">
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <div class="h3 text-primary font-weight-bold">{{ problem.title }}</div>
+                            <div class="text-muted">{{ problem.points }} points, {{ problem.difficulty }}</div>
+                        </div>
+                        {% if not user.isStudent %}
+                            <div class="col-sm-12 float-right" style="text-align: right">
+                                <a href="/problems/tests/?pid={{ problem.problemId }}" class="btn btn-primary">Manage Test Cases</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card-text"
+                         style="white-space: pre-wrap;" id="description"></div>
+                    <script>
+                        document.getElementById('description').innerHTML =
+                            marked(`{{ problem.description }}`);
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    {#  Code Editor  #}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row h4">
+                        <div class="col-12" style="text-align: center;">
+                            <b class="text-primary">Submit Code</b>
+                        </div>
+                    </div>
+                    <div id="editor">#include &lt;stdio.h&gt;
+
+int main(){
+    return 0;
+}</div>
+                </div>
+                <div class="card-footer">
+                    <div class="row float-right">
+                        <div class="col-12">
+                            <button class="btn btn-primary">Submit Code</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{% static 'js/ace-builds/src-noconflict/ace.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'js/ace-builds/src-noconflict/ext-language_tools.js' %}" type="text/javascript"
+            charset="utf-8"></script>
+    <script>
+        var editor = ace.edit("editor");
+        editor.setOptions({
+            autoScrollEditorIntoView: true,
+            maxLines: 100,
+            minLines: 25,
+            enableBasicAutocompletion: true
+        });
+        editor.renderer.setScrollMargin(10, 10, 10, 10);
+        editor.setTheme("ace/theme/tomorrow");
+        editor.session.setMode("ace/mode/c_cpp");
+        editor.setAutoScrollEditorIntoView(true);
+        editor.HighlightRules = 'ace/mode/c_cpp_highlight_rules';
+        console.log(editor.getValue())
+    </script>
+{% endblock %}

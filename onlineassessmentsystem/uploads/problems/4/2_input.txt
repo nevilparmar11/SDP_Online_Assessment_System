@@ -1,0 +1,90 @@
+// 1 j var karvanu
+1. clone my repo [nevilparmar11/ sdp]
+2. git branch [main]
+3. git branch -a [including remote branches]
+4. git checkout origin/develop
+5. git checkout develop ["develop" name ni local branch create karse <---- remote/develop ]
+6. git checkout main
+7. git flow init -d
+
+// Always
+1. git branch feature/feature-name
+2. git branch
+3. git checkout feature/feature-name
+4. updates
+5. commits
+6. git checkout main 
+7. git push origin feature/feature-name
+8. when the commits are ok / feature dev is done
+9. create PR [feature/feature-name - > develop]
+10. joine ane merge karse
+
+// to be followed by the generator of PR
+1. git checkout develop
+2. git merge feature/feature-name [LOCALLY DEVELOP <--- FEATURE-NAME]
+3. git flow feature finish feature-name [merge conflict check pan karse, jo nai hoy to e simply delete kari dese "feature-name" branch]
+4. git checkout main
+5. git push origin develop [develop branch ne push karse]
+6. git branch [*main , develop]
+
+// IN between jo updates joita hoy develop -> to any branch
+// TO UPDATE CHANGES
+[git chekcout [branch change karvanu / jema update reflect karva che te / amidst development OR starting ma]]
+[git pull origin [je branch mathi updates leva che te branch nu name]]
+
+EX.
+--if develop changed remotely and want to update your local develop
+git checkout develop
+git pull origin develop
+
+----if develop changed remotely and want to update your local brach
+git checkout feature/third
+git pull origin develop
+
+
+
+============================================================================================================================================
+forked -> PR (MAIN)
+
+
+MAIN (DIFF BRANCHES) -> 	MAIN(MAIN)
+
+
+DIFF BRANCHES : 
+
+[GIT FLOW PLUGIN / NEW VERSION GIT] COMMAND : GIT UPDATE-GIT=
+1. DEVELOP [COPY OF MAIN / BADHU J KAM AA J BRANCH MA RESE]
+|						|
+| COPY OF DEVELOP BRANCH			|AT THE END , MERGE IT BACK TO THE DEVELOP BRANCH
+| 						|
+2. NEW FEATURE BRANCH [FEATURE/NEW-FEATURE EX. FEATURE/LOGIN]
+
+3. MAIN BRANCH 
+
+
+
+
+1. Particualr feature branch banavi
+ -- 6 commit [feature]
+
+2. git push origin feature
+
+3. git checkout develop
+
+4. git merge feature
+-- develop <- feature
+
+
+===========================================================================================================================================
+
+
+
+1. projec init
+2. folder structure setup karine push karvanu
+3. develop branch setup karvani che
+4. models from ER
+5. static folder setup
+6. Login / registration
+
+
+

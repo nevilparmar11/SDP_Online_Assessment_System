@@ -1,46 +1,37 @@
 {% load static %}
-<nav class="sidebar sidebar-offcanvas" id="sidebar">
-    <ul class="nav">
-        <li class="nav-item nav-profile">
-            <a href="#" class="nav-link">
-                <div class="profile-image">
-                    <img class="img-xs rounded-circle" src="{% static 'images/faces/face8.jpg' %}" alt="profile image">
-                    <div class="dot-indicator bg-success"></div>
-                </div>
-                <div class="text-wrapper">
-                    <p class="profile-name">{{ user.username }}</p>
-                    {% if user.isStudent %}
-                        <p class="designation">Student</p>
-                    {% else %}
-                        <p class="designation">Faculty</p>
-                    {% endif %}
-                </div>
-            </a>
+
+<nav id="sidebar">
+    <div class="sidebar-header">
+        <h3>Lab Assesment</h3>
+    </div>
+{#    <div class="sidebar-header">#}
+{#        <img class="rounded-circle ml-2" src="{% static 'images/icon.webp' %}" height="100px"/>#}
+{#    </div>#}
+    <ul class="list-unstyled components">
+        <li>
+
+            <a href="/users/home"><i class="fa fa-home"></i> &nbsp;Home</a>
         </li>
-        <li class="nav-item nav-category">Main Menu</li>
-        <li class="nav-item">
-            <a class="nav-link" href="index.html">
-                <!-- <i class="menu-icon typcn typcn-document-text"></i> -->
-                <span class="menu-title">Dashboard</span>
-            </a>
+        <li>
+            <a href="#"><i class="fa fa-book" aria-hidden="true"></i>
+                &nbsp;Blogs</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="pages/forms/basic_elements.html">
-                <i class="menu-icon typcn typcn-shopping-bag"></i>
-                <span class="menu-title">Blogs</span>
-            </a>
+        <li>
+            <a href="#"><i class="fa fa-user" aria-hidden="true"></i>
+                &nbsp;My Profile</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="pages/charts/chartjs.html">
-                <i class="menu-icon typcn typcn-th-large-outline"></i>
-                <span class="menu-title">My Profile</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/users/logout">
-                <i class="menu-icon typcn typcn-bell"></i>
-                <span class="menu-title">Logout</span>
-            </a>
+        <li>
+            <a href="/users/logout"><i class="fa fa-power-off" aria-hidden="true"></i>
+                &nbsp;Logout</a>
         </li>
     </ul>
+
+    {#            <ul class="list-unstyled CTAs">#}
+    {#                <li>#}
+    {#                    <a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a>#}
+    {#                </li>#}
+    {#                <li>#}
+    {#                    <a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a>#}
+    {#                </li>#}
+    {#            </ul>#}
 </nav>

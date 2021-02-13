@@ -7,16 +7,57 @@
 <head>
     <meta charset="UTF-8">
     <title>Online Lab Assessment</title>
-    <link rel="stylesheet" href="{% static 'vendors/iconfonts/mdi/css/materialdesignicons.min.css' %}"/>
-    <link rel="stylesheet" href="{% static 'vendors/iconfonts/ionicons/dist/css/ionicons.css' %}"/>
-    <link rel="stylesheet" href="{% static 'vendors/iconfonts/flag-icon-css/css/flag-icon.min.css' %}"/>
-    <link rel="stylesheet" href="{% static 'vendors/css/vendor.bundle.base.css' %}"/>
-    <link rel="stylesheet" href="{% static 'vendors/css/vendor.bundle.addons.css' %}"/>
-    <link rel="stylesheet" href="{% static 'css/shared/style.css' %}"/>
-    <link rel="stylesheet" href="{% static 'css/demo_1/style.css' %}"/>
-    <link rel="stylesheet" href="{% static 'css/comment.css' %}"/>
+
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+          integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/comment.css' %}">
+
+    {% block headContent %}{% endblock headContent %}
+
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
 
     <style>
+        a {
+            text-decoration: none;
+        }
+
+        .breadcrumb-item a{
+            color: blue;
+        }
+        .coloured-link{
+            color: blue !important;
+            {#border-bottom: #0c83e2 0.125em solid;#}
+        }
+        a:hover {
+            text-decoration: none;
+            color: #5b8796;
+        }
+
+        .col-md-4 {
+            padding: 20px;
+        }
+
+        .card-header-own {
+            height: 80px;
+        }
+
+        .profile-pic {
+            height: 40px !important;
+            width: 40px !important;
+        }
+
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
         .classroom-wrapper {
             height: 10%;
             width: 10%;
@@ -50,40 +91,59 @@
             margin: auto;
         }
 
-        a {
-            text-decoration: none !important;
-        }
 
-        a:hover {
-            text-decoration: none !important;
-        }
     </style>
 </head>
 <body>
 <div id="loader" class="center-loading"></div>
-<div class="container-scroller">
-    {% include 'layouts/navbar.html' %}
-    <div class="container-fluid page-body-wrapper">
-        {% include 'layouts/sidebar.html' %}
-        <div class="main-panel">
-            <div class="content-wrapper">
-
+<div class="wrapper">
+    {% include 'layouts/sidebar.html' %}
+    <div id="content">
+        {% include 'layouts/navbar.html' %}
+        <div class="main">
+            <div class="container">
                 {% block content %}
 
                 {% endblock content %}
+                <br><br>
             </div>
-            {# Content-wrapper ends #}
-            {% include 'layouts/footer.html' %}
         </div>
+        {% include 'layouts/footer.html' %}
     </div>
-    {# End of container-fluid #}
 </div>
-{# End of Container-scroller #}
-<script src="{% static 'vendors/js/vendor.bundle.base.js' %}"></script>
-<script src="{% static 'vendors/js/vendor.bundle.addons.js' %}"></script>
-<script src="{% static 'js/shared/off-canvas.js' %}"></script>
-<script src="{% static 'js/shared/misc.js' %}"></script>
-<script src="{% static 'js/shared/jquery.cookie.js' %}" type="text/javascript"></script>
+
+
+<!-- jQuery CDN - Slim version (=without AJAX) -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<!-- Popper.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+        integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+        crossorigin="anonymous"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
+        integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+        crossorigin="anonymous"></script>
+<!-- jQuery Custom Scroller CDN -->
+<script
+        src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+<script src="https://use.fontawesome.com/a3df2a278d.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#sidebar").mCustomScrollbar({
+            theme: "minimal"
+        });
+
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar, #content').toggleClass('active');
+            $('.collapse.in').toggleClass('in');
+            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+        });
+    });
+</script>
 <script>
     document.onreadystatechange = function () {
         if (document.readyState !== "complete") {

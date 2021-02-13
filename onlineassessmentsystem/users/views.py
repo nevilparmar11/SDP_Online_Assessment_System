@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect, HttpResponse
+from urllib.parse import urlencode
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .decorators import student_required, faculty_required
-from urllib.parse import urlencode
+from django.shortcuts import render, redirect
 
 # To encode a login redirect message string into query string parameter
 loginRedirectMessage = urlencode({'msg': 'Please Login'})
@@ -63,10 +63,7 @@ Function to redirect user to home page
 
 @login_required(login_url='/users/login?' + loginRedirectMessage)
 def home(request):
-    if request.user.isStudent:
-        return render(request, 'users/studentDashboard.html')
-    else:
-        return render(request, 'users/facultyDashboard.html')
+    return redirect("/classroom")
 
 
 '''
@@ -99,3 +96,7 @@ def internalServerError(request):
     response = render(request, '500.html')
     response.status_code = 500
     return response
+
+
+def accessDemied(request):
+    return render(request, 'accessDenied.html')

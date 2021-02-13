@@ -1,68 +1,107 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Create Contest</title>
-</head>
-<body>
-        <form method="POST" action="/problems/create/?{{ idName }}={{ idValue }}" novalidate="">
-        {% csrf_token %}
-            <div>
-                {% if errorMessage %}
-                    {{ errorMessage }}
-                {% endif %}
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block headContent %}
+    <!--Markdown CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+
+{% endblock %}
+
+{% block content %}
+    <br>
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-header" style="text-align: center;">
+                    <div class="h3 text-primary font-weight-bold">New Problem</div>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="/problems/create/?{{ idName }}={{ idValue }}" novalidate>
+                        {% csrf_token %}
+                        {% if errorMessage %}
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="text-danger">{{ errorMessage }}</div>
+
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div>
+                            <input type="hidden" name="{{ idName }}" id="{{ idName }}"
+                                   value="{{ idValue }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-form-label">Title</label>
+                            <div class="input-group">
+                                <input id="title" class="form-control" type="text" value="{{ title }}"
+                                       name="title" value="" placeholder="Enter Title" required
+                                       autofocus>
+                            </div>
+                        </div>
+                        <!-- Hidden fields required for passing the data of markdown editor after submitting the form -->
+                        <!--Textarea required for attaching markdown editor -->
+                        <div>
+                            <input type="hidden" name="description" id="description"
+                                   value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="MDDescription">Description</label><br>
+                            <textarea class="form-control" id="MDDescription" type="text" rows="10" cols="50"
+                                      value="{{ description }}"
+                                      name="MDDescription" value="" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="difficulty" class="col-form-label">Difficulty</label>
+                            <select id="difficulty" class="form-control form-select form-select-lg mb-3"
+                                    name="difficulty" required>
+                                <option value="EASY">Easy</option>
+                                <option value="MEDIUM">Medium</option>
+                                <option value="HARD">Hard</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="points" class="col-form-label">Points</label>
+                            <div class="input-group">
+                                <input name="points" class="form-control"
+                                       placeholder="Enter Points"
+                                       id="points" type="number" value="{{ points }}"
+                                       required autofocus/>
+                            </div>
+                        </div>
+                        <input id="timeLimit" type="hidden" value="1"
+                               name="timeLimit" required autofocus/>
+                        <div class="form-group">
+                            <label for="classroomCode" class="col-form-label"></label>
+                            <div class="inline-group">
+                                <button type="submit" OnClick="return validate();"
+                                        class="btn btn-primary btn-block btn-md mr-2">Create
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div>
-                <input type="hidden" name="{{ idName }}" id="{{ idName }}"
-                        value="{{ idValue }}">
-            </div>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+{% endblock %}
 
-            <div class="form-group">
-                <label for="title">Title</label>
-                <input id="title" type="text" value="{{ title }}"
-                       name="title" value="" required autofocus>
-            </div>
+{% block javascripts %}
+    <script>
 
-            <div>
-                <label for="description">Description</label>
-                <textarea id="description" type="text" value="{{ description }}"
-                       name="description" value="" required autofocus>
-                </textarea>
-            </div>
+        // initialization of markdown editor with the custom toolbar
+        let simpleMDE = new SimpleMDE({
+            element: document.getElementById("MDDescription"),
+            toolbar: ["bold", "italic", "heading"],
+        });
 
-            <div class="form-group">
-                <label for="difficulty">Difficulty</label>
-                <select id="difficulty"
-                        name="difficulty" required>
-                    <option value="EASY">Easy</option>
-                    <option value="MEDIUM">Medium</option>
-                    <option value="HARD">Hard</option>
-                </select>
-            </div>
-
-            <div>
-                <label for="points">Points</label>
-                <input id="points" type="number" value="{{ points }}"
-                       name="points" required autofocus>
-                </input>
-            </div>
-
-
-            <div>
-                <label for="timeLimit">Time Limit</label>
-                <input id="timeLimit" type="number" value="{{ timeLimit }}"
-                       name="timeLimit" required autofocus>
-                </input>
-            </div>
-
-            <div>
-                <button type="submit" class="btn btn-primary btn-block">
-                    Create
-                </button>
-            </div>
-        </form>
-</body>
-
-</html>
-
+        //passing data to the hidden field in the form
+        function validate() {
+            console.log(simpleMDE.value());
+            document.getElementById("description").value = simpleMDE.value();
+        }
+    </script>
+{% endblock %}
 

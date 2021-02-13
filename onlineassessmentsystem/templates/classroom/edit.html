@@ -1,3 +1,91 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+    <br>
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-header" style="text-align: center;">
+                    <div class="h3 text-primary font-weight-bold">Edit Classroom</div>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="/classroom/edit/" novalidate="">
+                        {% csrf_token %}
+                        {% if errorMessage %}
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="text-danger">{{ errorMessage }}</div>
+
+                                </div>
+                            </div>
+                        {% endif %}
+                        <input id="classId" type="hidden" value="{{ classroom.classId }}"
+                               name="classId">
+
+                        <input id="classroomCode" type="hidden" value="{{ classroom.classroomCode }}"
+                               name="classroomCode">
+
+
+                        <div class="form-group">
+                            <label for="name" class="col-form-label">Name</label>
+                            <div class="input-group">
+                                <input id="name" class="form-control" type="text" value="{{ classroom.name }}"
+                                       placeholder="Enter Classroom Name" name="name" value="" required
+                                       autofocus>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="classroomCode" class="col-form-label">Classroom Code</label>
+                            <div class="input-group">
+                                <input id="classroomCode" class="form-control" type="text"
+                                       value="{{ classroom.classroomCode }}"
+                                       name="classroomCode" value="" required disabled
+                                       autofocus>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="col-form-label">Description</label>
+                            <div class="input-group">
+                                <textarea id="description" class="form-control" value=""
+                                          placeholder="Enter Description" name="description" value="" required
+                                          autofocus>{{ classroom.description }}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="semester" class="col-form-label">Semester</label>
+                            <div class="input-group">
+                                <input type="text" id="semester" class="form-control" value="{{ classroom.semester }}"
+                                       placeholder="Enter Semester" name="semester" value="" required/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="branch" class="col-form-label">Branch</label>
+                            <div class="input-group">
+                                <input type="text" id="branch" class="form-control" value="{{ classroom.branch }}"
+                                       placeholder="Enter Branch" name="branch" value="" required/>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="classroomCode" class="col-form-label"></label>
+                            <div class="inline-group">
+                                <button type="submit" class="btn btn-primary btn-block btn-md mr-2">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,55 +93,55 @@
     <title>Edit Classroom Details</title>
 </head>
 <body>
-    <form method="POST" action="/classroom/edit/" novalidate="">
-        {% csrf_token %}
-        <div>
-            {% if errorMessage %}
-                {{ errorMessage }}
-            {% endif %}
-        </div>
+<form method="POST" action="/classroom/edit/" novalidate="">
+    {% csrf_token %}
+    <div>
+        {% if errorMessage %}
+            {{ errorMessage }}
+        {% endif %}
+    </div>
 
-        Classroom Id : <input type="number" value="{{ classroom.classId }}"
-                   disabled autofocus>
-        <br>
+    Classroom Id : <input type="number" value="{{ classroom.classId }}"
+                          disabled autofocus>
+    <br>
 
-        <input id="classId" type="hidden" value="{{ classroom.classId }}"
-                   name="classId">
-        <br>
+    <input id="classId" type="hidden" value="{{ classroom.classId }}"
+           name="classId">
+    <br>
 
-        Classroom code : <input type="text" value="{{ classroom.classroomCode }}"
-                   disabled autofocus>
-        <input id="classroomCode" type="hidden" value="{{ classroom.classroomCode }}"
-                   name="classroomCode" >
+    Classroom code : <input type="text" value="{{ classroom.classroomCode }}"
+                            disabled autofocus>
+    <input id="classroomCode" type="hidden" value="{{ classroom.classroomCode }}"
+           name="classroomCode">
 
-        <br>
+    <br>
 
-        <div>
-            <label for="name">Name</label>
-            <input id="name" type="text" value="{{ classroom.name }}"
-                   name="name" required autofocus>
-        </div>
+    <div>
+        <label for="name">Name</label>
+        <input id="name" type="text" value="{{ classroom.name }}"
+               name="name" required autofocus>
+    </div>
 
-        <div>
-            <label >Description</label>
-            <textarea id="description"
-                   name="description" required autofocus>{{ classroom.description }}</textarea>
-        </div>
+    <div>
+        <label>Description</label>
+        <textarea id="description"
+                  name="description" required autofocus>{{ classroom.description }}</textarea>
+    </div>
 
-        Semester
-        <input id="semester" type="number" value="{{ classroom.semester }}" min="1" max="8"
-                   name="semester" required autofocus>
+    Semester
+    <input id="semester" type="number" value="{{ classroom.semester }}" min="1" max="8"
+           name="semester" required autofocus>
 
-        Branch
-        <input id="branch" type="text" value="{{ classroom.branch }}"
-                   name="branch" required autofocus>
-        <br>
+    Branch
+    <input id="branch" type="text" value="{{ classroom.branch }}"
+           name="branch" required autofocus>
+    <br>
 
-        <div>
-            <button type="submit" class="btn btn-primary btn-block">
-                Update
-            </button>
-        </div>
-    </form>
+    <div>
+        <button type="submit" class="btn btn-primary btn-block">
+            Update
+        </button>
+    </div>
+</form>
 </body>
 </html>

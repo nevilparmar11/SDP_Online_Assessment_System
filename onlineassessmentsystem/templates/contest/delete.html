@@ -1,39 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Delete Confirmed Contest</title>
-</head>
-<body>
-    <form method="POST" action="/contests/delete/" novalidate="">
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+    <form method="post" action="/contests/delete/" novalidate="">
         {% csrf_token %}
-        <div>
-            {% if errorMessage %}
-                {{ errorMessage }}
-            {% endif %}
-        </div>
 
         <input id="contestId" type="hidden" value="{{ contest.contestId }}"
                name="contestId">
 
-        Are You sure want to delete Contest? <br><hr>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="jumbotron">
+                    <h4 class="text-danger ml-2">
+                        Are You Sure you want to delete '{{ contest.title }}' ?
+                    </h4><br>
+                    {% if errorMessage %}
+                        <h5 class="text-danger">{{errorMessage}}</h5>
+                    {% endif %}
+                    <div>
+                        <div class="p-1"><b>Name :- </b>{{ contest.title }}</div>
+                        <div class="p-1"><b>Description :- </b>{{ contest.description }}</div>
+                        <div class="p-1"><b>Start Time :- </b>{{ contest.startTime }}</div>
+                        <div class="p-1"><b>End Time :- </b>{{ contest.endTime }}</div>
+                    </div>
 
-        Contest Id : {{ contest.contestId }}
-        Classroom Id : {{ contest.classroom.classId }}<br>
-        Title : {{ contest.title }}<br>
-        Description : {{ contest.description }}<br>
-        registeredUsersCount : {{ contest.registeredUsersCount }}<br>
-        Start Time : {{ contest.startTime }}<br>
-        End Time : {{ contest.endTime }}<br>
-        Is Private? : {{ contest.isPrivate }}<br>
-        Difficulty : {{ contest.difficulty }}<br>
-
-        <div class="form-group m-0">
-            <button type="submit" class="btn btn-danger btn-block">
-                Delete
-            </button>
+                    <div class="float-right">
+                        <a class="btn btn-secondary" href="/contests/?classId={{ contest.classroom.classId }}">Cancel</a>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                    <br>
+                </div>
+            </div>
         </div>
-
     </form>
-</body>
-</html>
+{% endblock %}
+

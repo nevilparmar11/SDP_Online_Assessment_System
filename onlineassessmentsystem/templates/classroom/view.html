@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
     <div class="row">
-        <div class="col-md-12 grid-margin">
+        <div class="col-sm-12 grid-margin">
             <div class="card">
                 <div class="card-header font-weight-semibold"
                      style="background-image: url('{% static 'images/classroom-bg.jpg' %}');color: white;height: 200px;text-align: center;">
@@ -13,22 +13,25 @@
                         Semester : {{ classroom.semester }}<br>
                         Year : {{ classroom.year }}<br>
                         Branch : {{ classroom.branch }}<br>
+                        {% if not user.isStudent %}
+                            Code :- {{ classroom.classroomCode }}
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </div><br>
     <div class="row">
-        <div class="col-6">
-            <div class="card">
-                <div class="card-body h4" style="text-align: center;">
+        <div class="col-sm-6">
+            <div class="card rounded">
+                <div class="card-body h5" style="text-align: center;">
                     <a href="/labs/?classId={{ classroom.classId }}">View Labs</a>
                 </div>
             </div>
         </div>
-        <div class="col-6">
-            <div class="card">
-                <div class="card-body h4" style="text-align: center;">
+        <div class="col-sm-6">
+            <div class="card rounded">
+                <div class="card-body h5" style="text-align: center;">
                     <a href="/contests/?classId={{ classroom.classId }}">View Contests</a>
                 </div>
             </div>
@@ -51,7 +54,7 @@
                 <div class="post-description">
                     <form action="" method="POST">
                         <div class="input-group">
-                      <textarea class="form-control" rows="4" required placeholder="Share Something With Class"
+                      <textarea class="form-control" rows="3" required placeholder="Share Something With Class"
                                 aria-label="With textarea"></textarea>
                         </div>
                         <br>
@@ -83,12 +86,12 @@
                     </div>
                 </div>
                 <div class="post-description">
-                    <p>
+                    <div>
                         Dear students, Problems of first lab are set and deadline is mentioned at lab's page. Start
                         Solving
                         the problems.
                         Mail me or ask me if you have any doubt.
-                    </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -111,11 +114,11 @@
                     </div>
                 </div>
                 <div class="post-description">
-                    <p>
+                    <div>
                         Sir, It seems like there has been problem while setting the lab as problems are not available
                         for
                         lab1.
-                    </p>
+                    </div>
                 </div>
             </div>
         </div>
