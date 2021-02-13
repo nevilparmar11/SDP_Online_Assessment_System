@@ -1,14 +1,11 @@
-import uuid
-from datetime import datetime
-
-from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import render, redirect
+from django.utils.datastructures import MultiValueDictKeyError
 
 from classroom.models import Classroom, ClassroomStudents
+from users.decorators import faculty_required
 from .models import Lab
-from users.decorators import faculty_required, student_required
-from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.decorators import login_required
-from django.utils.datastructures import MultiValueDictKeyError
 
 '''
     Function for Role based authorization of Classroom; upon provided the classId to the request parameter 
@@ -90,6 +87,7 @@ def getClassroom(request):
     Function which will convert Django DateTime to HTML DateTime
 '''
 
+
 def convertDjangoDateTimeToHTMLDateTime(lab):
     return lab.deadline.strftime('%Y-%m-%dT%H:%M')
 
@@ -110,7 +108,7 @@ def list(request):
 
     # lab list will be shown belonging to the particular classroom
     labs = Lab.objects.filter(classroom=classroom)
-    return render(request, 'lab/list.html', {'labs': labs, 'classId': classId})
+    return render(request, 'lab/list.html', {'labs': labs, 'classId': classId, 'classroom': classroom})
 
 
 '''
@@ -183,7 +181,7 @@ def edit(request):
 
         lab_deadline = convertDjangoDateTimeToHTMLDateTime(lab)
         return render(request, 'lab/edit.html',
-                      {'lab': lab, 'lab_deadline' : lab_deadline})
+                      {'lab': lab, 'lab_deadline': lab_deadline})
 
     # When request is POST
     # If contest not exist and If Contest is not belonging to Faculty

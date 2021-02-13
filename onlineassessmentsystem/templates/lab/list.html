@@ -1,32 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Lab list</title>
-</head>
-<body>
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/users/home">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/classroom">My Classrooms</a></li>
+                    <li class="breadcrumb-item"><a
+                            href="/classroom/view/?id={{ classroom.classId }}">{{ classroom.name }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Labs</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
     {% if user.isStudent %}
     {% else %}
-        <a href="/labs/create?classId={{ classId }}">
-            <button type="submit" class="btn btn-primary btn-block">
-                Create New Lab
-            </button>
-        </a>
-        <br><hr>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="page-header-toolbar float-right">
+                    <div class="sort-wrapper">
+                        <a href="/labs/create?classId={{ classId }}" class="btn btn-primary toolbar-item"><i
+                                class="fa fa-plus" aria-hidden="true"></i> Create New Lab</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
     {% endif %}
     {% for lab in labs %}
-        Lab Id : {{ lab.labId }} <br>
-        Classroom Id : {{ lab.classroom.classId }}<br>
-        Title : {{ lab.title }}<br>
-        Description : {{ lab.description }}<br>
-        Subject : {{ lab.subject }}<br>
-        Deadline : {{ lab.deadline }} <br>
-        <a href="/labs/view?id={{ lab.labId }}">
-            <button type="submit" class="btn btn-primary btn-block">
-                Select
-            </button>
-        </a>
-        <br><br>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body container">
+                        <h4>{{ lab.title }}</h4>
+                        <div class="row">
+                            <div class="mt-2 col-md-6 col-sm-6">
+                                <p class="card-text h6">
+                                    {{ lab.subject }}
+                                </p>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row float-right">
+                            <div class="col-md-12 col-sm-6">
+                                {% if not user.isStudent %}
+                                    <a href="/labs/edit?id={{ lab.labId }}"
+                                       class="btn btn-secondary m-1">Edit Lab</a>
+                                    <a href="/labs/delete?id={{ lab.labId }}"
+                                       class="btn btn-danger m-1">Delete Lab</a>
+                                {% endif %}
+                                <a href="/problems/?labId={{ lab.labId }}"
+                                   class="btn btn-primary m-1">View Problems</a>
+                            </div>
+                        </div>
+                        {#                        <br>#}
+                        <div class="text-muted">Deadline :- {{ lab.deadline }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
     {% endfor %}
-</body>
-</html>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

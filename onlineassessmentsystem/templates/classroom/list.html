@@ -1,62 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Classroom List</title>
-</head>
-<body>
-    <a href="/users/home">Home</a>
-    {% if user.isStudent %}
+{% extends "layouts/base.html" %}
+{% load static %}
 
-        <a href="/classroom/join">
-            <button type="submit" class="btn btn-primary btn-block">
-                Join New Classroom
-            </button>
-        </a>
-        <br><hr>
+{% block content %}
+    <div class="row page-title-header">
+        <div class="col-sm-12">
+            <div class="page-header">
+                <h4 class="page-title text-center">My Classrooms</h4>
+            </div>
+        </div>
+        {% if user.isStudent %}
+            <div class="col-md-12">
+                <div class="page-header-toolbar">
+                    <div class="sort-wrapper float-right">
+                        <a href="/classroom/join" class="btn btn-primary btn toolbar-item">Join New Classroom</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-md-12">
+                <div class="page-header-toolbar">
+                    <div class="sort-wrapper float-right">
+                        <a href="/classroom/create" class="btn btn-primary toolbar-item">Create New Classroom</a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    <div class="row">
+        {% if user.isStudent %}
+            {% for classroomStudent in classroomStudents %}
+                <div class="col-md-4 grid-margin">
+                    <a href="/classroom/view?id={{ classroomStudent.classroom.classId }}">
+                        <div class="card">
+                            <div class="h5 card-header card-header-own font-weight-semibold"
+                                 style="background-image: url('{% static 'images/classroom-bg.jpg' %}');color: white;">
+                                {{ classroomStudent.classroom.name }}
+                            </div>
+                            <div class="card-body justify-content-center" style="height: 200px;">
+                                <div class="card-text">{{ classroomStudent.classroom.description }}</div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        {% else %}
+            {% for classroom in classrooms %}
+                <div class="col-md-4 grid-margin">
+                    <a href="/classroom/view?id={{ classroom.classId }}">
+                        <div class="card rounded">
+                            <div class="h5 card-header card-header-own font-weight-semibold"
+                                 style="background-image: url('{% static 'images/classroom-bg.jpg' %}');color: white;">
+                                {{ classroom.name }}
+                            </div>
+                            <div class="card-body justify-content-center" style="height: 150px;">
+                                <div class="card-text">{{ classroom.description }}</div>
+                            </div>
+                            <div class="card-footer float-right" style="text-align: right;background-color: white">
+                                <a class="btn btn-secondary" href="/classroom/edit/?id={{ classroom.classId }}">Edit</a>
+                                <a class="btn btn-danger"
+                                   href="/classroom/delete/?id={{ classroom.classId }}">Delete</a>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock content %}
 
-        {% for classroomStudent in classroomStudents %}
-            Classroom Id : {{ classroomStudent.classroom.classId }}<br>
-            Name : {{ classroomStudent.classroom.name }}<br>
-            Semester : {{ classroomStudent.classroom.semester }}<br>
-            branch : {{ classroomStudent.classroom.branch }}
-            classroomCode : {{ classroomStudent.classroom.classroomCode }}<br>
-            <a href="/classroom/view?id={{ classroomStudent.classroom.classId }}">
-                <button type="submit" class="btn btn-primary btn-block">
-                    Select
-                </button>
-            </a>
-            <a href="/classroom/leave?id={{ classroomStudent.classroom.classId }}">
-                <button type="submit" class="btn btn-primary btn-block">
-                    Leave Class
-                </button>
-            </a>
-        <br><br>
-    {% endfor %}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
 
-    {% else %}
-
-        <a href="/classroom/create">
-            <button type="submit" class="btn btn-primary btn-block">
-                Create New Classroom
-            </button>
-        </a>
-        <br><hr>
-        {% for classroom in classrooms %}
-            Classroom Id : {{ classroom.classId }}<br>
-            Name : {{ classroom.name }}<br>
-            Semester : {{ classroom.semester }}<br>
-            branch : {{ classroom.branch }}
-            classroomCode : {{ classroom.classroomCode }}<br>
-            <a href="/classroom/view?id={{ classroom.classId }}">
-                <button type="submit" class="btn btn-primary btn-block">
-                    Select
-                </button>
-            </a>
-            <br><br>
-        {% endfor %}
-
-    {% endif %}
-
-</body>
-</html>
+{% endblock javascripts %}

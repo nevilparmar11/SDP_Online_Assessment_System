@@ -1,56 +1,78 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Edit Lab</title>
-</head>
-<body>
-    <form method="POST" action="/labs/edit/" novalidate="">
-        {% csrf_token %}
-        <div>
-            {% if errorMessage %}
-                {{ errorMessage }}
-            {% endif %}
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+    <br>
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-header" style="text-align: center;">
+                    <div class="h3 text-primary font-weight-bold">Edit Lab</div>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="/labs/edit/">
+                        {% csrf_token %}
+                        {% if errorMessage %}
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="text-danger">{{ errorMessage }}</div>
+
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div>
+                            <input id="labId" type="hidden" value="{{ lab.labId }}"
+                                   name="labId">
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-form-label">Title</label>
+                            <div class="input-group">
+                                <input id="title" class="form-control" type="text" value="{{ lab.title }}"
+                                       name="title" placeholder="Enter Lab Title" required
+                                       autofocus>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject" class="col-form-label">Subject</label>
+                            <div class="input-group">
+                                <input type="text" id="subject" class="form-control" value="{{ lab.subject }}"
+                                       placeholder="Enter Subject" name="subject" required
+                                       autofocus/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="col-form-label">Description</label>
+                            <div class="input-group">
+                                <textarea id="description" class="form-control"
+                                          placeholder="Enter Description" name="description" required
+                                          autofocus>{{ lab.description }}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="deadline" class="col-form-label">Deadline</label>
+                            <div class="input-group">
+                                <input type="datetime-local" id="deadline" class="form-control"
+                                       value="{{ lab_deadline }}"
+                                       placeholder="Enter Branch" name="deadline" required/>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="classroomCode" class="col-form-label"></label>
+                            <div class="inline-group">
+                                <button type="submit" class="btn btn-primary btn-block btn-md mr-2">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
+        <div class="col-sm-2"></div>
+    </div>
+{% endblock %}
 
-        Contest Id : <input type="number" value="{{ lab.labId }}"
-                   disabled autofocus>
-        <br>
+{% block javascripts %}
+{% endblock %}
 
-        <input id="labId" type="hidden" value="{{ lab.labId }}"
-                   name="labId">
-        <br>
-
-        Classroom Id : {{ lab.classroom.classId }}
-        <br>
-
-        <div class="form-group">
-            <label for="title">Title</label>
-            <input id="title" type="text" value="{{ lab.title }}"
-                   name="title" required autofocus>
-        </div>
-
-        <div>
-            <label for="description">Description</label>
-            <textarea id="description" type="text" name="description" required autofocus>{{ lab.description }}</textarea>
-        </div>
-
-        <div>
-            <label for="subject">Subject</label>
-            <textarea id="subject" type="text" name="subject" required autofocus>{{ lab.subject }}</textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="deadline">Deadline</label>
-            <input id="deadline" type="datetime-local" value="{{ lab_deadline }}"
-                   name="deadline" required autofocus>
-        </div>
-
-        <div>
-            <button type="submit" class="btn btn-primary btn-block">
-                Update
-            </button>
-        </div>
-    </form>
-</body>
-</html>

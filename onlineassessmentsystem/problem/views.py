@@ -1,13 +1,13 @@
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
-from .models import Problem, ProblemComment, TestCase
-from classroom.models import ClassroomStudents, Classroom
+from django.utils.datastructures import MultiValueDictKeyError
+
+from classroom.models import ClassroomStudents
 from contest.models import Contest
 from lab.models import Lab
 from users.decorators import faculty_required
-from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.decorators import login_required
-from django.utils.datastructures import MultiValueDictKeyError
-import os
+from .models import Problem, TestCase
 
 '''
     Function for Role based authorization of Problem; upon provided the pid to the request parameter 
@@ -195,7 +195,7 @@ def testList(request):
         return render(request, 'accessDenied.html', {})
 
     testCases = TestCase.objects.filter(problem=problem)
-    return render(request, 'problem/testsList.html', {'tests': testCases, 'pid': pid})
+    return render(request, 'problem/testsList.html', {'tests': testCases, 'pid': pid, 'problem': problem})
 
 
 '''
@@ -230,7 +230,6 @@ def testCreate(request):
 
 @faculty_required()
 def testDelete(request):
-
     result, tid, testCase = getTestCase(request)
     if not result:
         return render(request, '404.html', {})
@@ -271,7 +270,8 @@ def list(request):
         idName = "contestId"
         problems = Problem.objects.filter(contest=object, doesBelongToContest=True)
 
-    return render(request, 'problem/list.html', {'problems': problems, 'idName': idName, 'idValue': objectId})
+    return render(request, 'problem/list.html',
+                  {'problems': problems, 'idName': idName, 'idValue': objectId, 'isItLab': isItLab, "object": object})
 
 
 '''

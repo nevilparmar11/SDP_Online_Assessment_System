@@ -5,32 +5,32 @@
     <title>View Lab</title>
 </head>
 <body>
-    Lab Id : {{ lab.labId }} <br>
-    Classroom Id : {{ lab.classroom.classId }}<br>
-    Title : {{ lab.title }}<br>
-    Description : {{ lab.description }}<br>
-    Subject : {{ lab.subject }}<br>
-    Deadline  : {{ lab.deadline }}<br>
+Lab Id : {{ lab.labId }} <br>
+Classroom Id : {{ lab.classroom.classId }}<br>
+Title : {{ lab.title }}<br>
+Description : {{ lab.description }}<br>
+Subject : {{ lab.subject }}<br>
+Deadline : {{ lab.deadline }}<br>
 
-    {% if user.isStudent %}
-    {% else %}
-        <a href="/labs/edit?id={{ lab.labId }}">
-            <button type="submit" class="btn btn-primary btn-block">
-                Edit
-            </button>
-        </a>
-        <a href="/labs/delete?id={{ lab.labId }}">
-            <button type="submit" class="btn btn-primary btn-block">
-                Delete
-            </button>
-        </a>
-    {% endif %}
-
-
-    <a href="/problems/?labId={{ lab.labId }}">
+{% if user.isStudent %}
+{% else %}
+    <a href="/labs/edit?id={{ lab.labId }}">
         <button type="submit" class="btn btn-primary btn-block">
-            Problems
+            Edit
         </button>
     </a>
+    <a href="/labs/delete?id={{ lab.labId }}">
+        <button type="submit" class="btn btn-primary btn-block">
+            Delete
+        </button>
+    </a>
+{% endif %}
+
+
+<a href="/problems/?labId={{ lab.labId }}">
+    <button type="submit" class="btn btn-primary btn-block">
+        Problems
+    </button>
+</a>
 </body>
 </html>

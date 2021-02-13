@@ -1,17 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Delete Confirmed Problem</title>
-</head>
-<body>
-    <form method="POST" action="/problems/delete/" novalidate="">
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+    <form method="post" action="/problems/delete/" novalidate="">
         {% csrf_token %}
-        <div>
-            {% if errorMessage %}
-                {{ errorMessage }}
-            {% endif %}
-        </div>
 
         <div>
             <input type="hidden" name="{{ idName }}" id="{{ idName }}" value="{{ idValue }}">
@@ -21,26 +13,30 @@
             <input type="hidden" name="pid" id="pid" value="{{ problem.problemId }}">
         </div>
 
-        Are You sure want to delete Problem? <br><hr>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="jumbotron">
+                    <h4 class="text-danger ml-2">
+                        Are You Sure you want to delete '{{ problem.title }}' problem from
+                        '{{ problem.lab.title }}{{ problem.contest.title }}' ?
+                    </h4><br>
+                    {% if errorMessage %}
+                        <h5 class="text-danger">errorMessage</h5>
+                    {% endif %}
+                    <div>
+                        <div class="p-1"><b>Name :- </b>{{ problem.title }}</div>
+                        <div class="p-1"><b>Points :- </b>{{ problem.points }}</div>
+                        <div class="p-1"><b>Difficulty :- </b>{{ problem.difficulty }}</div>
+                    </div>
 
-        Problem Id : {{ problem.problemId }}<br>
-        Contest Id : {{ problem.contest.contestId }}<br>
-        Lab Id : {{ problem.lab.labId }}<br>
-        Title : {{ problem.title }}<br>
-        Description : <p style="white-space: pre-wrap;">{{ problem.description }}</p><br>
-        Difficulty : {{ problem.difficulty }}<br>
-        Points : {{ problem.points }}<br>
-        TimeLimit : {{ problem.timeLimit }}<br>
-
-        <div class="form-group m-0">
-            <button type="submit" class="btn btn-danger btn-block">
-                Delete
-            </button>
+                    <div class="float-right">
+                        <a onClick="javascript:history.go(-1);" class="btn btn-secondary" href="#">Cancel</a>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                    <br>
+                </div>
+            </div>
         </div>
-
-     <a href="/problems/?{{ idName }}={{ idValue }}">
-        Cancel, Go To Problems
-    </a>
     </form>
-</body>
-</html>
+{% endblock %}
+

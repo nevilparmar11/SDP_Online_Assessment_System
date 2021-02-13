@@ -1,45 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
-{% load static%}
-<head>
-    <meta charset="UTF-8">
-    <title>Create Class</title>
-</head>
-<body>
-    <form method="POST" action="/classroom/create/" novalidate="">
-        {% csrf_token %}
-        <div>
-            {% if errorMessage %}
-                {{ errorMessage }}
-            {% endif %}
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+    <br>
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-header" style="text-align: center;">
+                    <div class="h3 text-primary font-weight-bold">Create Classroom</div>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {% if errorMessage %}
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="text-danger">{{ errorMessage }}</div>
+
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="form-group">
+                            <label for="name" class="col-form-label">Name</label>
+                            <div class="input-group">
+                                <input id="name" class="form-control" type="text" value="{{ name }}"
+                                       placeholder="Enter Classroom Name" name="name" value="" required
+                                       autofocus>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="col-form-label">Description</label>
+                            <div class="input-group">
+                                <textarea id="description" class="form-control" value="{{ description }}"
+                                          placeholder="Enter Description" name="description" value="" required
+                                          autofocus></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="semester" class="col-form-label">Semester</label>
+                            <div class="input-group">
+                                <input type="text" id="semester" class="form-control" value="{{ semester }}"
+                                       placeholder="Enter Semester" name="semester" value="" required/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="branch" class="col-form-label">Branch</label>
+                            <div class="input-group">
+                                <input type="text" id="branch" class="form-control" value="{{ branch }}"
+                                       placeholder="Enter Branch" name="branch" value="" required/>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="classroomCode" class="col-form-label"></label>
+                            <div class="inline-group">
+                                <button type="submit" class="btn btn-primary btn-block btn-md mr-2">Create</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
+        <div class="col-sm-2"></div>
+    </div>
+{% endblock %}
 
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input id="name" type="text" value="{{ name }}"
-                   name="name" value="" required autofocus>
-        </div>
+{% block javascripts %}
+{% endblock %}
 
-        <div>
-            <label for="description">Description</label>
-            <textarea id="description" type="text" value="{{ description }}"
-                   name="description" value="" required autofocus>
-            </textarea>
-        </div>
-
-        Semester
-        <input id="semester" type="number" value="{{ semester }}" min="1" max="8"
-                   name="semester" value="" required autofocus>
-
-        Branch
-        <input id="branch" type="text" value="{{ branch }}"
-                   name="branch" value="" required autofocus>
-
-        <div>
-            <button type="submit" class="btn btn-primary btn-block">
-                Create
-            </button>
-        </div>
-    </form>
-</body>
-</html>
