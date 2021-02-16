@@ -7,7 +7,7 @@ from classroom.models import ClassroomStudents
 from contest.models import Contest
 from lab.models import Lab
 from users.decorators import faculty_required
-from .models import Problem, TestCase
+from .models import Problem, TestCase, ProblemComment
 
 '''
     Function for Role based authorization of Problem; upon provided the pid to the request parameter 
@@ -433,3 +433,43 @@ def delete(request):
 
     problem.delete()
     return redirect('/problems?' + idName + "=" + objectId)
+
+
+''' 
+    function to list out the problem comments
+'''
+
+
+@login_required(login_url='/users/login')
+def comments(request):
+    # If problem not exist and If Contest/Lab is not belonging to Faculty or Student
+    result, pid, problem = getProblem(request)
+    if not result:
+        return render(request, '404.html', {})
+    if not customRoleBasedProblemAuthorization(request, problem, not problem.doesBelongToContest):
+        return render(request, 'accessDenied.html', {})
+
+    problemComments = ProblemComment.objects.filter(problem=problem)
+    return render(request, 'problem/commentsList.html', {'comments': problemComments, 'pid': pid, 'problem': problem})
+
+
+'''
+    function to create the problem comments
+'''
+
+
+@login_required(login_url='/users/login')
+def commentCreate(request):
+    # If problem not exist and If Contest/Lab is not belonging to Faculty or Student
+    result, pid, problem = getProblem(request)
+    if not result:
+        return render(request, '404.html', {})
+    if not customRoleBasedProblemAuthorization(request, problem, not problem.doesBelongToContest):
+        return render(request, 'accessDenied.html', {})
+
+    comment = request.POST["comment"]
+    user = request.user
+    newComment = ProblemComment(comment=comment, user=user, problem=problem)
+    newComment.save()
+
+    return redirect('/problems/comments/?pid' + "=" + pid)

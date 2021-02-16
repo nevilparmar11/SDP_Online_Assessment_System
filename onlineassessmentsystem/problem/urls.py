@@ -11,8 +11,9 @@ urlpatterns = [
     path('view/', views.view),
     path('tests/', views.testList),
     path('testCreate/', views.testCreate),
-    path('testDelete/', views.testDelete)
-
+    path('testDelete/', views.testDelete),
+    path('comments/', views.comments),
+    path('commentCreate/', views.commentCreate),
 ]
 
 if settings.DEBUG:
