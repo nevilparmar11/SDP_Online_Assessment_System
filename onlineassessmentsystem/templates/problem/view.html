@@ -47,6 +47,13 @@
     </div>
     <br>
     <div class="row">
+        <div class="col-sm-12" style="text-align: right">
+            <a class="btn btn-secondary" href="/submissions/list/?problemId={{ problem.problemId }}&&username={{ user.username }}">View My Submissions</a>
+            <a class="btn btn-primary" href="/submissions/list/?problemId={{ problem.problemId }}">View All Submissions</a>
+        </div>
+    </div>
+    <br>
+    <div class="row">
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header p-5 bg-light" style="background-color: white !important;">
@@ -106,13 +113,13 @@ int main(){
     <div class="row" id="loader1" style="display: none">
         <div class="col-sm-12">
             <div class="jumbotron text-center">
-                <img src="{% static 'images/loader1.jpg' %}" height="150" width="150"><br><br>
+                <img src="{% static 'images/loader1.jpg' %}" height="130" width="130"><br><br>
                 <h3 class="font-weight-bold">Evaluating Result</h3>
             </div>
         </div>
     </div>
     <br>
-    <div id="output" class="row" style="display: none">
+    <div id="output1" class="row" style="display: none">
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-body text-center">
@@ -153,7 +160,7 @@ int main(){
             $(this).text("Submitting")
             $("#submitButton").prop('disabled', true);
             $("#loader1").css({"display":"block"})
-            $("#output").css({"display":"none"})
+            $("#output1").css({"display":"none"})
             var code = editor.getValue()
             $.ajax({
                     type: "GET",
@@ -164,7 +171,7 @@ int main(){
                     },
                     success: function (data) {
                         $("#loader1").css({"display":"none"})
-                        $("#output").css({"display":"block"})
+                        $("#output1").css({"display":"block"})
                         $("#submitButton").text("Submit")
                         $("#submitButton").prop('disabled', false);
                         $("#result").text(data['passed']+"/"+data['total']+" test cases passed!!!")

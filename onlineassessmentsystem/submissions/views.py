@@ -1,13 +1,25 @@
 import datetime
 import json
 import os
+from urllib.parse import urlencode
 
+import pytz
 import requests
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse
+from django.shortcuts import render
 
 from problem.models import TestCase, Problem
+from problem.views import customRoleBasedProblemAuthorization
+from users.models import User
 from .models import Submission
+
+utc = pytz.UTC
+
+loginRedirectMessage = urlencode({'msg': 'Please Login'})
 
 '''Function to Compile code using API'''
 
@@ -53,6 +65,7 @@ def compareOutput(codeOutput, testcaseOutput):
 '''Function to submit code'''
 
 
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def submitCode(request):
     code = request.GET.get('code')
     problemId = request.GET.get('problemId')
@@ -81,10 +94,70 @@ def submitCode(request):
         if compareOutput(output, fpOutput.read()):
             testCasesPassed += 1
         fpOutput.close()
-    print(testCasesPassed / totalTestCases * problem.points)
+
     score = int(testCasesPassed / totalTestCases * problem.points)
     submission = Submission(problem_id=problemId, status=True, submissionTime=datetime.date.today(), user=request.user,
                             score=score,
                             filePath=filePath)
     submission.save()
     return JsonResponse({"passed": testCasesPassed, 'total': totalTestCases, 'score': score})
+
+
+'''Function To display List of submissions'''
+
+
+@login_required(login_url='/users/login?' + loginRedirectMessage)
+def list(request):
+    problemId = request.GET.get('problemId')
+    page = request.GET.get('page', 1)
+
+    if problemId is None:
+        return render(request, '404.html')
+
+    try:
+        problem = Problem.objects.get(problemId=problemId)
+    except ObjectDoesNotExist:
+        return render(request, '404.html')
+
+    if not customRoleBasedProblemAuthorization(request, problem, not problem.doesBelongToContest):
+        return render(request, 'accessDenied.html')
+    username = request.GET.get("username")
+    if username is not None:
+        try:
+            user = User.objects.get(username=username)
+            submissionsList = Submission.objects.filter(problem=problem, user=user)
+        except ObjectDoesNotExist:
+            submissionsList = []
+
+    else:
+        submissionsList = Submission.objects.filter(problem=problem)
+    paginator = Paginator(submissionsList, 10)
+    try:
+        submissions = paginator.page(page)
+    except PageNotAnInteger:
+        submissions = paginator.page(1)
+    except EmptyPage:
+        submissions = paginator.page(paginator.num_pages)
+
+    return render(request, 'submissions/list.html',
+                  {'problem': problem, 'submissions': submissions, "username": username})
+
+
+@login_required(login_url='/users/login?' + loginRedirectMessage)
+def view(request):
+    submissionId = request.GET.get('submissionId')
+    if submissionId is None:
+        return render(request, '404.html')
+
+    try:
+        submission = Submission.objects.get(submissionId=submissionId)
+    except ObjectDoesNotExist:
+        return render(request, '404.html')
+
+    if not customRoleBasedProblemAuthorization(request, submission.problem, not submission.problem.doesBelongToContest):
+        return render(request, 'accessDenied.html')
+    uploadDirectory = settings.MEDIA_ROOT
+    file = open(os.path.join(uploadDirectory, submission.filePath), "r")
+    code = file.read()
+    file.close()
+    return render(request, 'submissions/view.html', {'submission': submission, 'code': code})
