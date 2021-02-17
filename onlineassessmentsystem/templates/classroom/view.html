@@ -23,18 +23,22 @@
     </div><br>
     <div class="row">
         <div class="col-sm-6">
-            <div class="card rounded">
-                <div class="card-body h5" style="text-align: center;">
-                    <a href="/labs/?classId={{ classroom.classId }}">View Labs</a>
+            <a href="/labs/?classId={{ classroom.classId }}">
+                <div class="card rounded">
+                    <div class="card-body h5" style="text-align: center;">
+                        View Labs
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
         <div class="col-sm-6">
-            <div class="card rounded">
-                <div class="card-body h5" style="text-align: center;">
-                    <a href="/contests/?classId={{ classroom.classId }}">View Contests</a>
+            <a href="/contests/?classId={{ classroom.classId }}">
+                <div class="card rounded">
+                    <div class="card-body h5" style="text-align: center;">
+                        View Contests
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
     <br>
@@ -53,12 +57,62 @@
                     </div>
                 </div>
                 <div class="post-description">
-                    <form action="" method="POST">
+                    <form id="addCommentForm" action="/classroom/commentCreate/" name="form" method="POST" novalidate=""
+                          enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="classId" id="classId" value="{{ classroom.classId }}">
                         <div class="input-group">
-                      <textarea class="form-control" rows="3" required placeholder="Share Something With Class"
-                                aria-label="With textarea"></textarea>
+                            <textarea id="comment" name="comment" class="form-control" rows="3" required placeholder="Share Something With Class"
+                                      aria-label="With textarea"></textarea>
                         </div>
                         <br>
+                        <div class="float-left">
+
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#exampleModal">
+                                <i class="fa fa-plus"></i>&nbsp;Add Attachment
+                            </button>
+                            <label id="filename" class="text-primary"></label>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title text-primary font-weight-medium"
+                                                id="exampleModalLabel">
+                                                Add Test Case</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+
+                                            <div class="mb-2">Add Attachment</div>
+                                            <div class="input-group mb-3">
+                                                <div class="custom-file">
+                                                    <input class="custom-file-input" id="inputFile" type="file"
+                                                           value=""
+                                                           name="inputFile" value="" required autofocus>
+                                                    <label class="custom-file-label" for="inputGroupFile02"
+                                                           aria-describedby="inputGroupFileAddon02">Choose Attachment Document
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" form="addCommentForm" data-dismiss="modal" class="btn btn-secondary"
+                                                onClick="return validate();">Cancel
+                                            </button>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Add
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                         <div class="float-right">
                             <button type="reset" class="btn btn-secondary btn-md">Clear</button>
                             <button type="submit" class="btn btn-primary btn-md">Post</button>
@@ -70,61 +124,61 @@
     </div>
     <br>
 
-    <!-- This will be in loop for all comments -->
-    <div class="row">
-        <div class="col-12">
-            <div class="card card-white post round-border">
-                <div class="post-heading">
-                    <div class="float-left image">
-                        <img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar"
-                             alt="user profile image">
-                    </div>
-                    <div class="float-left meta">
-                        <div class="title h5">
-                            <a href="#"><b>Pandav Patel</b></a>
+    {% for comment in comments %}
+        <!-- This will be in loop for all comments -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-white post round-border">
+                    <div class="post-heading">
+                        <div class="float-left image">
+                            <img src="/uploads/{{ user.profilePicture }}" class="img-circle avatar"
+                                 alt="user profile image">
                         </div>
-                        <h6 class="text-muted time">1 minute ago</h6>
+                        <div class="float-left meta">
+                            <div class="title h5">
+                                <a href="#"><b>{{ comment.user.username }}</b></a>
+                            </div>
+                            <h6 class="text-muted time">1 minute ago</h6>
+                        </div>
                     </div>
-                </div>
-                <div class="post-description">
-                    <div>
-                        Dear students, Problems of first lab are set and deadline is mentioned at lab's page. Start
-                        Solving
-                        the problems.
-                        Mail me or ask me if you have any doubt.
+                    <div class="post-description">
+                        <div class="row">
+                            <div class="col-md-9">
+                                {{ comment.comment }}
+                            </div>
+                            {% if comment.attachmentPath %}
+                                <div class="col-md-3 card shadow-none" style="background-color: #1026DE">
+                                    <a href="{{ comment.attachmentPath.url }}" class="text-white" data-title="{{ comment.attachmentPath }}"> See Attachment </a>
+                                    <a href="{{ comment.attachmentPath.url }}" class="text-white" data-title="{{ comment.attachmentPath }}" download>  Download</a>
+                                </div>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <br>
-    <!-- Loop Ends -->
-    <div class="row">
-        <div class="col-12">
-            <div class="card card-white post round-border">
-                <div class="post-heading">
-                    <div class="float-left image">
-                        <img src="http://bootdey.com/img/Content/user_3.jpg" class="img-circle avatar"
-                             alt="user profile image">
-                    </div>
-                    <div class="float-left meta">
-                        <div class="title h5">
-                            <a href="#"><b>Nevil Parmar</b></a>
-                        </div>
-                        <h6 class="text-muted time">1 minute ago</h6>
-                    </div>
-                </div>
-                <div class="post-description">
-                    <div>
-                        Sir, It seems like there has been problem while setting the lab as problems are not available
-                        for
-                        lab1.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        <br>
+        <!-- Loop Ends -->
+
+    {% endfor %}
+
 {% endblock %}
 
 {% block javascripts %}
+    <script>
+        function validate() {
+            form.inputFile.value = "";
+            $("#filename").html("");
+            $('.custom-file-label').html("");
+        }
+        $(document).ready(function () {
+            $(".custom-file-input").on("change", function () {
+                var fnm = $(this).val().split("\\").pop();
+                $(this).next('.custom-file-label').html(fnm);
+                $("#filename").html(fnm);
+            })
+        });
+
+
+    </script>
 {% endblock %}
