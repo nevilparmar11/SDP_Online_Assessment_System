@@ -2,12 +2,11 @@ import uuid
 from datetime import datetime
 
 from django.shortcuts import render, redirect
-from .models import Classroom, ClassroomStudents
+from .models import Classroom, ClassroomStudents, ClassComments
 from users.decorators import faculty_required, student_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.utils.datastructures import MultiValueDictKeyError
-
 
 '''
     Function to get all Classroom list details
@@ -16,7 +15,6 @@ from django.utils.datastructures import MultiValueDictKeyError
 
 @login_required(login_url='/users/login')
 def list(request):
-
     user = request.user
 
     # classroom list will be shown according to th user type
@@ -35,7 +33,6 @@ def list(request):
 
 @faculty_required()
 def create(request):
-
     if request.method == "GET":
         return render(request, "classroom/create.html")
 
@@ -60,7 +57,6 @@ def create(request):
 
 @login_required(login_url='/users/login')
 def view(request):
-
     user = request.user
 
     # if requested classroom not exists then
@@ -70,19 +66,22 @@ def view(request):
     except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
         return render(request, '404.html', {})
 
+    # fetch all the class comments belonging to perticular classroom
+    comments = ClassComments.objects.filter(classroom=classroom)
+
     if user.isStudent:
 
         # if student has joined classroom then only it is to be viewed
         try:
             classroomStudent = ClassroomStudents.objects.get(student=user, classroom=classroom)
-            return render(request, './classroom/view.html', {'classroom': classroom})
+            return render(request, './classroom/view.html', {'classroom': classroom, 'comments': comments})
         except ObjectDoesNotExist:
             return render(request, "accessDenied.html", {})
     else:
 
         # if faculty has created classroom then only it is to be viewed
         if classroom.user == user:
-            return render(request, './classroom/view.html', {'classroom': classroom})
+            return render(request, './classroom/view.html', {'classroom': classroom, 'comments': comments})
         else:
             return render(request, "accessDenied.html", {})
 
@@ -94,7 +93,6 @@ def view(request):
 
 @faculty_required()
 def edit(request):
-
     if request.method == "GET":
 
         # if classroom not exists
@@ -223,3 +221,27 @@ def leaveClassroom(request):
 
     classroomStudent.delete()
     return redirect('/classroom/')
+
+
+'''
+    function to create the problem comments
+'''
+
+
+@login_required(login_url='/users/login')
+def commentCreate(request):
+
+    # if requested classroom not exists then
+    try:
+        classId = request.POST['classId']
+        classroom = Classroom.objects.get(classId=classId)
+    except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
+        return render(request, '404.html', {})
+
+    comment = request.POST["comment"]
+    user = request.user
+    inputFile = request.FILES.get('inputFile')
+    newComment = ClassComments(comment=comment, user=user, classroom=classroom, attachmentPath=inputFile)
+    newComment.save()
+
+    return redirect('/classroom/view/?id' + "=" + classId)

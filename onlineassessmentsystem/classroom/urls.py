@@ -9,4 +9,5 @@ urlpatterns = [
     path('view/', views.view),
     path('join/', views.joinClassroom),
     path('leave/', views.leaveClassroom),
+    path('commentCreate/', views.commentCreate),
 ]
