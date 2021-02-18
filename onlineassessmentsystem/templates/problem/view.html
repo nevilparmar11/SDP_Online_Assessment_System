@@ -8,7 +8,8 @@
             color: black !important;
             font-size: 17px;
         }
-        #editor{
+
+        #editor {
             font-size: 17px;
         }
     </style>
@@ -22,17 +23,33 @@
                     <li class="breadcrumb-item"><a href="/users/home">Home</a></li>
                     <li class="breadcrumb-item"><a href="/classroom">My Classrooms</a></li>
                     {% if problem.doesBelongToContest %}
-                        <li class="breadcrumb-item"><a href="/classroom/view/?id={{ problem.contest.classroom.classId }}">{{ problem.contest.classroom.name }}</a></li>
-                        <li class="breadcrumb-item"><a href="/contests/?classId={{ problem.contest.classroom.classId }}">Contests</a></li>
-                        <li class="breadcrumb-item"><a href="/problems/?contestId={{ problem.contest.contestId }}">{{ problem.contest.title }}</a></li>
+                        <li class="breadcrumb-item"><a
+                                href="/classroom/view/?id={{ problem.contest.classroom.classId }}">{{ problem.contest.classroom.name }}</a>
+                        </li>
+                        <li class="breadcrumb-item"><a
+                                href="/contests/?classId={{ problem.contest.classroom.classId }}">Contests</a></li>
+                        <li class="breadcrumb-item"><a
+                                href="/problems/?contestId={{ problem.contest.contestId }}">{{ problem.contest.title }}</a>
+                        </li>
                     {% else %}
-                        <li class="breadcrumb-item"><a href="/classroom/view/?id={{ problem.lab.classroom.classId }}">{{ problem.lab.classroom.name }}</a></li>
-                        <li class="breadcrumb-item"><a href="/labs/?classId={{ problem.lab.classroom.classId }}">Labs</a></li>
-                        <li class="breadcrumb-item"><a href="/problems/?labId={{ problem.lab.labId }}">{{ problem.lab.title }}</a></li>
+                        <li class="breadcrumb-item"><a
+                                href="/classroom/view/?id={{ problem.lab.classroom.classId }}">{{ problem.lab.classroom.name }}</a>
+                        </li>
+                        <li class="breadcrumb-item"><a
+                                href="/labs/?classId={{ problem.lab.classroom.classId }}">Labs</a></li>
+                        <li class="breadcrumb-item"><a
+                                href="/problems/?labId={{ problem.lab.labId }}">{{ problem.lab.title }}</a></li>
                     {% endif %}
                     <li class="breadcrumb-item active" aria-current="page">{{ problem.title }}</li>
                 </ol>
             </nav>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-sm-12" style="text-align: right">
+            <a class="btn btn-secondary" href="/submissions/list/?problemId={{ problem.problemId }}&&username={{ user.username }}">View My Submissions</a>
+            <a class="btn btn-primary" href="/submissions/list/?problemId={{ problem.problemId }}">View All Submissions</a>
         </div>
     </div>
     <br>
@@ -47,7 +64,8 @@
                         </div>
                         {% if not user.isStudent %}
                             <div class="col-sm-12 float-right" style="text-align: right">
-                                <a href="/problems/tests/?pid={{ problem.problemId }}" class="btn btn-primary">Manage Test Cases</a>
+                                <a href="/problems/tests/?pid={{ problem.problemId }}" class="btn btn-primary">Manage
+                                    Test Cases</a>
                             </div>
                         {% endif %}
                     </div>
@@ -64,9 +82,10 @@
         </div>
     </div>
     <br>
+    <input type="hidden" name="problemId" id="problemId" value="{{ problem.problemId }}">
     {#  Code Editor  #}
     <div class="row">
-        <div class="col-12">
+        <div class="col-sm-12">
             <div class="card">
                 <div class="card-body">
                     <div class="row h4">
@@ -83,9 +102,34 @@ int main(){
                 <div class="card-footer">
                     <div class="row float-right">
                         <div class="col-12">
-                            <button class="btn btn-primary">Submit Code</button>
+                            <button id="submitButton" class="btn btn-primary">Submit Code</button>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row" id="loader1" style="display: none">
+        <div class="col-sm-12">
+            <div class="jumbotron text-center">
+                <img src="{% static 'images/loader1.jpg' %}" height="130" width="130"><br><br>
+                <h3 class="font-weight-bold">Evaluating Result</h3>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div id="output1" class="row" style="display: none">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4 class="text-primary font-weight-bold">Result</h4><br>
+                    <h5 class="font-weight-bold" id="result"></h5>
+                    <div class="progress">
+                      <div class="progress-bar" id="tc-progress-bar" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <br>
+                    <h5 class="font-weight-bold" id="score"></h5>
                 </div>
             </div>
         </div>
@@ -110,5 +154,34 @@ int main(){
         editor.setAutoScrollEditorIntoView(true);
         editor.HighlightRules = 'ace/mode/c_cpp_highlight_rules';
         console.log(editor.getValue())
+    </script>
+    <script>
+        $("#submitButton").click(function () {
+            $(this).text("Submitting")
+            $("#submitButton").prop('disabled', true);
+            $("#loader1").css({"display":"block"})
+            $("#output1").css({"display":"none"})
+            var code = editor.getValue()
+            $.ajax({
+                    type: "GET",
+                    url: "/submissions/submit/",
+                    data: {
+                        'code': code,
+                        'problemId': $("#problemId").val()
+                    },
+                    success: function (data) {
+                        $("#loader1").css({"display":"none"})
+                        $("#output1").css({"display":"block"})
+                        $("#submitButton").text("Submit")
+                        $("#submitButton").prop('disabled', false);
+                        $("#result").text(data['passed']+"/"+data['total']+" test cases passed!!!")
+                        var pct = data['passed'] / data['total'] * 100
+                        $("#tc-progress-bar").attr("aria-valuenow",pct)
+                        $("#tc-progress-bar").css({"width":pct+"%"})
+                        $("#score").text("Score :- "+data['score'])
+                    }
+                }
+            )
+        })
     </script>
 {% endblock %}

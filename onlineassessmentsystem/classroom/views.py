@@ -21,7 +21,7 @@ def list(request):
 
     # classroom list will be shown according to th user type
     if user.isStudent:
-        classroomStudents = ClassroomStudents.objects.all().select_related('student')
+        classroomStudents = ClassroomStudents.objects.filter(student=user)
         return render(request, './classroom/list.html', {'classroomStudents': classroomStudents})
     else:
         classrooms = Classroom.objects.filter(user=user)
