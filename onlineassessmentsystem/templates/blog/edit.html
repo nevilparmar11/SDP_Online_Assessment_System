@@ -1,0 +1,60 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+    <br>
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-header" style="text-align: center;">
+                    <div class="h3 text-primary font-weight-bold">Edit Blog</div>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="/blogs/edit/" novalidate="">
+                        {% csrf_token %}
+                        {% if errorMessage %}
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <div class="text-danger">{{ errorMessage }}</div>
+
+                                </div>
+                            </div>
+                        {% endif %}
+                        <input id="blogId" type="hidden" value="{{ blog.blogId }}"
+                               name="blogId">
+
+                        <div class="form-group">
+                            <label for="title" class="col-form-label">Title</label>
+                            <div class="input-group">
+                                <input id="title" class="form-control" type="text" value="{{ blog.title }}"
+                                       placeholder="Enter Blog Title" name="title" value="" required
+                                       autofocus>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description" class="col-form-label">Description</label>
+                            <div class="input-group">
+                                <textarea id="description" class="form-control" value=""
+                                          placeholder="Enter Description" name="description" value="" required
+                                          autofocus>{{ blog.description }}</textarea>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <div class="inline-group">
+                                <button type="submit" class="btn btn-primary btn-block btn-md mr-2">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
+

@@ -1,0 +1,23 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12 grid-margin">
+            <div class="card">
+                <div class="card-header font-weight-semibold"
+                     style="background-image: url('{% static 'images/classroom-bg.jpg' %}');color: white;height: 200px;text-align: center;">
+
+                    <h2>{{ blog.title }}</h2>
+
+                </div>
+            </div>
+        </div>
+    </div><br>
+
+    <div>
+            {{ blog.description }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
