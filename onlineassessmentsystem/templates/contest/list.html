@@ -50,6 +50,9 @@
                                        class="btn btn-secondary m-1">Edit Contest</a>
                                     <a href="/contests/delete?id={{ contest.contestId }}"
                                        class="btn btn-danger m-1">Delete Contest</a>
+                                {% else %}
+                                    <a href="/contests/leaderboard?id={{ contest.contestId }}"
+                                       class="btn btn-success m-1"><i class="fa fa-trophy"></i> Leaderboard</a>
                                 {% endif %}
                                 <a href="/problems/?contestId={{ contest.contestId }}"
                                    class="btn btn-primary">View Problems</a>
