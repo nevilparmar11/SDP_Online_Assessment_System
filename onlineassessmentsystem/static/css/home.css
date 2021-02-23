@@ -1,0 +1,290 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300&display=swap');
+
+/*----- General Styling -----*/
+*{margin: 0; padding: 0;}
+
+body{
+    font-family: 'Poppins', sans-serif;   
+}
+.container{
+    margin-bottom: 100px;
+}
+h1, h2, h3{
+    color: #444343;
+}
+.green-btn{
+    background: #21B573;
+    border-radius: 33px;
+    width: 153px;
+    height: 43px;
+    color: #fff;
+}
+.green-btn:hover{
+    background: none;
+    border: 2px solid #21B573;
+    color: #818181;
+}
+
+/*------ Header ------*/
+.header-bg{
+    background-color: #F0FFF0;
+    width: 100%;
+    height: 576px;
+    left: 0px;
+    top: 0px;
+    margin-bottom: 80px;
+}
+#logo{
+    position: absolute;
+    top: 30px;
+}
+.my-navbar{
+    padding-top: 30px;
+}
+.my-navbar ul li{
+    padding-left: 25px;
+}
+.my-navbar ul li a{
+    font-weight: 600;
+    color: #818181;
+}
+.navbar-nav .nav-item .nav-link:hover, .my-drop a:hover{
+    color: #21B573;
+}
+.sign-in-button{
+    background: #21B573;
+    border-radius: 33px;
+    width: 104px;
+    height: 43px;
+    color: #fff;
+    margin-left: 20px;
+}
+.sign-in-button:hover{
+    background: none;
+    border: 2px solid #21B573;
+    color: #818181;
+}
+.my-drop{
+    border: none;
+    background: none;
+    margin-top: -1px;
+}
+.dropdown-menu .dropdown-item{
+    background: none;
+}
+.dropdown:hover .dropdown-menu {
+    display: block; 
+ }
+
+ /*----- header banner area -----*/
+ .header-banner-text{
+     padding-top: 80px;
+ }
+ .colored-text{
+    color: #FD511A;
+    font-size: 16px;
+    line-height: 24px;
+ }
+ .header-banner-text h1{
+    font-size: 48px;
+    line-height: 70px;
+    font-weight: 600;
+ }
+ .header-banner-text span{
+     color: #21B573;
+ }
+ .header-banner-text p{
+    font-size: 16px;
+    line-height: 36px;
+ }
+ .header-banner-img img{
+     width: 100%;
+ }
+
+ /*-----main area-----*/
+ .single-card{
+    height: 250px;
+    width: 250px;
+    background: #F8FFFB;
+    border-radius: 10px;
+    transition: all 0.5s ease;
+}
+.single-card:hover{
+    box-shadow: 1px 7px 20px rgba(158, 157, 157, 0.3);
+    transform: scale(1.1);
+    filter: brightness(100%);
+    background-color: #fff;
+    cursor: pointer;
+ }
+ .single-card h5{
+     font-weight: 500;
+ }
+ .single-card img{
+     padding-bottom: 22px;
+ }
+
+ /*-----Online Course Section -----*/
+ .online-courses h2{
+     font-weight: 600;
+     padding-bottom: 79px;
+ }
+ .card{
+     border: none;
+     box-shadow: 1px 7px 20px rgba(158, 157, 157, 0.4);
+     padding-bottom: 10px;
+ }
+ .course-img{
+     cursor: pointer;
+ }
+ .course-img:hover{
+    
+ }
+ .card-footer-icon{
+    padding: 0 5px;
+    
+ }
+ .card-footer h6{
+    font-size: 14px; 
+    padding-top: 5px;
+ }
+ .card-footer{
+     border: none;
+     background: none;
+     height: 45px;
+ }
+
+ /*----- Admission Section -----*/
+ .admission h3{
+     padding: 30px 0 40px;
+     font-weight: 600;
+ }
+ .admit-form{
+     background-color: #F0FFF0;
+     padding: 50px;
+ }
+ .admit-img{
+     background-color: #f8f5f5;
+ }
+
+ /*----- Testimonal Section -----*/
+.testimonial-carousel{
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.my-indicator{
+    position: relative;
+    top: 244px;
+    left: 38px;
+}
+.carousel-indicators li {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin: 10px;
+    text-indent: 0;
+    cursor: pointer;
+    border: none;
+    border-radius: 15px;
+    background-color: gray;
+    
+}
+.carousel-indicators .active {
+    background-color: #21B573; 
+}
+.testimonial h2{
+    font-weight: 600;
+    padding: 0 0 17px 40px;
+ }
+ #client-text{
+    font-style: italic;
+    padding-top: 20px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 400;
+}
+#star-rating{
+    height: 15px;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 10px;
+}
+.client-review h6{
+    text-align: center;
+    color: #494545;
+    padding-left: 5px;
+    font-size: 14px;
+    margin-top: -5px;
+}
+.client-review h5{
+    text-align: center;
+    font-size: 16px;
+}
+
+/*------ Footer Section -----*/
+footer .container{
+    margin-bottom: 0;
+}
+.footer-bg{
+    background-color: #282531;
+    width: 100%;
+    height: 460px;
+}
+.footer-left-text{
+    margin-top: 10px;
+    margin-bottom: 30px;
+    font-weight: 200;
+    font-size: 16px;
+    color: white;
+}
+.footer-left {
+    padding-top: 40px;
+}
+.footer-left h4{
+    color: rgb(216, 209, 209);   
+}
+.footer-left .input-box{
+    width: 60%;
+    background-color: #b6b4b4;
+    border: none;
+    height: 35px;
+    margin-bottom: 8px;
+}
+.footer-left .send-btn{
+    background-color: #21B573;
+    border-radius: 2px;
+    padding: 5px 20px;
+    border: none;
+    color: white;
+    transition: all 0.5s ease;
+}
+.footer-right{
+    color: white;
+    padding-top: 70px;
+    font-weight: 200;
+    font-size: 16px;
+}
+.footer-right .link-column a{
+    color: white;
+    padding-bottom: 16px;
+    font-weight: 200;
+    font-size: 16px;
+}
+.footer-bottom{
+    padding-top: 65px;   
+}
+.footer-bottom .copyright p{
+    color: #838383;
+    font-weight: 200;
+    font-size: 14px;
+    padding-left: 10px;
+    padding-top: 3px;
+}
+.social-icon a{
+    padding: 5px;
+}
+.social-icon a:hover{
+   filter: brightness(200%);
+}
+
+/* ---------- End ---------- */
