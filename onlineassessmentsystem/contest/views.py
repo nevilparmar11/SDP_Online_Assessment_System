@@ -182,7 +182,7 @@ def create(request):
             return render(request, '404.html', {})
         if not customRoleBasedClassroomAuthorization(request, classroom):
             return render(request, 'accessDenied.html', {})
-        return render(request, 'contest/create.html', {'classId': classId})
+        return render(request, 'contest/create.html', {'classId': classId, 'currentTime': str(timezone.now().strftime("%Y-%m-%dT%H:%M"))})
 
     # POST request
     # If Classroom not exist and If Classroom is not belonging to Faculty or Student
@@ -249,7 +249,7 @@ def edit(request):
             isOver = True
             return redirect('/contests/?classId='+str(contest.classroom.classId)+'&msg=Contest has ended')
         return render(request, 'contest/edit.html',
-                      {'contest': contest, 'startTime': startTimeString, 'endTime': endTimeString})
+                      {'contest': contest, 'startTime': startTimeString, 'endTime': endTimeString, 'currentTime': str(timezone.now().strftime("%Y-%m-%dT%H:%M"))})
 
     # When request is POST
     # If contest not exist and If Contest is not belonging to Faculty

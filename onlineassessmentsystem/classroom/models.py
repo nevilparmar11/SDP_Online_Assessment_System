@@ -7,7 +7,7 @@ from users.models import User
 
 class Classroom(models.Model):
     classId = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(null=False, max_length=50, default="DEFAULT-CLASS")
     description = models.CharField(null=False, max_length=1000, default="Default description")
     semester = models.IntegerField(default=-1)
