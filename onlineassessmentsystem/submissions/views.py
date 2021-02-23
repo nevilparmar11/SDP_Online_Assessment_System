@@ -2,7 +2,6 @@ import datetime
 import json
 import os
 from urllib.parse import urlencode
-from django.utils import  timezone
 
 import pytz
 import requests
@@ -12,15 +11,42 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.utils import timezone
 
+from classroom.models import ClassroomStudents
 from problem.models import TestCase, Problem
-from problem.views import customRoleBasedProblemAuthorization
 from users.models import User
 from .models import Submission
 
 utc = pytz.UTC
 
 loginRedirectMessage = urlencode({'msg': 'Please Login'})
+
+'''
+    Function for Role based authorization of Problem; upon provided the pid to the request parameter 
+'''
+
+
+def customRoleBasedProblemAuthorization(request, problem, isItLab):
+    user = request.user
+
+    # If Faculty hasn't created classroom
+    # or Student is not enrolled to the classroom
+    if user.isStudent:
+        try:
+            if isItLab:
+                classroomStudents = ClassroomStudents.objects.get(student=user, classroom=problem.lab.classroom)
+            else:
+                classroomStudents = ClassroomStudents.objects.get(student=user, classroom=problem.contest.classroom)
+        except ObjectDoesNotExist:
+            return False
+    else:
+        if ((isItLab and problem.lab.classroom.user != user) or (
+                not isItLab and problem.contest.classroom.user != user)):
+            return False
+
+    return True
+
 
 '''Function to Compile code using API'''
 
@@ -30,8 +56,8 @@ def compileCode(code, stdIn):
         'script': code,
         'language': 'c',
         'versionIndex': '4',
-        'clientId': 'a92ce167568266c5f8f01df202603f6e',
-        'clientSecret': '236048d32cb67fbf2dcb920f2673f6446fc2d26bec118453906130650ec70070',
+        'clientId': 'a4aa65a157cadf264708a78e14c229c7',
+        'clientSecret': '914ba5e4c071a74fa7c4e4c958543fb7ab8100602ecb38a19640d697d8831125',
         'stdin': stdIn
     }
     url = 'https://api.jdoodle.com/v1/execute'
@@ -63,11 +89,19 @@ def compareOutput(codeOutput, testcaseOutput):
     return True
 
 
+@login_required(login_url='/users/login?' + loginRedirectMessage)
+def runCode(request):
+    code = request.GET.get('code')
+    stdin = request.GET.get('stdin')
+    output = compileCode(code, stdin)
+    return JsonResponse({"output": output})
+
+
 '''Function to submit code'''
 
 
 @login_required(login_url='/users/login?' + loginRedirectMessage)
-def submitCode(request):
+def submitCode(request, update=False, submission=None):
     code = request.GET.get('code')
     problemId = request.GET.get('problemId')
     problem = Problem.objects.get(problemId=problemId)
@@ -97,6 +131,10 @@ def submitCode(request):
         fpOutput.close()
 
     score = int(testCasesPassed / totalTestCases * problem.points)
+    if update:
+        submission.score = score
+        submission.save()
+        return
     submission = Submission(problem_id=problemId, status=True, submissionTime=datetime.date.today(), user=request.user,
                             score=score,
                             filePath=filePath)
@@ -151,7 +189,8 @@ def list(request):
         submissions = paginator.page(paginator.num_pages)
 
     return render(request, 'submissions/list.html',
-                  {'problem': problem, 'submissions': submissions, "username": username, 'isOver': isOver, 'user': user})
+                  {'problem': problem, 'submissions': submissions, "username": username, 'isOver': isOver,
+                   'user': user})
 
 
 @login_required(login_url='/users/login?' + loginRedirectMessage)
