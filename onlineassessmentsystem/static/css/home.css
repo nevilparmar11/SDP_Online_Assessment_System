@@ -25,9 +25,14 @@ h1, h2, h3{
     color: #818181;
 }
 
+.white-text {
+    text-decoration-color: white;
+    color: white;
+}
+
 /*------ Header ------*/
 .header-bg{
-    background-color: #F0FFF0;
+    background-color: #0a192f; /*F0FFF0*/
     width: 100%;
     height: 576px;
     left: 0px;
@@ -73,7 +78,7 @@ h1, h2, h3{
     background: none;
 }
 .dropdown:hover .dropdown-menu {
-    display: block; 
+    display: block;
  }
 
  /*----- header banner area -----*/
@@ -137,14 +142,14 @@ h1, h2, h3{
      cursor: pointer;
  }
  .course-img:hover{
-    
+
  }
  .card-footer-icon{
     padding: 0 5px;
-    
+
  }
  .card-footer h6{
-    font-size: 14px; 
+    font-size: 14px;
     padding-top: 5px;
  }
  .card-footer{
@@ -187,10 +192,10 @@ h1, h2, h3{
     border: none;
     border-radius: 15px;
     background-color: gray;
-    
+
 }
 .carousel-indicators .active {
-    background-color: #21B573; 
+    background-color: #21B573;
 }
 .testimonial h2{
     font-weight: 600;
@@ -226,7 +231,7 @@ footer .container{
     margin-bottom: 0;
 }
 .footer-bg{
-    background-color: #282531;
+    background-color: #0a192f; /* 282531*/
     width: 100%;
     height: 460px;
 }
