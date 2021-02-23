@@ -48,8 +48,11 @@
     <br>
     <div class="row">
         <div class="col-sm-12" style="text-align: right">
-            <a class="btn btn-secondary" href="/submissions/list/?problemId={{ problem.problemId }}&&username={{ user.username }}">View My Submissions</a>
-            <a class="btn btn-primary" href="/submissions/list/?problemId={{ problem.problemId }}">View All Submissions</a>
+            <a class="btn btn-secondary"
+               href="/submissions/list/?problemId={{ problem.problemId }}&&username={{ user.username }}">View My
+                Submissions</a>
+            <a class="btn btn-primary" href="/submissions/list/?problemId={{ problem.problemId }}">View All
+                Submissions</a>
         </div>
     </div>
     <br>
@@ -63,9 +66,11 @@
                             <div class="text-muted">{{ problem.points }} points, {{ problem.difficulty }}</div>
                         </div>
                         <div class="col-sm-12 float-right" style="text-align: right">
-                            <a href="/problems/comments/?pid={{ problem.problemId }}" class="btn btn-primary">Problem Comments</a>
+                            <a href="/problems/comments/?pid={{ problem.problemId }}" class="btn btn-primary">Problem
+                                Comments</a>
                             {% if not user.isStudent %}
-                                <a href="/problems/tests/?pid={{ problem.problemId }}" class="btn btn-primary">Manage Test Cases</a>
+                                <a href="/problems/tests/?pid={{ problem.problemId }}" class="btn btn-primary">Manage
+                                    Test Cases</a>
                             {% endif %}
                         </div>
                     </div>
@@ -94,15 +99,18 @@
                         </div>
                     </div>
                     <div id="editor">#include &lt;stdio.h&gt;
-
 int main(){
     return 0;
-}</div>
+}                                     </div>
                 </div>
                 <div class="card-footer">
                     <div class="row float-right">
                         <div class="col-12">
-                            <button id="submitButton" class="btn btn-primary">Submit Code</button>
+                            {% if isOver %}
+                                <button id="submitButton" class="btn btn-primary disabled">Submit Code</button>
+                            {% else %}
+                                <button id="submitButton" class="btn btn-primary">Submit Code</button>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -126,7 +134,8 @@ int main(){
                     <h4 class="text-primary font-weight-bold">Result</h4><br>
                     <h5 class="font-weight-bold" id="result"></h5>
                     <div class="progress">
-                      <div class="progress-bar" id="tc-progress-bar" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar" id="tc-progress-bar" role="progressbar" style="width: 60%"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     <br>
                     <h5 class="font-weight-bold" id="score"></h5>
@@ -157,31 +166,33 @@ int main(){
     </script>
     <script>
         $("#submitButton").click(function () {
-            $(this).text("Submitting")
-            $("#submitButton").prop('disabled', true);
-            $("#loader1").css({"display":"block"})
-            $("#output1").css({"display":"none"})
-            var code = editor.getValue()
-            $.ajax({
-                    type: "GET",
-                    url: "/submissions/submit/",
-                    data: {
-                        'code': code,
-                        'problemId': $("#problemId").val()
-                    },
-                    success: function (data) {
-                        $("#loader1").css({"display":"none"})
-                        $("#output1").css({"display":"block"})
-                        $("#submitButton").text("Submit")
-                        $("#submitButton").prop('disabled', false);
-                        $("#result").text(data['passed']+"/"+data['total']+" test cases passed!!!")
-                        var pct = data['passed'] / data['total'] * 100
-                        $("#tc-progress-bar").attr("aria-valuenow",pct)
-                        $("#tc-progress-bar").css({"width":pct+"%"})
-                        $("#score").text("Score :- "+data['score'])
+            if (!$("#submitButton").hasClass("disabled")) {
+                $(this).text("Submitting")
+                $("#submitButton").prop('disabled', true);
+                $("#loader1").css({"display": "block"})
+                $("#output1").css({"display": "none"})
+                var code = editor.getValue()
+                $.ajax({
+                        type: "GET",
+                        url: "/submissions/submit/",
+                        data: {
+                            'code': code,
+                            'problemId': $("#problemId").val()
+                        },
+                        success: function (data) {
+                            $("#loader1").css({"display": "none"})
+                            $("#output1").css({"display": "block"})
+                            $("#submitButton").text("Submit")
+                            $("#submitButton").prop('disabled', false);
+                            $("#result").text(data['passed'] + "/" + data['total'] + " test cases passed!!!")
+                            var pct = data['passed'] / data['total'] * 100
+                            $("#tc-progress-bar").attr("aria-valuenow", pct)
+                            $("#tc-progress-bar").css({"width": pct + "%"})
+                            $("#score").text("Score :- " + data['score'])
+                        }
                     }
-                }
-            )
+                )
+            }
         })
     </script>
 {% endblock %}
