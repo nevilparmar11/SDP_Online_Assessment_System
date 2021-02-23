@@ -19,6 +19,11 @@
     {% else %}
         <div class="row">
             <div class="col-sm-12">
+                <div class="page-header-toolbar float-md-left">
+                    <div class="sort-wrapper text-danger font-weight-bold">
+                        {{ msg }}
+                    </div>
+                </div>
                 <div class="page-header-toolbar float-right">
                     <div class="sort-wrapper">
                         <a href="/contests/create?classId={{ classId }}" class="btn btn-primary toolbar-item"><i
@@ -29,6 +34,7 @@
         </div>
         <br>
     {% endif %}
+
     {% for contest in contests %}
         <div class="row">
             <div class="col-12">
@@ -36,7 +42,7 @@
                     <div class="card-body container">
                         <h4 class="text-primary">{{ contest.title }}</h4>
                         <div class="row">
-                            <div class="mt-2 col-md-6 col-sm-6">
+                            <div class="mt-1 col-md-6 col-sm-6">
                                 <p class="card-text h6">
                                     {{ contest.description }}
                                 </p>
@@ -46,10 +52,17 @@
                         <div class="row float-right">
                             <div class="col-md-12 col-sm-6">
                                 {% if not user.isStudent %}
-                                    <a href="/contests/edit?id={{ contest.contestId }}"
-                                       class="btn btn-secondary m-1">Edit Contest</a>
+
+                                    {% if date >= contest.endTime %}
+                                        <a href="/contests/edit?id={{ contest.contestId }}"
+                                           class="btn btn-secondary m-1 disabled">Edit Contest</a>
+                                    {% else %}
+                                        <a href="/contests/edit?id={{ contest.contestId }}"
+                                           class="btn btn-secondary m-1">Edit Contest</a>
+                                    {% endif %}
                                     <a href="/contests/delete?id={{ contest.contestId }}"
                                        class="btn btn-danger m-1">Delete Contest</a>
+
                                 {% else %}
                                     <a href="/contests/leaderboard?id={{ contest.contestId }}"
                                        class="btn btn-success m-1"><i class="fa fa-trophy"></i> Leaderboard</a>

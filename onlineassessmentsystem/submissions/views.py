@@ -167,6 +167,15 @@ def view(request):
 
     if not customRoleBasedProblemAuthorization(request, submission.problem, not submission.problem.doesBelongToContest):
         return render(request, 'accessDenied.html')
+
+    # Submission can be viewed by other participants only after contest is over
+    if submission.problem.doesBelongToContest:
+        if timezone.now() < submission.problem.contest.endTime and submission.user != request.user:
+            return render(request, 'accessDenied.html')
+    else:
+        if timezone.now() < submission.problem.lab.deadline and submission.user != request.user:
+            return render(request, 'accessDenied.html')
+
     uploadDirectory = settings.MEDIA_ROOT
     file = open(os.path.join(uploadDirectory, submission.filePath), "r")
     code = file.read()

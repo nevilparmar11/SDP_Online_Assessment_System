@@ -156,7 +156,14 @@ def list(request):
 
     # Contest list will be shown belonging to the particular classroom
     contests = Contest.objects.filter(classroom=classroom)
-    return render(request, 'contest/list.html', {'contests': contests, 'classId': classId, 'classroom': classroom})
+    date = timezone.now()
+
+    try:
+        msg = request.GET["msg"]
+    except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
+        msg = ""
+
+    return render(request, 'contest/list.html', {'contests': contests, 'classId': classId, 'classroom': classroom, 'date': date, 'msg': msg})
 
 
 '''
@@ -240,7 +247,7 @@ def edit(request):
         isOver = False
         if timezone.now() >= contest.endTime:
             isOver = True
-            return redirect('/contests/?classId='+str(contest.classroom.classId))
+            return redirect('/contests/?classId='+str(contest.classroom.classId)+'&msg=Contest has ended')
         return render(request, 'contest/edit.html',
                       {'contest': contest, 'startTime': startTimeString, 'endTime': endTimeString})
 
