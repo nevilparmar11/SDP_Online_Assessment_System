@@ -2,6 +2,7 @@ import datetime
 import json
 import os
 from urllib.parse import urlencode
+from django.utils import  timezone
 
 import pytz
 import requests
@@ -122,6 +123,16 @@ def list(request):
     if not customRoleBasedProblemAuthorization(request, problem, not problem.doesBelongToContest):
         return render(request, 'accessDenied.html')
     username = request.GET.get("username")
+
+    isOver = False
+    user = request.user
+    if problem.doesBelongToContest:
+        if timezone.now() >= problem.contest.endTime:
+            isOver = True
+    else:
+        if timezone.now() >= problem.lab.deadline:
+            isOver = True
+
     if username is not None:
         try:
             user = User.objects.get(username=username)
@@ -140,7 +151,7 @@ def list(request):
         submissions = paginator.page(paginator.num_pages)
 
     return render(request, 'submissions/list.html',
-                  {'problem': problem, 'submissions': submissions, "username": username})
+                  {'problem': problem, 'submissions': submissions, "username": username, 'isOver': isOver, 'user': user})
 
 
 @login_required(login_url='/users/login?' + loginRedirectMessage)
@@ -156,6 +167,15 @@ def view(request):
 
     if not customRoleBasedProblemAuthorization(request, submission.problem, not submission.problem.doesBelongToContest):
         return render(request, 'accessDenied.html')
+
+    # Submission can be viewed by other participants only after contest is over
+    if submission.problem.doesBelongToContest:
+        if timezone.now() < submission.problem.contest.endTime and submission.user != request.user:
+            return render(request, 'accessDenied.html')
+    else:
+        if timezone.now() < submission.problem.lab.deadline and submission.user != request.user:
+            return render(request, 'accessDenied.html')
+
     uploadDirectory = settings.MEDIA_ROOT
     file = open(os.path.join(uploadDirectory, submission.filePath), "r")
     code = file.read()

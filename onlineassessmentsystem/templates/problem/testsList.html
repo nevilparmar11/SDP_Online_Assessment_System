@@ -12,9 +12,16 @@
                 </div>
                 <div class="card-body">
                     <div class="float-right">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                            <i class="fa fa-plus"></i>&nbsp;Add Test Case
-                        </button>
+                        {%  if isOver %}
+                            <button type="button" class="btn btn-primary disabled">
+                                <i class="fa fa-plus"></i>&nbsp;Add Test Case
+                            </button>
+                        {% else %}
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                <i class="fa fa-plus"></i>&nbsp;Add Test Case
+                            </button>
+                        {% endif %}
+
                         <br><br>
 
                         <!-- Modal -->
@@ -111,9 +118,15 @@
                                                    value="{{ test.testCaseId }}">
                                         </div>
                                         <div>
-                                            <button type="submit" class="btn btn-danger">
-                                                Remove Test Case
-                                            </button>
+                                            {%  if isOver %}
+                                                <a class="btn btn-danger disabled" style="color: white">
+                                                    Remove Test Case
+                                                </a>
+                                            {% else %}
+                                                <button type="submit" class="btn btn-danger">
+                                                    Remove Test Case
+                                                </button>
+                                            {% endif %}
                                         </div>
                                     </form>
                                 </td>

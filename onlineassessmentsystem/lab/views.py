@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from django.utils.datastructures import MultiValueDictKeyError
+from django.utils import timezone
 
 from classroom.models import Classroom, ClassroomStudents
 from users.decorators import faculty_required
@@ -180,6 +181,8 @@ def edit(request):
             return render(request, 'accessDenied.html', {})
 
         lab_deadline = convertDjangoDateTimeToHTMLDateTime(lab)
+        if timezone.now() >= lab.deadline:
+            return redirect('/labs/?classId=' + str(lab.classroom.classId))
         return render(request, 'lab/edit.html',
                       {'lab': lab, 'lab_deadline': lab_deadline})
 

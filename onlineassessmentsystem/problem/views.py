@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from django.utils.datastructures import MultiValueDictKeyError
+from django.utils import timezone
 
 from classroom.models import ClassroomStudents
 from contest.models import Contest
@@ -195,7 +196,14 @@ def testList(request):
         return render(request, 'accessDenied.html', {})
 
     testCases = TestCase.objects.filter(problem=problem)
-    return render(request, 'problem/testsList.html', {'tests': testCases, 'pid': pid, 'problem': problem})
+    isOver = False
+    if problem.doesBelongToContest:
+        if timezone.now() >= problem.contest.endTime:
+            isOver = True
+    else:
+        if timezone.now() >= problem.lab.deadline:
+            isOver = True
+    return render(request, 'problem/testsList.html', {'tests': testCases, 'pid': pid, 'problem': problem, 'isOver':isOver})
 
 
 '''
@@ -263,15 +271,20 @@ def list(request):
 
     idName = ""
     # Problem list will be shown belonging to the particular contest or lab
+    isOver = False
     if isItLab:
         idName = "labId"
         problems = Problem.objects.filter(lab=object, doesBelongToContest=False)
+        if timezone.now() >= object.deadline:
+            isOver = True
     else:
         idName = "contestId"
         problems = Problem.objects.filter(contest=object, doesBelongToContest=True)
+        if timezone.now() >= object.endTime:
+            isOver = True
 
     return render(request, 'problem/list.html',
-                  {'problems': problems, 'idName': idName, 'idValue': objectId, 'isItLab': isItLab, "object": object})
+                  {'problems': problems, 'idName': idName, 'idValue': objectId, 'isItLab': isItLab, "object": object, 'isOver':isOver})
 
 
 '''
@@ -344,11 +357,16 @@ def view(request):
         return render(request, 'accessDenied.html', {})
 
     idName = ""
+    isOver = False
     if isItLab:
         idName = "labId"
+        if timezone.now() >= object.deadline:
+            isOver = True
     else:
         idName = "contestId"
-    return render(request, 'problem/view.html', {'problem': problem, 'idName': idName, 'idValue': objectId})
+        if timezone.now() >= object.endTime:
+            isOver = True
+    return render(request, 'problem/view.html', {'problem': problem, 'idName': idName, 'idValue': objectId, 'isOver': isOver})
 
 
 '''
@@ -450,7 +468,15 @@ def comments(request):
         return render(request, 'accessDenied.html', {})
 
     problemComments = ProblemComment.objects.filter(problem=problem)
-    return render(request, 'problem/commentsList.html', {'comments': problemComments, 'pid': pid, 'problem': problem})
+    objectName = ""
+    objectId = 0
+    if problem.doesBelongToContest:
+        objectName="contestId"
+        objectId = problem.contest.contestId
+    else:
+        objectName = "labId"
+        objectId = problem.lab.labId
+    return render(request, 'problem/commentsList.html', {'comments': problemComments, 'pid': pid, 'problem': problem, 'objectName': objectName, 'objectId': objectId})
 
 
 '''

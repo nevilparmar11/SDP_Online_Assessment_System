@@ -60,9 +60,14 @@
                                 <td>{{ submission.submissionTime }}</td>
                                 <td>{{ submission.score }}</td>
                                 <td>
-                                    {% if disableViewButton %}
-                                        <a href="/submissions/view/?submissionId={{ submission.submissionId }}"
-                                       class="btn btn-primary disabled">View</a></td>
+                                    {% if not isOver %}
+                                        {% if user.username != submission.user.username %}
+                                            <a href="/submissions/view/?submissionId={{ submission.submissionId }}"
+                                               class="btn btn-primary disabled">View</a></td>
+                                        {% else %}
+                                            <a href="/submissions/view/?submissionId={{ submission.submissionId }}"
+                                                class="btn btn-primary">View</a></td>
+                                        {% endif %}
                                     {% else %}
                                         <a href="/submissions/view/?submissionId={{ submission.submissionId }}"
                                        class="btn btn-primary">View</a></td>
