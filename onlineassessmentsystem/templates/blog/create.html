@@ -1,5 +1,11 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
+{% block headContent %}
+    <!--Markdown CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+
+{% endblock %}
 
 {% block content %}
     <br>
@@ -11,7 +17,7 @@
                     <div class="h3 text-primary font-weight-bold">Create Blog</div>
                 </div>
                 <div class="card-body">
-                    <form method="POST">
+                    <form method="post" action="/blogs/create/" novalidate>
                         {% csrf_token %}
                         {% if errorMessage %}
                             <div class="form-group">
@@ -28,18 +34,25 @@
                                        autofocus>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="description" class="col-form-label">Description</label>
-                            <div class="input-group">
-                                <textarea id="description" class="form-control"
-                                          placeholder="Enter Description" name="description"  required
-                                          autofocus></textarea>
-                            </div>
+                         <!-- Hidden fields required for passing the data of markdown editor after submitting the form -->
+                        <!--Textarea required for attaching markdown editor -->
+                        <div>
+                            <input type="hidden" name="description" id="description"
+                                   value="">
                         </div>
+                        <div class="form-group">
+                            <label for="MDDescription">Description</label><br>
+                            <textarea class="form-control" id="MDDescription" type="text" rows="10" cols="50"
+                                      value="{{ description }}"
+                                      name="MDDescription" value="" required></textarea>
+                        </div>
+
                         <br>
                         <div class="form-group">
-                            <div class="inline-group">
-                                <button type="submit" class="btn btn-primary btn-block btn-md mr-2">Create</button>
+                             <div class="inline-group">
+                                <button type="submit" OnClick="return validate();"
+                                        class="btn btn-primary btn-block btn-md mr-2">Create
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -51,5 +64,19 @@
 {% endblock %}
 
 {% block javascripts %}
+    <script>
+
+        // initialization of markdown editor with the custom toolbar
+        let simpleMDE = new SimpleMDE({
+            element: document.getElementById("MDDescription"),
+            toolbar: ["bold", "italic", "heading"],
+        });
+
+        //passing data to the hidden field in the form
+        function validate() {
+            console.log(simpleMDE.value());
+            document.getElementById("description").value = simpleMDE.value();
+        }
+    </script>
 {% endblock %}
 

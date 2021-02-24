@@ -32,6 +32,8 @@ def create(request):
     user = request.user
     title = request.POST['title']
     description = request.POST['description']
+    print(title)
+    print(description)
     newBlog = Blog(user=user, title=title, description=description)
     newBlog.save()
     return redirect('/blogs/')

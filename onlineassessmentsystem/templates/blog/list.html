@@ -1,12 +1,25 @@
 {% extends "layouts/base.html" %}
 {% load static %}
-
+{% block headContent %}
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        #description > * {
+            color: black !important;
+            font-size: 17px;
+        }
+    </style>
+{% endblock %}
 {% block content %}
     <div class="row page-title-header">
         <div class="col-sm-12">
             <div class="page-header">
                 <h4 class="page-title text-center">Blogs</h4>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12" style="text-align: right">
+            <a class="btn btn-primary" href="/blogs/create">Create new blog</a>
         </div>
     </div>
     <div class="row">
@@ -20,7 +33,10 @@
                                 {{ blog.title }}
                             </div>
                             <div class="card-body justify-content-center" style="height: 200px">
-                                <div class="card-text" >{{ blog.description }}</div>
+                                <div class="card-text" style="white-space: pre-wrap;" id="description"></div>
+                                <script>
+                                    document.getElementById('description').innerHTML = marked(`{{ blog.description }}`);
+                                </script>
                             </div>
                         </div>
                     </a>
