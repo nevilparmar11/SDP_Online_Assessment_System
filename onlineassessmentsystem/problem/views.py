@@ -272,6 +272,11 @@ def list(request):
     idName = ""
     # Problem list will be shown belonging to the particular contest or lab
     isOver = False
+    isStarted = False
+    hours = timezone.now().hour
+    minutes = timezone.now().minute
+    seconds = timezone.now().second
+
     if isItLab:
         idName = "labId"
         problems = Problem.objects.filter(lab=object, doesBelongToContest=False)
@@ -282,9 +287,14 @@ def list(request):
         problems = Problem.objects.filter(contest=object, doesBelongToContest=True)
         if timezone.now() >= object.endTime:
             isOver = True
+        hours = object.endTime.hour - timezone.now().hour
+        minutes = object.endTime.minute - timezone.now().minute
+        seconds = object.endTime.second - timezone.now().second
+        if timezone.now() >= object.startTime and timezone.now() <= object.endTime:
+            isStarted = True;
 
     return render(request, 'problem/list.html',
-                  {'problems': problems, 'idName': idName, 'idValue': objectId, 'isItLab': isItLab, "object": object, 'isOver':isOver})
+                  {'problems': problems, 'idName': idName, 'idValue': objectId, 'isItLab': isItLab, "object": object, 'isOver': isOver, 'isStarted': isStarted, 'hours': hours, 'minutes': minutes, 'seconds': seconds})
 
 
 '''
