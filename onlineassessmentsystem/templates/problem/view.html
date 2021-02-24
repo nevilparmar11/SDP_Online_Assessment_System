@@ -47,31 +47,13 @@
     </div>
     <br>
     <div class="row">
-        <div class="col-sm-12" style="text-align: right">
-            <a class="btn btn-secondary"
-               href="/submissions/list/?problemId={{ problem.problemId }}&&username={{ user.username }}">View My
-                Submissions</a>
-            <a class="btn btn-primary" href="/submissions/list/?problemId={{ problem.problemId }}">View All
-                Submissions</a>
-        </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-9">
             <div class="card">
                 <div class="card-header p-5 bg-light" style="background-color: white !important;">
                     <div class="row">
                         <div class="col-sm-12 text-center">
                             <div class="h3 text-primary font-weight-bold">{{ problem.title }}</div>
                             <div class="text-muted">{{ problem.points }} points, {{ problem.difficulty }}</div>
-                        </div>
-                        <div class="col-sm-12 float-right" style="text-align: right">
-                            <a href="/problems/comments/?pid={{ problem.problemId }}" class="btn btn-primary">Problem
-                                Comments</a>
-                            {% if not user.isStudent %}
-                                <a href="/problems/tests/?pid={{ problem.problemId }}" class="btn btn-primary">Manage
-                                    Test Cases</a>
-                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -85,12 +67,42 @@
                 </div>
             </div>
         </div>
+        <div class="col-sm-3">
+            <br>
+            <h6 class="text-muted">Difficulty :- {{ problem.difficulty }}</h6>
+            <br>
+            <h6 class="text-muted">Max Score :- {{ problem.points }}</h6>
+            <br><hr>
+            <h5 class="text-muted">Need Help ?</h5><br>
+            <a class="coloured-link"
+               href="/submissions/list/?problemId={{ problem.problemId }}&&username={{ user.username }}">
+                <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+                View My Submissions
+            </a>
+            <br><br>
+            <a class="coloured-link" href="/submissions/list/?problemId={{ problem.problemId }}">
+                <i class="fa fa-code" aria-hidden="true"></i>
+                View All Submissions
+            </a>
+            <br><br>
+            <a class="coloured-link" href="/problems/comments/?pid={{ problem.problemId }}">
+                <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                Discussion
+            </a>
+            {% if not user.isStudent %}
+                <br><br>
+                <a href="/problems/tests/?pid={{ problem.problemId }}" class="coloured-link">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                    Manage Test Cases
+                </a>
+            {% endif %}
+        </div>
     </div>
     <br>
     <input type="hidden" name="problemId" id="problemId" value="{{ problem.problemId }}">
     {#  Code Editor  #}
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-11">
             <div class="card">
                 <div class="card-body">
                     <div class="row h4">
@@ -99,21 +111,37 @@
                         </div>
                     </div>
                     <div id="editor">#include &lt;stdio.h&gt;
+
 int main(){
     return 0;
-}                                     </div>
+}</div>
                 </div>
                 <div class="card-footer">
-                    <div class="row float-right">
-                        <div class="col-12">
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <label for="file">Open File :- </label>
+                            <input type="file" id="file" name="file">
+                        </div>
+                        <div class="col-sm-5" style="text-align: right">
+                            <input type="checkbox" id="customInputCb" name="customInputCb"> <label for="customInputCb">Custom Input </label>&nbsp;
+                            <button id="runButton" class="btn btn-secondary">Run</button>
                             {% if isOver %}
-                                <button id="submitButton" class="btn btn-primary disabled">Submit Code</button>
+                                <button id="submitButton" class="btn btn-primary disabled">Submit</button>
                             {% else %}
-                                <button id="submitButton" class="btn btn-primary">Submit Code</button>
+                                <button id="submitButton" class="btn btn-primary">Submit</button>
                             {% endif %}
                         </div>
                     </div>
                 </div>
+            </div>
+            <br>
+            <div id="customInputDiv" style="display: none">
+                <textarea rows="4"  style="width: 100%" class="form-control" id="customInput" name="customInput" placeholder="Provide Custom Input Here..."></textarea>
+            </div>
+            <br>
+            <div id="customOutputDiv" style="display: none">
+                <h5 class="font-weight-bold">Output :- </h5><br>
+                <textarea rows="4"  style="width: 100%" class="form-control" id="customOutput" name="customOutput" disabled></textarea>
             </div>
         </div>
     </div>
@@ -193,6 +221,44 @@ int main(){
                     }
                 )
             }
+        })
+        $("#file").change(function (){
+            var fr=new FileReader();
+            fr.onload=function(){
+                editor.setValue(fr.result)
+            }
+            fr.readAsText(this.files[0]);
+        })
+        $("#customInputCb").change(function (){
+            if($("#customInputCb").prop('checked') == true){
+                $("#customInputDiv").css({"display": "block"})
+            }
+            else {
+                $("#customInputDiv").css({"display": "none"})
+                $("#customOutputDiv").css({"display": "none"})
+            }
+        })
+        $("#runButton").click(function () {
+            $(this).text("Running")
+            $(this).prop('disabled', true);
+            $("#customOutputDiv").css({"display": "none"})
+            var code = editor.getValue()
+            $.ajax({
+                        type: "GET",
+                        url: "/submissions/run/",
+                        data: {
+                            'code': code,
+                            'stdin' : $("#customInput").val()
+                        },
+                        success: function (data) {
+                            $("#runButton").text("Run")
+                            $("#runButton").prop('disabled', false);
+
+                            $("#customOutputDiv").css({"display": "block"})
+                            $("#customOutput").val(data['output'])
+                        }
+                    }
+                )
         })
     </script>
 {% endblock %}

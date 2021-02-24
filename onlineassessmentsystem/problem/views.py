@@ -1,12 +1,19 @@
+import os
+import threading
+
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
-from django.utils.datastructures import MultiValueDictKeyError
 from django.utils import timezone
+from django.utils.datastructures import MultiValueDictKeyError
 
+import submissions.views
 from classroom.models import ClassroomStudents
 from contest.models import Contest
 from lab.models import Lab
+from submissions.models import Submission
+# from submissions.views import submitCode
 from users.decorators import faculty_required
 from .models import Problem, TestCase, ProblemComment
 
@@ -203,7 +210,36 @@ def testList(request):
     else:
         if timezone.now() >= problem.lab.deadline:
             isOver = True
-    return render(request, 'problem/testsList.html', {'tests': testCases, 'pid': pid, 'problem': problem, 'isOver':isOver})
+    return render(request, 'problem/testsList.html',
+                  {'tests': testCases, 'pid': pid, 'problem': problem, 'isOver': isOver})
+
+
+'''Function which executes thread in background'''
+
+
+def reevaluateSubmissionThread(problemId, request):
+    problem = Problem.objects.get(problemId=problemId)
+    print("Submission Reevaluation Started for problem :- ", problem.title)
+    submittedSubmissions = Submission.objects.filter(problem=problem)
+    for submission in submittedSubmissions:
+        uploadDirectory = settings.MEDIA_ROOT
+        file = open(os.path.join(uploadDirectory, submission.filePath), "r")
+        code = file.read()
+        request.GET._mutable = True
+        request.GET["code"] = code
+        request.GET["problemId"] = problemId
+        submissions.views.submitCode(request, update=True, submission=submission)
+        file.close()
+    print("Submission Reevaluation Finished for problem :- ", problem.title)
+
+
+'''Function for reevaluating submissions after updating test cases'''
+
+
+def reEvaluateSubmissions(request, problemId):
+    thread = threading.Thread(target=reevaluateSubmissionThread, args=[problemId, request])
+    thread.setDaemon(True)
+    thread.start()
 
 
 '''
@@ -228,6 +264,7 @@ def testCreate(request):
 
     newTestcase = TestCase(problem=problem, inputFile=inputFile, outputFile=outputFile)
     newTestcase.save()
+    reEvaluateSubmissions(request, problem.problemId)
     return redirect('/problems/tests?pid=' + pid)
 
 
@@ -248,6 +285,7 @@ def testDelete(request):
     testCase.inputFile.delete()
     testCase.outputFile.delete()
     testCase.delete()
+    reEvaluateSubmissions(request, testCase.problem.problemId)
     return redirect('/problems/tests/?pid=' + str(testCase.problem.problemId))
 
 
@@ -272,6 +310,11 @@ def list(request):
     idName = ""
     # Problem list will be shown belonging to the particular contest or lab
     isOver = False
+    isStarted = False
+    hours = timezone.now().hour
+    minutes = timezone.now().minute
+    seconds = timezone.now().second
+
     if isItLab:
         idName = "labId"
         problems = Problem.objects.filter(lab=object, doesBelongToContest=False)
@@ -282,9 +325,14 @@ def list(request):
         problems = Problem.objects.filter(contest=object, doesBelongToContest=True)
         if timezone.now() >= object.endTime:
             isOver = True
+        hours = object.endTime.hour - timezone.now().hour
+        minutes = object.endTime.minute - timezone.now().minute
+        seconds = object.endTime.second - timezone.now().second
+        if timezone.now() >= object.startTime and timezone.now() <= object.endTime:
+            isStarted = True;
 
     return render(request, 'problem/list.html',
-                  {'problems': problems, 'idName': idName, 'idValue': objectId, 'isItLab': isItLab, "object": object, 'isOver':isOver})
+                  {'problems': problems, 'idName': idName, 'idValue': objectId, 'isItLab': isItLab, "object": object, 'isOver': isOver, 'isStarted': isStarted, 'hours': hours, 'minutes': minutes, 'seconds': seconds})
 
 
 '''
@@ -366,7 +414,8 @@ def view(request):
         idName = "contestId"
         if timezone.now() >= object.endTime:
             isOver = True
-    return render(request, 'problem/view.html', {'problem': problem, 'idName': idName, 'idValue': objectId, 'isOver': isOver})
+    return render(request, 'problem/view.html',
+                  {'problem': problem, 'idName': idName, 'idValue': objectId, 'isOver': isOver})
 
 
 '''
@@ -471,12 +520,14 @@ def comments(request):
     objectName = ""
     objectId = 0
     if problem.doesBelongToContest:
-        objectName="contestId"
+        objectName = "contestId"
         objectId = problem.contest.contestId
     else:
         objectName = "labId"
         objectId = problem.lab.labId
-    return render(request, 'problem/commentsList.html', {'comments': problemComments, 'pid': pid, 'problem': problem, 'objectName': objectName, 'objectId': objectId})
+    return render(request, 'problem/commentsList.html',
+                  {'comments': problemComments, 'pid': pid, 'problem': problem, 'objectName': objectName,
+                   'objectId': objectId})
 
 
 '''

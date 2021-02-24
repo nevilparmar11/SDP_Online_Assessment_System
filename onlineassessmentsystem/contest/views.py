@@ -1,8 +1,8 @@
 from datetime import datetime
-from django.utils import timezone
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Max
 from django.shortcuts import render, redirect
 from django.utils.datastructures import MultiValueDictKeyError
 
@@ -11,7 +11,6 @@ from problem.models import Problem
 from submissions.models import Submission
 from users.decorators import faculty_required
 from .models import Contest
-from django.db.models import Max
 
 '''
     Function for Role based authorization of Classroom; upon provided the classId to the request parameter 
@@ -156,14 +155,14 @@ def list(request):
 
     # Contest list will be shown belonging to the particular classroom
     contests = Contest.objects.filter(classroom=classroom)
-    date = timezone.now()
 
     try:
         msg = request.GET["msg"]
     except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
         msg = ""
 
-    return render(request, 'contest/list.html', {'contests': contests, 'classId': classId, 'classroom': classroom, 'date': date, 'msg': msg})
+    return render(request, 'contest/list.html',
+                  {'contests': contests, 'classId': classId, 'classroom': classroom, 'msg': msg})
 
 
 '''
@@ -182,7 +181,7 @@ def create(request):
             return render(request, '404.html', {})
         if not customRoleBasedClassroomAuthorization(request, classroom):
             return render(request, 'accessDenied.html', {})
-        return render(request, 'contest/create.html', {'classId': classId})
+        return render(request, 'contest/create.html', {'classId': classId, 'currentTime': str(timezone.now().strftime("%Y-%m-%dT%H:%M"))})
 
     # POST request
     # If Classroom not exist and If Classroom is not belonging to Faculty or Student
@@ -244,12 +243,8 @@ def edit(request):
             return render(request, 'accessDenied.html', {})
         startTimeString, endTimeString = convertDjangoDateTimeToHTMLDateTime(contest)
 
-        isOver = False
-        if timezone.now() >= contest.endTime:
-            isOver = True
-            return redirect('/contests/?classId='+str(contest.classroom.classId)+'&msg=Contest has ended')
         return render(request, 'contest/edit.html',
-                      {'contest': contest, 'startTime': startTimeString, 'endTime': endTimeString})
+                      {'contest': contest, 'startTime': startTimeString, 'endTime': endTimeString, 'currentTime': str(timezone.now().strftime("%Y-%m-%dT%H:%M"))})
 
     # When request is POST
     # If contest not exist and If Contest is not belonging to Faculty
