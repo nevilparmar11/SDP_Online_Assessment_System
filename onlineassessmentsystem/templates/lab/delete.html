@@ -1,39 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Delete Confirmed Lab</title>
-</head>
-<body>
-    <form method="POST" action="/labs/delete/" novalidate="">
-        {% csrf_token %}
-        <div>
-            {% if errorMessage %}
-                {{ errorMessage }}
-            {% endif %}
-        </div>
+{% extends 'layouts/base.html' %}
+{% load static %}
 
+{% block content %}
+    <form method="post" action="/labs/delete/" novalidate="">
+        {% csrf_token %}
         <input id="labId" type="hidden" value="{{ lab.labId }}"
                name="labId">
 
-        Are You sure want to delete Lab? <br><hr>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="jumbotron">
+                    <h4 class="text-danger ml-2">
+                        Are You Sure you want to delete '{{ lab.title }}' ?
+                    </h4><br>
+                    {% if errorMessage %}
+                        <h5 class="text-danger">errorMessage</h5>
+                    {% endif %}
+                    <div>
+                        <div class="p-1"><b>Name :- </b>{{ lab.title }}</div>
+                        <div class="p-1"><b>Description :- </b>{{ lab.description }}</div>
+                        <div class="p-1"><b>Subject :- </b>{{ lab.subject }}</div>
+                        <div class="p-1"><b>Deadline :- </b>{{ lab.deadline }}</div>
+                    </div>
 
-        Lab Id : {{ lab.labId }} <br>
-        Classroom Id : {{ lab.classroom.classId }}<br>
-        Title : {{ lab.title }}<br>
-        Description : {{ lab.description }}<br>
-        Subject : {{ lab.subject }}<br>
-        Deadline : {{ lab.deadline }}<br>
-
-        <div class="form-group m-0">
-            <button type="submit" class="btn btn-danger btn-block">
-                Delete
-            </button>
+                    <div class="float-right">
+                        <a class="btn btn-secondary" href="/labs/?classId={{ lab.classroom.classId }}">Cancel</a>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                    <br>
+                </div>
+            </div>
         </div>
-
-     <a href="/labs/view?id={{ lab.labId }}">
-                Cancel
-     </a>
     </form>
-</body>
-</html>
+{% endblock %}
+

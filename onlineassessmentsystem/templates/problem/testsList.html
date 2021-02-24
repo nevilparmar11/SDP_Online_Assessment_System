@@ -1,0 +1,167 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header" style="background-color: white !important;">
+                    <div class="h3 text-primary text-center">Manage Test Cases</div>
+                    <div class="h4 p-2 text-center">{{ problem.title }}</div>
+                    <div class="h6 text-center">{{ problem.points }} Points, {{ problem.difficulty }}</div>
+                </div>
+                <div class="card-body">
+                    <div class="float-right">
+                        {%  if isOver %}
+                            <button type="button" class="btn btn-primary disabled">
+                                <i class="fa fa-plus"></i>&nbsp;Add Test Case
+                            </button>
+                        {% else %}
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                <i class="fa fa-plus"></i>&nbsp;Add Test Case
+                            </button>
+                        {% endif %}
+
+                        <br><br>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-primary font-weight-medium" id="exampleModalLabel">
+                                            Add Test Case</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="addTestForm" method="POST" name="form" action="/problems/testCreate/"
+                                              novalidate=""
+                                              enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <div class="mb-2">Add New Test Case : (Only .txt files are allowed)</div>
+                                            <div>
+                                                {% if errorMessage %}
+                                                    {{ errorMessage }}
+                                                {% endif %}
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="pid" id="pid"
+                                                       value="{{ pid }}">
+                                            </div>
+                                            <div class="input-group mb-3">
+                                                <div class="custom-file">
+                                                    <input class="custom-file-input" id="inputFile" type="file"
+                                                           value="{{ inputFile }}"
+                                                           name="inputFile" value="" required autofocus
+                                                           accept="text/plain">
+                                                    <label class="custom-file-label" for="inputGroupFile02"
+                                                           aria-describedby="inputGroupFileAddon02">Choose Input
+                                                        file</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="input-group mb-3">
+                                                <div class="custom-file">
+                                                    <input class="custom-file-input" id="outputFile" type="file"
+                                                           value="{{ outputFile }}"
+                                                           name="outputFile" value="" required autofocus
+                                                           accept="text/plain">
+                                                    <label class="custom-file-label" for="outputFile"
+                                                           aria-describedby="inputGroupFileAddon02">Choose Output
+                                                        File</label>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                        </button>
+                                        <button type="submit" form="addTestForm" class="btn btn-primary"
+                                                onClick="return validate();">Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Input File</th>
+                            <th>Output File</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for test in tests %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td><a class="coloured-link" href="{{ test.inputFile.url }}">{{ test.inputFile }}</a>
+                                </td>
+                                <td><a class="coloured-link" href="{{ test.outputFile.url }}">{{ test.outputFile }}</a>
+                                </td>
+                                <td>
+                                    <form method="POST" action="/problems/testDelete/" novalidate="">
+                                        {% csrf_token %}
+                                        <div>
+                                            {% if errorMessage %}
+                                                {{ errorMessage }}
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <input type="hidden" name="tid" id="tid"
+                                                   value="{{ test.testCaseId }}">
+                                        </div>
+                                        <div>
+                                            {%  if isOver %}
+                                                <a class="btn btn-danger disabled" style="color: white">
+                                                    Remove Test Case
+                                                </a>
+                                            {% else %}
+                                                <button type="submit" class="btn btn-danger">
+                                                    Remove Test Case
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function validate() {
+            let inputFile = form.inputFile.value;
+            let outputFile = form.outputFile.value;
+            if (inputFile == "" || outputFile == "") {
+                alert("Files are not selected");
+                return false;
+            }
+
+            let reg = /(.*?)\.(txt)$/;
+            if (!inputFile.match(reg) || !outputFile.match(reg)) {
+                alert("Invalid File format");
+                return false;
+            }
+        }
+
+        $(document).ready(function () {
+            $(".custom-file-input").on("change", function () {
+                var fnm = $(this).val().split("\\").pop();
+                $(this).next('.custom-file-label').html(fnm);
+            })
+        })
+    </script>
+{% endblock %}

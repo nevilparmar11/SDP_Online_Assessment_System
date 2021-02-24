@@ -1,0 +1,112 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12 mb-3">
+            <a class="btn btn-secondary" href="/problems/view/?pid={{ problem.problemId }}&{{ objectName }}={{ objectId }}"><i class="fa fa-backward"></i>
+                Back</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header" style="background-color: white !important;">
+                    <div class="h3 text-primary text-center">Discussion</div>
+                    <div class="h4 p-2 text-center">{{ problem.title }}</div>
+                    <div class="h6 text-center">{{ problem.points }} Points, {{ problem.difficulty }}</div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card card-white post round-border">
+                        <div class="post-heading">
+                            <div class="float-left image">
+                                <img src="/uploads/{{ user.profilePicture }}" class="img-circle avatar"
+                                     alt="user profile image">
+                            </div>
+                            <div class="float-left meta">
+                                <div class="title h5 mt-4">
+                                    <a href="#"><b>{{ user.username }}</b></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-description">
+                            <form action="/problems/commentCreate/" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" id="pid" name="pid" value="{{ pid }}">
+                                <div class="input-group">
+                                    <textarea id="comment" name="comment" class="form-control" rows="3" required placeholder="Post Something about problem"
+                                        aria-label="With textarea"></textarea>
+                                </div>
+                                <br>
+                                <div class="float-right">
+                                    <button type="reset" class="btn btn-secondary btn-md">Clear</button>
+                                    <button type="submit" class="btn btn-primary btn-md">Post</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+
+            {% for comment in comments %}
+                <!-- This will be in loop for all comments -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card card-white post round-border">
+                            <div class="post-heading">
+                                <div class="float-left image">
+                                    <img src="/uploads/{{ user.profilePicture }}" class="img-circle avatar"
+                                         alt="user profile image">
+                                </div>
+                                <div class="float-left meta">
+                                    <div class="title h5">
+                                        <a href="#"><b>{{ comment.user.username }}</b></a>
+                                    </div>
+                                    <h6 class="text-muted time">1 minute ago</h6>
+                                </div>
+                            </div>
+                            <div class="post-description">
+                                <div>
+                                    {{ comment.comment }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <!-- Loop Ends -->
+
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function validate() {
+            let inputFile = form.inputFile.value;
+            let outputFile = form.outputFile.value;
+            if (inputFile == "" || outputFile == "") {
+                alert("Files are not selected");
+                return false;
+            }
+
+            let reg = /(.*?)\.(txt)$/;
+            if (!inputFile.match(reg) || !outputFile.match(reg)) {
+                alert("Invalid File format");
+                return false;
+            }
+        }
+
+        $(document).ready(function () {
+            $(".custom-file-input").on("change", function () {
+                var fnm = $(this).val().split("\\").pop();
+                $(this).next('.custom-file-label').html(fnm);
+            })
+        })
+    </script>
+{% endblock %}

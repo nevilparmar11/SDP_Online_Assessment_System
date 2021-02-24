@@ -1,0 +1,140 @@
+always create branch from develop onlYYYYYY
+
+
+$ cd PROJECT_NAME
+$ git remote add upstream https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git -------** We have to set upstream for only once
+$ git fetch upstream
+
+# then: (like "git pull" which is fetch + merge)
+$ git merge upstream/master master
+
+# or, better, replay your local work on top of the fetched branch
+# like a "git pull --rebase"
+$ git rebase upstream/master   ------------------------------------------------------------** till then out local repo is updated
+
+git push 
+
+----------------------------------------------------------------------------------** now in jwalit(forked)(main) is updated
+
+--------- exrta ---------------------------------------------------------------------------** git remote rm upstream
+									
+
+IMPIMPIMPIMPIMPIMPIMPIMPIMP
+$ git update-index --assume-unchanged D:/Semester6/MAIN_SDP_CURRENT/SDP_Online_Assessment_System/onlineassessmentsystem/db.sqlite3
+$ git update-index --assume-unchanged D:/Semester6/MAIN_SDP_CURRENT/SDP_Online_Assessment_System/onlineassessmentsystem/.idea/misc.xml
+$ git update-index --assume-unchanged D:/Semester6/MAIN_SDP_CURRENT/SDP_Online_Assessment_System/onlineassessmentsystem/.idea/onlineassessmentsystem.iml
+
+
+
+
+git restore --stage foo.txt 
+(for removing file after git add .)
+
+
+********************
+compare the commits in the github website so make pr, merge
+then
+now mari online complete thai gai 6, but mari local haju update karvani baki 6
+so now
+git pull
+
+********************
+
+
+Main(owner)     Ayan(forked from owner) 	Jwalit(forked from owner)
+
+main		main				main
+nevil		ayan				jwalit --( what to do?)
+jwalit
+ayan
+
+
+==============================================================================================
+
+git log
+git branch
+
+
+**************************************************************************************
+			||	FINAL     ||					     
+**************************************************************************************
+
+
+
+SETUP
+--to make same branch in local as it is in remote 
+================================================================
+git clone
+git branch
+git branch -a
+git checkout origin/develop
+git checkout develop [create local develop brach same as remote develop]
+git checkout main
+git flow init -d
+
+
+
+ALWAYS
+To do work in the feature
+================================================================
+git branch feature/third
+git checkhout feature/third
+change
+git add .
+git commit -m "done"
+git checkout main
+git push origin feature/third
+(jo kai sudhaaro hase to)
+git checkhout feature/third
+change
+git add .
+git commit -m "done again with changes"
+git checkout main
+git push origin feature/third (for making avl for reviewing by others)
+
+
+Make PR (fature/third ---> develop)
+(after all reviews)
+(remote ma merge kar do)
+(fature/third ---> develop ) (by nevil)
+
+
+
+
+To be followed by generator of PR
+================================================================
+git checkout develop
+git merge feature/third  [ LOCALY develop <----- third ]
+git flow feature finish third [ merge conflict check karse and third delete karse locally and remotelly ]
+
+
+====================================
+if remotely new branch is added then 
+git checkout main
+git remote update
+git checkout origin/newbranch
+git checkout newbranch
+===================================
+
+
+For checking prev block that remote and local same j content dharavta hase
+================================================================
+git checkout main (necessary for any push)
+git push origin develop [* Already UP TO DATE *]
+=======================================
+||     If error any comes then	     ||
+=======================================
+[git checkout develop --> git pull (local update thase) --> git checkout main --> git push origin develop ]
+
+
+
+
+IN CASE REMOTE DEVELOP UPDATES WHILE WE WORKING IN CURRENT FEATURE 
+==================================================================
+--if develop changed remotely and want to update your local develop
+git checkout develop
+git pull origin develop
+
+----if develop changed remotely and want to update your local brach
+git checkout feature/third
+git pull origin develop

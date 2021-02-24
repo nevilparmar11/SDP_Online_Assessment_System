@@ -1,38 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-{% load static%}
-<head>
-    <meta charset="UTF-8">
-    <title>Delete Confirmed Classroom</title>
-</head>
-<body>
-    <form method="POST" action="/classroom/delete/" novalidate="">
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+    <form method="post" action="/classroom/delete/" novalidate="">
         {% csrf_token %}
-        <div>
-            {% if errorMessage %}
-                {{ errorMessage }}
-            {% endif %}
-        </div>
 
         <input id="classId" type="hidden" value="{{ classroom.classId }}"
                name="classId">
 
-        Are You sure want to delete Classroom? <br><hr>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="jumbotron">
+                    <h4 class="text-danger ml-2">
+                        Are You Sure you want to delete '{{ classroom.name }}' classroom ?
+                    </h4><br>
+                    {% if errorMessage %}
+                        <h5 class="text-danger">{{ errorMessage }}</h5>
+                    {% endif %}
+                    <div>
+                        <div class="p-1"><b>Name :- </b>{{ classroom.name }}</div>
+                        <div class="p-1"><b>Description :- </b>{{ classroom.description }}</div>
+                        <div class="p-1"><b>Year :- </b>{{ classroom.year }}</div>
+                        <div class="p-1"><b>Branch :- </b>{{ classroom.branch }}</div>
+                    </div>
 
-        Classroom Id : {{ classroom.classId }}<br>
-        Name : {{ classroom.name }}<br>
-        Description : {{ classroom.description }}<br>
-        Owner : {{ classroom.user.username }}<br>
-        Semester : {{ classroom.semester }}<br>
-        Year : {{ classroom.year }}<br>
-        Branch : {{ classroom.branch }}<br>
-        Class Code : {{ classroom.classroomCode }}<br>
-        <div class="form-group m-0">
-            <button type="submit" class="btn btn-danger btn-block">
-                Delete
-            </button>
+                    <div class="float-right">
+                        <a class="btn btn-secondary"
+                           href="/classroom/">Cancel</a>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                    <br>
+                </div>
+            </div>
         </div>
-
     </form>
-</body>
-</html>
+{% endblock %}
+
