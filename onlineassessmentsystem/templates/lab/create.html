@@ -53,7 +53,7 @@
                         <div class="form-group">
                             <label for="deadline" class="col-form-label">Deadline</label>
                             <div class="input-group">
-                                <input type="datetime-local" id="deadline" class="form-control" value="{{ lab.deadline }}"
+                                <input min="{{ currentTime }}" type="datetime-local" id="deadline" class="form-control" value="{{ lab.deadline }}"
                                        name="deadline" value="" required/>
                             </div>
                         </div>
