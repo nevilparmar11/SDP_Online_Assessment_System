@@ -1,6 +1,5 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
-
 {% block headContent %}
     <!--Markdown CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
@@ -15,32 +14,27 @@
         <div class="col-sm-8">
             <div class="card">
                 <div class="card-header" style="text-align: center;">
-                    <div class="h3 text-primary font-weight-bold">New Problem</div>
+                    <div class="h3 text-primary font-weight-bold">Create Blog</div>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="/problems/create/?{{ idName }}={{ idValue }}" novalidate>
+                    <form method="post" action="/blogs/create/" novalidate>
                         {% csrf_token %}
                         {% if errorMessage %}
                             <div class="form-group">
                                 <div class="col-sm-12">
                                     <div class="text-danger">{{ errorMessage }}</div>
-
                                 </div>
                             </div>
                         {% endif %}
-                        <div>
-                            <input type="hidden" name="{{ idName }}" id="{{ idName }}"
-                                   value="{{ idValue }}">
-                        </div>
                         <div class="form-group">
                             <label for="title" class="col-form-label">Title</label>
                             <div class="input-group">
-                                <input id="title" class="form-control" type="text" value="{{ title }}"
-                                       name="title" value="" placeholder="Enter Title" required
+                                <input id="title" class="form-control" type="text"
+                                       placeholder="Enter Blog Title" name="title"  required
                                        autofocus>
                             </div>
                         </div>
-                        <!-- Hidden fields required for passing the data of markdown editor after submitting the form -->
+                         <!-- Hidden fields required for passing the data of markdown editor after submitting the form -->
                         <!--Textarea required for attaching markdown editor -->
                         <div>
                             <input type="hidden" name="description" id="description"
@@ -52,29 +46,10 @@
                                       value="{{ description }}"
                                       name="MDDescription" value="" required></textarea>
                         </div>
+
+                        <br>
                         <div class="form-group">
-                            <label for="difficulty" class="col-form-label">Difficulty</label>
-                            <select id="difficulty" class="form-control form-select form-select-lg mb-3"
-                                    name="difficulty" required>
-                                <option value="EASY">Easy</option>
-                                <option value="MEDIUM">Medium</option>
-                                <option value="HARD">Hard</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="points" class="col-form-label">Points</label>
-                            <div class="input-group">
-                                <input name="points" class="form-control"
-                                       placeholder="Enter Points"
-                                       id="points" type="number" value="{{ points }}"
-                                       required autofocus/>
-                            </div>
-                        </div>
-                        <input id="timeLimit" type="hidden" value="1"
-                               name="timeLimit" required autofocus/>
-                        <div class="form-group">
-                            <label for="classroomCode" class="col-form-label"></label>
-                            <div class="inline-group">
+                             <div class="inline-group">
                                 <button type="submit" OnClick="return validate();"
                                         class="btn btn-primary btn-block btn-md mr-2">Create
                                 </button>
@@ -102,7 +77,6 @@
             console.log(simpleMDE.value());
             document.getElementById("description").value = simpleMDE.value();
         }
-        console.log(document.getElementById("description").value);
     </script>
 {% endblock %}
 

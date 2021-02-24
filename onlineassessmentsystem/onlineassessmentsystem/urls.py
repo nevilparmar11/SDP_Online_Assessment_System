@@ -31,6 +31,7 @@ urlpatterns = [
     path('contests/', include('contest.urls')),
     path('problems/', include('problem.urls')),
     path('submissions/', include('submissions.urls')),
+    path('blogs/', include('blog.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
