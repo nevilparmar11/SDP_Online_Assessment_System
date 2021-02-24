@@ -149,3 +149,6 @@ EMAIL_HOST_USER = 'onlineassessment.sdp@gmail.com'  # this also can be done usin
 EMAIL_HOST_PASSWORD = 'sdp@2020'  # this can be done using the system variable also
 
 django_heroku.settings(locals())
+
+API_CLIENT_ID = '***'
+API_CLIENT_SECRET = '***'
