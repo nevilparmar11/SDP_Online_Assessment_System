@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Blog
+from .models import Blog, BlogComments
 from users.decorators import faculty_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
@@ -12,8 +12,7 @@ from django.utils.datastructures import MultiValueDictKeyError
 
 @login_required(login_url='/users/login')
 def list(request):
-    user = request.user
-    blogs = Blog.objects.filter(user=user)
+    blogs = Blog.objects.all()
     return render(request, './blog/list.html', {'blogs': blogs})
 
 
@@ -25,15 +24,12 @@ def list(request):
 
 @faculty_required()
 def create(request):
-    print("Inside Create BLog")
     if request.method == "GET":
         return render(request, "blog/create.html")
 
     user = request.user
     title = request.POST['title']
     description = request.POST['description']
-    print(title)
-    print(description)
     newBlog = Blog(user=user, title=title, description=description)
     newBlog.save()
     return redirect('/blogs/')
@@ -49,13 +45,16 @@ def view(request):
     user = request.user
 
     # if requested classroom not exists then
+
     try:
         blogId = request.GET['id']
         blog = Blog.objects.get(blogId=blogId)
+        # fetch all the class comments belonging to particular blog
+        comments = BlogComments.objects.filter(blog=blog)
     except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
         return render(request, '404.html', {})
 
-    return render(request, './blog/view.html', {'blog': blog})
+    return render(request, './blog/view.html', {'blog': blog, 'comments': comments})
 
 
 '''
@@ -129,4 +128,19 @@ def delete(request):
 
 @login_required(login_url='/users/login')
 def commentCreate(request):
-    pass
+    # if requested classroom not exists then
+    try:
+        blogId = request.POST['blogId']
+        blog = Blog.objects.get(blogId=blogId)
+    except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
+        return render(request, '404.html', {})
+
+    comment = request.POST["comment"]
+    user = request.user
+    inputFile = request.FILES.get('inputFile')
+    print(comment)
+    print(blogId)
+    newComment = BlogComments(comment=comment, user=user, blog=blog, attachmentPath=inputFile)
+    newComment.save()
+
+    return redirect('/blogs/view/?id' + "=" + blogId)
