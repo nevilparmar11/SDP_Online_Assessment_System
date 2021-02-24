@@ -15,10 +15,10 @@
         <div class="col-sm-8">
             <div class="card">
                 <div class="card-header" style="text-align: center;">
-                    <div class="h3 text-primary font-weight-bold">New Problem</div>
+                    <div class="h3 text-primary font-weight-bold">Edit Blog</div>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="/problems/create/?{{ idName }}={{ idValue }}" novalidate>
+                    <form method="post" action="/blogs/edit/" novalidate="">
                         {% csrf_token %}
                         {% if errorMessage %}
                             <div class="form-group">
@@ -28,19 +28,19 @@
                                 </div>
                             </div>
                         {% endif %}
-                        <div>
-                            <input type="hidden" name="{{ idName }}" id="{{ idName }}"
-                                   value="{{ idValue }}">
-                        </div>
+                        <input id="blogId" type="hidden" value="{{ blog.blogId }}"
+                               name="blogId">
+
                         <div class="form-group">
                             <label for="title" class="col-form-label">Title</label>
                             <div class="input-group">
-                                <input id="title" class="form-control" type="text" value="{{ title }}"
-                                       name="title" value="" placeholder="Enter Title" required
+                                <input id="title" class="form-control" type="text" value="{{ blog.title }}"
+                                       placeholder="Enter Blog Title" name="title" value="" required
                                        autofocus>
                             </div>
                         </div>
-                        <!-- Hidden fields required for passing the data of markdown editor after submitting the form -->
+
+                         <!-- Hidden fields required for passing the data of markdown editor after submitting the form -->
                         <!--Textarea required for attaching markdown editor -->
                         <div>
                             <input type="hidden" name="description" id="description"
@@ -49,34 +49,15 @@
                         <div class="form-group">
                             <label for="MDDescription">Description</label><br>
                             <textarea class="form-control" id="MDDescription" type="text" rows="10" cols="50"
-                                      value="{{ description }}"
-                                      name="MDDescription" value="" required></textarea>
+
+                                      name="MDDescription" value="" required>{{ blog.description }}</textarea>
                         </div>
+
+                        <br>
                         <div class="form-group">
-                            <label for="difficulty" class="col-form-label">Difficulty</label>
-                            <select id="difficulty" class="form-control form-select form-select-lg mb-3"
-                                    name="difficulty" required>
-                                <option value="EASY">Easy</option>
-                                <option value="MEDIUM">Medium</option>
-                                <option value="HARD">Hard</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="points" class="col-form-label">Points</label>
-                            <div class="input-group">
-                                <input name="points" class="form-control"
-                                       placeholder="Enter Points"
-                                       id="points" type="number" value="{{ points }}"
-                                       required autofocus/>
-                            </div>
-                        </div>
-                        <input id="timeLimit" type="hidden" value="1"
-                               name="timeLimit" required autofocus/>
-                        <div class="form-group">
-                            <label for="classroomCode" class="col-form-label"></label>
                             <div class="inline-group">
                                 <button type="submit" OnClick="return validate();"
-                                        class="btn btn-primary btn-block btn-md mr-2">Create
+                                        class="btn btn-primary btn-block btn-md mr-2">Update
                                 </button>
                             </div>
                         </div>
@@ -90,7 +71,6 @@
 
 {% block javascripts %}
     <script>
-
         // initialization of markdown editor with the custom toolbar
         let simpleMDE = new SimpleMDE({
             element: document.getElementById("MDDescription"),
@@ -102,7 +82,5 @@
             console.log(simpleMDE.value());
             document.getElementById("description").value = simpleMDE.value();
         }
-        console.log(document.getElementById("description").value);
     </script>
 {% endblock %}
-

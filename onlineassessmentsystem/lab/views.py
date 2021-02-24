@@ -183,8 +183,6 @@ def edit(request):
             return render(request, 'accessDenied.html', {})
 
         lab_deadline = convertDjangoDateTimeToHTMLDateTime(lab)
-        if timezone.now() >= lab.deadline:
-            return redirect('/labs/?classId=' + str(lab.classroom.classId))
         return render(request, 'lab/edit.html',
                       {'lab': lab, 'lab_deadline': lab_deadline, 'currentTime': str(timezone.now().strftime("%Y-%m-%dT%H:%M"))})
 

@@ -3459,6 +3459,7 @@ input[type="button"].btn-block {
       color: #fff; }
 
 .card {
+  overflow: hidden;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -3502,7 +3503,9 @@ input[type="button"].btn-block {
   margin-bottom: 0; }
 
 .card-link:hover {
-  text-decoration: none; }
+  text-decoration: none;
+  word-wrap: break-word;
+}
 
 .card-link + .card-link {
   margin-left: 1.25rem; }
