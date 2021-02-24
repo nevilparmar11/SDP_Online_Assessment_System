@@ -11,18 +11,18 @@
                         &nbsp;&nbsp;
                         {% if submission.problem.doesBelongToContest %}
                             Problem : <a class="coloured-link"
-                                        href="/problems/view/?pid={{ submission.problem.problemId }}&&contestId={{ submission.problem.contest.contestId }}">{{ submission.problem.title }}</a>
+                                         href="/problems/view/?pid={{ submission.problem.problemId }}&&contestId={{ submission.problem.contest.contestId }}">{{ submission.problem.title }}</a>
                             |
                             &nbsp;&nbsp;
                             Contest : <a class="coloured-link"
-                                        href="/problems/?contestId={{ submission.problem.contest.contestId }}">{{ submission.problem.contest.title }}</a>
+                                         href="/problems/?contestId={{ submission.problem.contest.contestId }}">{{ submission.problem.contest.title }}</a>
                         {% else %}
                             Problem : <a class="coloured-link"
-                                        href="/problems/view/?pid={{ submission.problem.problemId }}&&labId={{ submission.problem.lab.labId }}">{{ submission.problem.title }}</a>
+                                         href="/problems/view/?pid={{ submission.problem.problemId }}&&labId={{ submission.problem.lab.labId }}">{{ submission.problem.title }}</a>
                             |
                             &nbsp;&nbsp;
                             Lab : <a class="coloured-link"
-                                    href="/problems/?labId={{ submission.problem.lab.labId }}">{{ submission.problem.lab.title }}</a>
+                                     href="/problems/?labId={{ submission.problem.lab.labId }}">{{ submission.problem.lab.title }}</a>
                         {% endif %}
                         &nbsp;&nbsp;
                         | &nbsp;User : {{ submission.user.username }}
