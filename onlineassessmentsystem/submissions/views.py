@@ -56,8 +56,8 @@ def compileCode(code, stdIn):
         'script': code,
         'language': 'c',
         'versionIndex': '4',
-        'clientId': 'a4aa65a157cadf264708a78e14c229c7',
-        'clientSecret': '914ba5e4c071a74fa7c4e4c958543fb7ab8100602ecb38a19640d697d8831125',
+        'clientId': settings.API_CLIENT_ID,
+        'clientSecret': settings.API_CLIENT_SECRET,
         'stdin': stdIn
     }
     url = 'https://api.jdoodle.com/v1/execute'
