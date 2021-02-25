@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
-from .models import Blog, BlogComments
-from users.decorators import faculty_required
-from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import render, redirect
 from django.utils.datastructures import MultiValueDictKeyError
+
+from users.decorators import faculty_required
+from .models import Blog, BlogComments
 
 '''
     Function to get all blog list details
@@ -14,7 +15,6 @@ from django.utils.datastructures import MultiValueDictKeyError
 def list(request):
     blogs = Blog.objects.all()
     return render(request, './blog/list.html', {'blogs': blogs})
-
 
 
 '''
@@ -68,7 +68,7 @@ def edit(request):
         # if classroom not exists
         try:
             blogId = request.GET['id']
-            blog = Blog.objects.get(blogId = blogId)
+            blog = Blog.objects.get(blogId=blogId)
 
         except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
             return render(request, '404.html', {})
@@ -87,6 +87,7 @@ def edit(request):
     blog.description = request.POST['description']
     blog.save()
     return redirect('/blogs/')
+
 
 '''
     Function to delete particular blog
