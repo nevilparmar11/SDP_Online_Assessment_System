@@ -12,6 +12,7 @@ urlpatterns = [
     path('tests/', views.testList),
     path('testCreate/', views.testCreate),
     path('testDelete/', views.testDelete),
+    path('testEdit/', views.testEdit),
     path('comments/', views.comments),
     path('commentCreate/', views.commentCreate),
 ]
