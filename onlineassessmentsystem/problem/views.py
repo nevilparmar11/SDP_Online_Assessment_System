@@ -332,8 +332,7 @@ def list(request):
             isStarted = True;
 
     return render(request, 'problem/list.html',
-                  {'problems': problems, 'idName': idName, 'idValue': objectId, 'isItLab': isItLab, "object": object,
-                   'isOver': isOver, 'isStarted': isStarted, 'hours': hours, 'minutes': minutes, 'seconds': seconds})
+                  {'problems': problems, 'idName': idName, 'idValue': objectId, 'isItLab': isItLab, "object": object, 'isOver': isOver, 'isStarted': isStarted, 'hours': hours, 'minutes': minutes, 'seconds': seconds})
 
 
 '''

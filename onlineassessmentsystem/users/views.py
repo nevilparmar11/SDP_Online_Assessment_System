@@ -1,14 +1,14 @@
 from urllib.parse import urlencode
 
-import pandas as pd
 from django.contrib.auth import authenticate, login, logout
+from users.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 # To encode a login redirect message string into query string parameter
 from django.utils.datastructures import MultiValueDictKeyError
 
 from users.decorators import faculty_required
-from users.models import User
+import pandas as pd
 
 loginRedirectMessage = urlencode({'msg': 'Please Login'})
 
@@ -49,8 +49,7 @@ def registerStudents(request):
             if User.objects.filter(username=username).exists():
                 msg += "ERROR : " + "Username : " + username + " for " + firstName + " " + lastName + " is already exist.\n"
             else:
-                user = User.objects.create_user(username=username, first_name=firstName, last_name=lastName,
-                                                password=password, email=email)
+                user = User.objects.create_user(username=username, first_name=firstName, last_name=lastName, password=password, email=email)
                 user.is_active = True
                 user.save()
                 msg += "SUCCESS : " + firstName + " " + lastName + " with Username : " + username + " is registered successfully.\n"
