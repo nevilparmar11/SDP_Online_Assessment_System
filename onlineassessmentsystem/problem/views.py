@@ -310,6 +310,11 @@ def list(request):
     idName = ""
     # Problem list will be shown belonging to the particular contest or lab
     isOver = False
+    isStarted = False
+    hours = timezone.now().hour
+    minutes = timezone.now().minute
+    seconds = timezone.now().second
+
     if isItLab:
         idName = "labId"
         problems = Problem.objects.filter(lab=object, doesBelongToContest=False)
@@ -320,10 +325,15 @@ def list(request):
         problems = Problem.objects.filter(contest=object, doesBelongToContest=True)
         if timezone.now() >= object.endTime:
             isOver = True
+        hours = object.endTime.hour - timezone.now().hour
+        minutes = object.endTime.minute - timezone.now().minute
+        seconds = object.endTime.second - timezone.now().second
+        if timezone.now() >= object.startTime and timezone.now() <= object.endTime:
+            isStarted = True;
 
     return render(request, 'problem/list.html',
                   {'problems': problems, 'idName': idName, 'idValue': objectId, 'isItLab': isItLab, "object": object,
-                   'isOver': isOver})
+                   'isOver': isOver, 'isStarted': isStarted, 'hours': hours, 'minutes': minutes, 'seconds': seconds})
 
 
 '''
@@ -541,3 +551,25 @@ def commentCreate(request):
     newComment.save()
 
     return redirect('/problems/comments/?pid' + "=" + pid)
+
+
+@faculty_required()
+def testEdit(request):
+    result, tid, testCase = getTestCase(request)
+    if not result:
+        return render(request, '404.html', {})
+    else:
+        if not customRoleBasedTestProblemAuthorization(request, testCase.problem):
+            return render(request, 'accessDenied.html', {})
+    input = request.POST.get("input")
+    output = request.POST.get("output")
+    input = input.replace('\r', '')
+    output = output.replace('\r', '')
+    fpInput = open(os.path.join(settings.BASE_DIR, testCase.inputFile.url[1:]), "w")
+    fpInput.write(input)
+    fpInput.close()
+    fpOutput = open(os.path.join(settings.BASE_DIR, testCase.outputFile.url[1:]), "w")
+    fpOutput.write(output)
+    fpOutput.close()
+    reEvaluateSubmissions(request, testCase.problem.problemId)
+    return redirect('/problems/tests/?pid=' + str(testCase.problem.problemId))

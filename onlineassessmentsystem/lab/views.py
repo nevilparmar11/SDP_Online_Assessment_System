@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from django.utils.datastructures import MultiValueDictKeyError
@@ -127,7 +128,8 @@ def create(request):
             return render(request, '404.html', {})
         if not customRoleBasedClassroomAuthorization(request, classroom):
             return render(request, 'accessDenied.html', {})
-        return render(request, 'lab/create.html', {'classId': classId})
+        print(str(timezone.now().strftime("%Y-%m-%dT%H:%M")))
+        return render(request, 'lab/create.html', {'classId': classId, 'currentTime': str(timezone.now().strftime("%Y-%m-%dT%H:%M"))})
 
     # POST request
     # If Classroom not exist and If Classroom is not belonging to Faculty or Student
@@ -182,7 +184,7 @@ def edit(request):
 
         lab_deadline = convertDjangoDateTimeToHTMLDateTime(lab)
         return render(request, 'lab/edit.html',
-                      {'lab': lab, 'lab_deadline': lab_deadline})
+                      {'lab': lab, 'lab_deadline': lab_deadline, 'currentTime': str(timezone.now().strftime("%Y-%m-%dT%H:%M"))})
 
     # When request is POST
     # If contest not exist and If Contest is not belonging to Faculty

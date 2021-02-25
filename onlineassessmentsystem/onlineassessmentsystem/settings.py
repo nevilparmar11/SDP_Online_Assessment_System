@@ -150,5 +150,5 @@ EMAIL_HOST_PASSWORD = 'sdp@2020'  # this can be done using the system variable a
 
 django_heroku.settings(locals())
 
-API_CLIENT_ID = '***'
-API_CLIENT_SECRET = '***'
+API_CLIENT_ID = 'a4aa65a157cadf264708a78e14c229c7'
+API_CLIENT_SECRET = '914ba5e4c071a74fa7c4e4c958543fb7ab8100602ecb38a19640d697d8831125'
