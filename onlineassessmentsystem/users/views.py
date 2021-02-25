@@ -4,12 +4,10 @@ from django.contrib.auth import authenticate, login, logout
 from users.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-
 # To encode a login redirect message string into query string parameter
 from django.utils.datastructures import MultiValueDictKeyError
 
 from users.decorators import faculty_required
-import xlrd
 import pandas as pd
 
 loginRedirectMessage = urlencode({'msg': 'Please Login'})

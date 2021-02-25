@@ -16,7 +16,6 @@ def list(request):
     return render(request, './blog/list.html', {'blogs': blogs})
 
 
-
 '''
     Function to create Blog
 '''
