@@ -4,12 +4,14 @@ from django.contrib.auth import authenticate, login, logout
 from users.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-# To encode a login redirect message string into query string parameter
 from django.utils.datastructures import MultiValueDictKeyError
+from django.db import IntegrityError
 
 from users.decorators import faculty_required
 import pandas as pd
+from datetime import datetime
 
+# To encode a login redirect message string into query string parameter
 loginRedirectMessage = urlencode({'msg': 'Please Login'})
 
 '''
@@ -18,7 +20,7 @@ Function to show homepage of the site
 
 
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'index.html', {'year': str(datetime.now().year)})
 
 
 '''
@@ -141,3 +143,56 @@ def internalServerError(request):
 
 def accessDemied(request):
     return render(request, 'accessDenied.html')
+
+
+'''Function To display user profile page'''
+
+
+@login_required(login_url='/users/login?' + loginRedirectMessage)
+def viewProfile(request):
+    return render(request, 'users/profile.html')
+
+
+'''Function To edit user's details'''
+
+
+@login_required(login_url='/users/login?' + loginRedirectMessage)
+def editProfile(request):
+    if request.method == "GET":
+        return render(request, '404.html')
+    username = request.POST.get("username")
+    firstName = request.POST.get("firstName")
+    lastName = request.POST.get("lastName")
+    email = request.POST.get("email")
+    try:
+        profilePic = request.FILES['profilePic']
+    except MultiValueDictKeyError:
+        profilePic = None
+
+    user = request.user
+    oldUsername = user.username
+    try:
+        user.first_name = firstName
+        user.last_name = lastName
+        user.email = email
+        user.username = username
+        if profilePic is not None:
+            user.profilePicture.delete(save=False)
+            user.profilePicture = profilePic
+        user.save()
+        return redirect('/users/viewProfile')
+    except IntegrityError:
+        user.username = oldUsername
+        return render(request, 'users/profile.html', {"errorMessage": "Username is already taken"})
+
+
+def changePassword(request):
+    oldPassword = request.POST.get("oldPassword")
+    user = authenticate(username=request.user.username, password=oldPassword)
+    if user is None:
+        return render(request, 'users/profile.html', {"pwdErrorMessage": "Incorrect Old Password"})
+    newPassword = request.POST.get("password")
+    user.set_password(newPassword)
+    user.save()
+    login(request, user)
+    return redirect("/users/viewProfile")
