@@ -7,64 +7,49 @@
             color: black !important;
             font-size: 17px;
         }
+
+        p {
+            color: black;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .card {
+                width: 100% !important;
+            }
+        }
     </style>
 {% endblock %}
 {% block content %}
-    <div class="row page-title-header">
-        <div class="col-sm-12">
-            <div class="page-header">
-                <h4 class="page-title text-center">Blogs</h4>
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <h1 class="font-weight-bold text-center">Blogs</h1>
+        </div>
+        <div class="col-md-3" style="text-align: right">
+            <a href="/blogs/create/" class="btn btn-primary">
+            <i class="fa fa-plus"></i>&nbsp;Create Blog
+        </a>
+        </div>
+    </div>
+    <br>
+    {% for blog in blogs %}
+        <div class="card w-75 mx-auto mt-4">
+            <div class="card-body">
+                <h3 class="blog-title text-center">{{ blog.title }}</h3>
+                <hr>
+                <div style="font-weight: bolder" id="description{{ blog.blogId }}"></div>
+                <script>
+                    $("#description{{ blog.blogId }}").html(marked(`{{ blog.description | truncatechars:200 }}`))
+                </script>
+                <div class="text-muted mt-1">Posted By :- {{ blog.user.username }}</div>
+                <div class="float-right">
+                    <a href="/blogs/view?id={{ blog.blogId }}" class="coloured-link font-weight-bold">Read
+                        More</a>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12" style="text-align: right">
-            <a class="btn btn-primary" href="/blogs/create">Create new blog</a>
-        </div>
-    </div>
-    <div class="row">
-        {% if user.isStudent %}
-            {% for blog in blogs %}
-                <div class="col-md-4 grid-margin">
-                    <a href="/blogs/view?id={{ blog.blogId }}">
-                        <div class="card">
-                            <div class="h5 card-header card-header-own font-weight-semibold"
-                                 style="background-image: url('{% static 'images/classroom-bg.jpg' %}');color: white;">
-                                {{ blog.title }}
-                            </div>
-                            <div class="card-body justify-content-center" style="height: 200px">
-                                <div class="card-text" style="white-space: pre-wrap;" id="description"></div>
-                                <script>
-                                    document.getElementById('description').innerHTML = marked(`{{ blog.description }}`);
-                                </script>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            {% endfor %}
-        {% else %}
-            {% for blog in blogs %}
-                <div class="col-md-4 grid-margin">
-                    <a href="/blogs/view?id={{ blog.blogId }}">
-                        <div class="card rounded">
-                            <div class="h5 card-header card-header-own font-weight-semibold"
-                                 style="background-image: url('{% static 'images/classroom-bg.jpg' %}');color: white;">
-                                {{ blog.title }}
-                            </div>
-                            <div class="card-body justify-content-center" style="height: 150px;">
-                                <div class="card-text">{{ blog.description }}</div>
-                            </div>
-                            <div class="card-footer float-right" style="text-align: right;background-color: white">
-                                <a class="btn btn-secondary" href="/blogs/edit/?id={{ blog.blogId }}">Edit</a>
-                                <a class="btn btn-danger"
-                                   href="/blogs/delete/?id={{ blog.blogId }}">Delete</a>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            {% endfor %}
-        {% endif %}
-    </div>
+    {% endfor %}
+
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->

@@ -8,7 +8,7 @@
         <input id="blogId" type="hidden" value="{{ blog.blogId }}"
                name="blogId">
 
-        <div class="row">
+        <div class="row mt-5">
             <div class="col-sm-12">
                 <div class="jumbotron">
                     <h4 class="text-danger ml-2">
@@ -17,14 +17,9 @@
                     {% if errorMessage %}
                         <h5 class="text-danger">{{ errorMessage }}</h5>
                     {% endif %}
-                    <div>
-                        <div class="p-1"><b>Name :- </b>{{ blog.title }}</div>
-                        <div class="p-1"><b>Description :- </b>{{ blog.description }}</div>
-                    </div>
-
                     <div class="float-right">
                         <a class="btn btn-secondary"
-                           href="/blogs/">Cancel</a>
+                           href="/blogs/view/?id={{ blog.blogId }}">Cancel</a>
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </div>
                     <br>

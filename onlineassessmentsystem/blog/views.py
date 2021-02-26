@@ -21,7 +21,7 @@ def list(request):
 '''
 
 
-@faculty_required()
+@login_required(login_url='/users/login')
 def create(request):
     if request.method == "GET":
         return render(request, "blog/create.html")
@@ -61,15 +61,14 @@ def view(request):
 '''
 
 
-@faculty_required()
+@login_required(login_url='/users/login')
 def edit(request):
     if request.method == "GET":
-
-        # if classroom not exists
         try:
             blogId = request.GET['id']
             blog = Blog.objects.get(blogId = blogId)
-
+            if blog.user != request.user:
+                return render(request, 'accessDenied.html', {})
         except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
             return render(request, '404.html', {})
 
@@ -88,19 +87,18 @@ def edit(request):
     blog.save()
     return redirect('/blogs/')
 
+
 '''
     Function to delete particular blog
 '''
 
 
-@faculty_required()
+@login_required(login_url='/users/login')
 def delete(request):
     if request.method == "GET":
-        # if classroom not exists then
         try:
             blogId = request.GET['id']
             blog = Blog.objects.get(blogId=blogId)
-            # if classroom is not belonging to logged faculty user then
             if blog.user != request.user:
                 return render(request, 'accessDenied.html', {})
         except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
