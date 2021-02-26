@@ -11,6 +11,7 @@ from django.utils.datastructures import MultiValueDictKeyError
 from users.decorators import faculty_required
 import xlrd
 import pandas as pd
+from django.core.mail import send_mail
 
 loginRedirectMessage = urlencode({'msg': 'Please Login'})
 
@@ -49,12 +50,30 @@ def registerStudents(request):
             username = data.iloc[i][3]
             password = data.iloc[i][4]
             if User.objects.filter(username=username).exists():
+                emailSubject = 'Student Registration Error : Online assessment system'
+                emailBody = 'Dear student\n'\
+                            + 'Your requested Username : ' + username + ' already exist.\n' + 'Please Contact to your respective faculty member for more details and further registration process.\n' \
+                            + '\nProvided Details\nFirst Name : ' + firstName + '\nLast Name : ' + lastName + '\nUsername : ' + username + '\nEmail : ' + email \
+                            + "\n\nThank you\nAdministrator\nOnline Assessment System"
                 msg += "ERROR : " + "Username : " + username + " for " + firstName + " " + lastName + " is already exist.\n"
             else:
+                emailSubject = 'Student Registration Successful : Online assessment system'
+                emailBody = 'Dear student\n' \
+                            + 'You are successfully registered to the system\n' \
+                            + '\nProvided Details\nFirst Name : ' + firstName + '\nLast Name : ' + lastName + '\nUsername : ' + username + '\nPassword :' + password + '\nEmail : ' + email \
+                            + "\n\nThank you\nAdministrator\nOnline Assessment System"
                 user = User.objects.create_user(username=username, first_name=firstName, last_name=lastName, password=password, email=email)
                 user.is_active = True
                 user.save()
                 msg += "SUCCESS : " + firstName + " " + lastName + " with Username : " + username + " is registered successfully.\n"
+
+            send_mail(
+                emailSubject,
+                emailBody,
+                'onlineassessment.sdp@gmail.com',
+                [email],
+                fail_silently=False
+            )
 
         return render(request, 'users/registerStudents.html', {'msg': msg})
 
