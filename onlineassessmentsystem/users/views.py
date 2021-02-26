@@ -12,6 +12,7 @@ from users.decorators import faculty_required
 import xlrd
 import pandas as pd
 from django.core.mail import send_mail
+from django.conf import settings
 
 loginRedirectMessage = urlencode({'msg': 'Please Login'})
 
@@ -70,7 +71,7 @@ def registerStudents(request):
             send_mail(
                 emailSubject,
                 emailBody,
-                'onlineassessment.sdp@gmail.com',
+                settings.EMAIL_HOST_USER,
                 [email],
                 fail_silently=False
             )
