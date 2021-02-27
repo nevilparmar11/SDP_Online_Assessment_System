@@ -29,15 +29,15 @@
         </div>
         <br>
     {% endif %}
-    {% for lab in labs %}
+    {% for lab,grade in gradedLabs.items %}
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body container">
-                        {% if lab in gradedLabs %}
+                        {% if grade is not None %}
                             <div class="float-right">
                                 <div class="btn btn-sm btn-light">
-                                    Graded &nbsp;<span class="badge badge-success badge-pill">{{ gradedLabs.lab }}</span>
+                                    Graded &nbsp;<span class="badge badge-success badge-pill">{{ grade }}</span>
                                 </div>
                             </div>
                         {% endif %}

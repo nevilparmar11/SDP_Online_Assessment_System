@@ -109,11 +109,14 @@ def list(request):
 
     # lab list will be shown belonging to the particular classroom
     labs = Lab.objects.filter(classroom=classroom)
-    labGrades = LabGrade.objects.all()
+    labGrades = LabGrade.objects.filter(student=request.user)
     gradedLabs = {}
     for labGrade in labGrades:
-        gradedLabs[labGrade.lab] = labGrade.lab
-    return render(request, 'lab/list.html', {'labs': labs, 'classId': classId, 'classroom': classroom, 'gradedLabs': gradedLabs })
+        gradedLabs[labGrade.lab] = labGrade.grade
+    for lab in labs:
+        if lab not in gradedLabs:
+            gradedLabs[lab] = None  # Storing None grade for not graded labs
+    return render(request, 'lab/list.html', {'classId': classId, 'classroom': classroom, 'gradedLabs': gradedLabs})
 
 
 '''
@@ -131,7 +134,6 @@ def create(request):
             return render(request, '404.html', {})
         if not customRoleBasedClassroomAuthorization(request, classroom):
             return render(request, 'accessDenied.html', {})
-        print(str(timezone.now().strftime("%Y-%m-%dT%H:%M")))
         return render(request, 'lab/create.html',
                       {'classId': classId, 'currentTime': str(timezone.now().strftime("%Y-%m-%dT%H:%M"))})
 
