@@ -560,3 +560,25 @@ def commentCreate(request):
     newComment.save()
 
     return redirect('/problems/comments/?pid' + "=" + pid)
+
+
+@faculty_required()
+def testEdit(request):
+    result, tid, testCase = getTestCase(request)
+    if not result:
+        return render(request, '404.html', {})
+    else:
+        if not customRoleBasedTestProblemAuthorization(request, testCase.problem):
+            return render(request, 'accessDenied.html', {})
+    input = request.POST.get("input")
+    output = request.POST.get("output")
+    input = input.replace('\r', '')
+    output = output.replace('\r', '')
+    fpInput = open(os.path.join(settings.BASE_DIR, testCase.inputFile.url[1:]), "w")
+    fpInput.write(input)
+    fpInput.close()
+    fpOutput = open(os.path.join(settings.BASE_DIR, testCase.outputFile.url[1:]), "w")
+    fpOutput.write(output)
+    fpOutput.close()
+    reEvaluateSubmissions(request, testCase.problem.problemId)
+    return redirect('/problems/tests/?pid=' + str(testCase.problem.problemId))
