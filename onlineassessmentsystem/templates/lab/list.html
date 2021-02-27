@@ -29,11 +29,18 @@
         </div>
         <br>
     {% endif %}
-    {% for lab in labs %}
+    {% for lab,grade in gradedLabs.items %}
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body container">
+                        {% if grade is not None %}
+                            <div class="float-right">
+                                <div class="btn btn-sm btn-light">
+                                    Graded &nbsp;<span class="badge badge-success badge-pill">{{ grade }}</span>
+                                </div>
+                            </div>
+                        {% endif %}
                         <h4>{{ lab.title }}</h4>
                         <div class="row">
                             <div class="mt-2 col-md-6 col-sm-6">

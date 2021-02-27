@@ -31,6 +31,12 @@
                     <a class="btn btn-success" href="/contests/leaderboard/?id={{ idValue }}"><i
                             class="fa fa-trophy"></i>
                         Leaderboard</a>
+                {% else %}
+                    {% if isOver %}
+                        <a class="btn btn-secondary" href="/labs/viewGrades/?id={{ object.labId }}">
+                            View Student Grades
+                        </a>
+                    {% endif %}
                 {% endif %}
                 {% if isOver %}
                     <a class="btn btn-primary disabled" href="/problems/create?{{ idName }}={{ idValue }}"><i
@@ -70,10 +76,10 @@
                         {% if not isItLab %}
                             Difficulty :- {{ object.difficulty }} <br><br><br>
                             <div class="text-right">
-                    {% if isStarted and not isOver%}
-                             <div id="countdowntimer"><span id="hms_timer"></span></div>
-                            {% endif %}
-                    </div>
+                                {% if isStarted and not isOver %}
+                                    <div id="countdowntimer"><span id="hms_timer"></span></div>
+                                {% endif %}
+                            </div>
                         {% endif %}
                     </div>
                     <br>
@@ -145,16 +151,16 @@
         </div>
     </div>
 
-     <script type="text/javascript">
-           $(function() {
-		$("#hms_timer").countdowntimer({
-			hours : {{ hours }},
-			minutes : {{ minutes }},
-			seconds : {{ seconds }},
-			size : "md",
-		});
-	});
-         </script>
+    <script type="text/javascript">
+        $(function () {
+            $("#hms_timer").countdowntimer({
+                hours: {{ hours }},
+                minutes: {{ minutes }},
+                seconds: {{ seconds }},
+                size: "md",
+            });
+        });
+    </script>
 {% endblock %}
 
 

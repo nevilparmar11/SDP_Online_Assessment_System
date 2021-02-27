@@ -1,13 +1,12 @@
 from django.contrib.auth.decorators import login_required
-from django.utils import timezone
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
-from django.utils.datastructures import MultiValueDictKeyError
 from django.utils import timezone
+from django.utils.datastructures import MultiValueDictKeyError
 
 from classroom.models import Classroom, ClassroomStudents
 from users.decorators import faculty_required
-from .models import Lab
+from .models import Lab, LabGrade
 
 '''
     Function for Role based authorization of Classroom; upon provided the classId to the request parameter 
@@ -110,7 +109,15 @@ def list(request):
 
     # lab list will be shown belonging to the particular classroom
     labs = Lab.objects.filter(classroom=classroom)
-    return render(request, 'lab/list.html', {'labs': labs, 'classId': classId, 'classroom': classroom, 'currentTime': timezone.now()})
+
+    labGrades = LabGrade.objects.filter(student=request.user)
+    gradedLabs = {}
+    for labGrade in labGrades:
+        gradedLabs[labGrade.lab] = labGrade.grade
+    for lab in labs:
+        if lab not in gradedLabs:
+            gradedLabs[lab] = None  # Storing None grade for not graded labs
+    return render(request, 'lab/list.html', {'classId': classId, 'classroom': classroom, 'gradedLabs': gradedLabs, 'currentTime': timezone.now()})
 
 
 '''
@@ -128,8 +135,8 @@ def create(request):
             return render(request, '404.html', {})
         if not customRoleBasedClassroomAuthorization(request, classroom):
             return render(request, 'accessDenied.html', {})
-        print(str(timezone.now().strftime("%Y-%m-%dT%H:%M")))
-        return render(request, 'lab/create.html', {'classId': classId, 'currentTime': str(timezone.now().strftime("%Y-%m-%dT%H:%M"))})
+        return render(request, 'lab/create.html',
+                      {'classId': classId, 'currentTime': str(timezone.now().strftime("%Y-%m-%dT%H:%M"))})
 
     # POST request
     # If Classroom not exist and If Classroom is not belonging to Faculty or Student
@@ -184,7 +191,8 @@ def edit(request):
 
         lab_deadline = convertDjangoDateTimeToHTMLDateTime(lab)
         return render(request, 'lab/edit.html',
-                      {'lab': lab, 'lab_deadline': lab_deadline, 'currentTime': str(timezone.now().strftime("%Y-%m-%dT%H:%M"))})
+                      {'lab': lab, 'lab_deadline': lab_deadline,
+                       'currentTime': str(timezone.now().strftime("%Y-%m-%dT%H:%M"))})
 
     # When request is POST
     # If contest not exist and If Contest is not belonging to Faculty
@@ -230,3 +238,11 @@ def delete(request):
         return render(request, 'accessDenied.html', {})
     lab.delete()
     return redirect('/labs/?classId=' + str(lab.classroom.classId))
+
+
+@faculty_required()
+def viewGrades(request):
+    labId = request.GET.get('id')
+    lab = Lab.objects.get(labId=labId)
+    grades = LabGrade.objects.filter(lab=lab)
+    return render(request, 'lab/grades.html', {'lab':lab, 'grades': grades})

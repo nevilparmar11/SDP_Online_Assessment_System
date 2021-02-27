@@ -47,7 +47,13 @@ INSTALLED_APPS = [
     'users',
     'problem',
     'crispy_forms',
+    'django_q'
 ]
+
+Q_CLUSTER = {
+    "name": "lab",
+    "orm": "default",  # Use Django's ORM + database for broker
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
