@@ -130,7 +130,9 @@ def submitCode(request, update=False, submission=None):
             testCasesPassed += 1
         fpOutput.close()
 
-    score = int(testCasesPassed / totalTestCases * problem.points)
+    score = 0
+    if totalTestCases != 0:
+        score = int(testCasesPassed / totalTestCases * problem.points)
     if update:
         submission.score = score
         submission.save()
@@ -165,6 +167,8 @@ def list(request):
     isOver = False
     user = request.user
     if problem.doesBelongToContest:
+        if request.user.isStudent and timezone.now() < object.startTime:
+            return render(request, 'accessDenied.html', {})
         if timezone.now() >= problem.contest.endTime:
             isOver = True
     else:

@@ -110,7 +110,7 @@ def list(request):
 
     # lab list will be shown belonging to the particular classroom
     labs = Lab.objects.filter(classroom=classroom)
-    return render(request, 'lab/list.html', {'labs': labs, 'classId': classId, 'classroom': classroom})
+    return render(request, 'lab/list.html', {'labs': labs, 'classId': classId, 'classroom': classroom, 'currentTime': timezone.now()})
 
 
 '''
