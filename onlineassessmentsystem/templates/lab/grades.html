@@ -1,0 +1,27 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+    <div class="card">
+        <div class="card-header text-center bg-white">
+            <h2>Student's Lab Grades</h2>
+            <h4 class="text-muted">{{ lab.title }}</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <th>#</th>
+                    <th>Student</th>
+                    <th>Grade Obtained</th>
+                </thead>
+                <tbody>
+                    {% for grade in grades %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ grade.student.username }}</td>
+                            <td>{{ grade.grade }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
