@@ -64,6 +64,13 @@
                         </div>
                         {#                        <br>#}
                         <div class="text-muted">Deadline :- {{ lab.deadline }}</div>
+                        <div class="text-muted">
+                            {% if currentTime < lab.deadline %}
+                                Status : <span class="small text-success">Assigned</span>
+                            {% else %}
+                                Status : <span class="small text-danger">Over!</span>
+                            {%  endif %}
+                        </div>
                     </div>
                 </div>
             </div>

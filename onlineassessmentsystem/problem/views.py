@@ -321,6 +321,9 @@ def list(request):
         if timezone.now() >= object.deadline:
             isOver = True
     else:
+        if request.user.isStudent and timezone.now() < object.startTime:
+            return render(request, 'accessDenied.html', {})
+
         idName = "contestId"
         problems = Problem.objects.filter(contest=object, doesBelongToContest=True)
         if timezone.now() >= object.endTime:
@@ -412,6 +415,9 @@ def view(request):
             isOver = True
     else:
         idName = "contestId"
+
+        if request.user.isStudent and timezone.now() < object.startTime:
+            return render(request, 'accessDenied.html', {})
         if timezone.now() >= object.endTime:
             isOver = True
     return render(request, 'problem/view.html',
@@ -522,6 +528,10 @@ def comments(request):
     if problem.doesBelongToContest:
         objectName = "contestId"
         objectId = problem.contest.contestId
+
+        if request.user.isStudent and timezone.now() < problem.contest.startTime:
+            return render(request, 'accessDenied.html', {})
+
     else:
         objectName = "labId"
         objectId = problem.lab.labId

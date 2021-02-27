@@ -109,6 +109,7 @@ def list(request):
 
     # lab list will be shown belonging to the particular classroom
     labs = Lab.objects.filter(classroom=classroom)
+
     labGrades = LabGrade.objects.filter(student=request.user)
     gradedLabs = {}
     for labGrade in labGrades:
@@ -116,7 +117,7 @@ def list(request):
     for lab in labs:
         if lab not in gradedLabs:
             gradedLabs[lab] = None  # Storing None grade for not graded labs
-    return render(request, 'lab/list.html', {'classId': classId, 'classroom': classroom, 'gradedLabs': gradedLabs})
+    return render(request, 'lab/list.html', {'classId': classId, 'classroom': classroom, 'gradedLabs': gradedLabs, 'currentTime': timezone.now()})
 
 
 '''

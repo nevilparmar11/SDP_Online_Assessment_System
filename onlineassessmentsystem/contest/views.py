@@ -12,6 +12,7 @@ from problem.models import Problem
 from submissions.models import Submission
 from users.decorators import faculty_required
 from .models import Contest
+from django.utils import timezone
 
 '''
     Function for Role based authorization of Classroom; upon provided the classId to the request parameter 
@@ -119,6 +120,9 @@ def leaderboard(request):
     if not customRoleBasedContestAuthorization(request, contest):
         return render(request, 'accessDenied.html', {})
 
+    if request.user.isStudent and timezone.now() < contest.startTime:
+        return render(request, 'accessDenied.html', {})
+
     problems = Problem.objects.filter(contest=contest)
     classroomStudents = ClassroomStudents.objects.filter(classroom=contest.classroom)
     data = {}
@@ -162,8 +166,9 @@ def list(request):
     except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
         msg = ""
 
+    currentTime = timezone.now()
     return render(request, 'contest/list.html',
-                  {'contests': contests, 'classId': classId, 'classroom': classroom, 'msg': msg})
+                  {'contests': contests, 'classId': classId, 'classroom': classroom, 'msg': msg, 'currentTime': currentTime})
 
 
 '''
