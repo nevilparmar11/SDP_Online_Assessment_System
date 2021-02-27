@@ -7,4 +7,5 @@ urlpatterns = [
     path('edit/', views.edit),
     path('delete/', views.delete),
     path('view/', views.view),
+    path('viewGrades/', views.viewGrades)
 ]
