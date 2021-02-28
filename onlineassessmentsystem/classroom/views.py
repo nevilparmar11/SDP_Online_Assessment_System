@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime
+from urllib.parse import urlencode
 
 from django.shortcuts import render, redirect
 from .models import Classroom, ClassroomStudents, ClassComments
@@ -8,12 +9,15 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.utils.datastructures import MultiValueDictKeyError
 
+# To encode a login redirect message string into query string parameter
+loginRedirectMessage = urlencode({'msg': 'Please Login'})
+
 '''
     Function to get all Classroom list details
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def list(request):
     user = request.user
 
@@ -55,7 +59,7 @@ def create(request):
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def view(request):
     user = request.user
 
@@ -228,7 +232,7 @@ def leaveClassroom(request):
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def commentCreate(request):
 
     # if requested classroom not exists then

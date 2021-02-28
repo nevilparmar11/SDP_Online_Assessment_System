@@ -1,3 +1,5 @@
+from urllib.parse import urlencode
+
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
@@ -7,6 +9,9 @@ from django.utils.datastructures import MultiValueDictKeyError
 from classroom.models import Classroom, ClassroomStudents
 from users.decorators import faculty_required
 from .models import Lab, LabGrade
+
+# To encode a login redirect message string into query string parameter
+loginRedirectMessage = urlencode({'msg': 'Please Login'})
 
 '''
     Function for Role based authorization of Classroom; upon provided the classId to the request parameter 
@@ -98,7 +103,7 @@ def convertDjangoDateTimeToHTMLDateTime(lab):
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def list(request):
     # If classroom not exist and If Classroom is not belonging to Faculty or Student
     result, classId, classroom = getClassroom(request)
@@ -161,7 +166,7 @@ def create(request):
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def view(request):
     # If lab not exist and If Lab is not belonging to Faculty or Student
     result, labId, lab = getLab(request)
