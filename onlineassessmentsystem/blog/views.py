@@ -1,3 +1,5 @@
+from urllib.parse import urlencode
+
 from django.shortcuts import render, redirect
 from .models import Blog, BlogComments
 from users.decorators import faculty_required
@@ -5,12 +7,14 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.utils.datastructures import MultiValueDictKeyError
 
+loginRedirectMessage = urlencode({'msg': 'Please Login'})
+
 '''
     Function to get all blog list details
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def list(request):
     blogs = Blog.objects.all()
     return render(request, './blog/list.html', {'blogs': blogs})
@@ -21,7 +25,7 @@ def list(request):
 '''
 
 
-@faculty_required()
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def create(request):
     if request.method == "GET":
         return render(request, "blog/create.html")
@@ -39,7 +43,7 @@ def create(request):
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def view(request):
     user = request.user
 
@@ -61,15 +65,14 @@ def view(request):
 '''
 
 
-@faculty_required()
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def edit(request):
     if request.method == "GET":
-
-        # if classroom not exists
         try:
             blogId = request.GET['id']
             blog = Blog.objects.get(blogId = blogId)
-
+            if blog.user != request.user:
+                return render(request, 'accessDenied.html', {})
         except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
             return render(request, '404.html', {})
 
@@ -88,19 +91,18 @@ def edit(request):
     blog.save()
     return redirect('/blogs/')
 
+
 '''
     Function to delete particular blog
 '''
 
 
-@faculty_required()
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def delete(request):
     if request.method == "GET":
-        # if classroom not exists then
         try:
             blogId = request.GET['id']
             blog = Blog.objects.get(blogId=blogId)
-            # if classroom is not belonging to logged faculty user then
             if blog.user != request.user:
                 return render(request, 'accessDenied.html', {})
         except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
@@ -125,7 +127,7 @@ def delete(request):
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def commentCreate(request):
     # if requested classroom not exists then
     try:

@@ -1,5 +1,6 @@
 import os
 import threading
+from urllib.parse import urlencode
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -16,6 +17,8 @@ from submissions.models import Submission
 # from submissions.views import submitCode
 from users.decorators import faculty_required
 from .models import Problem, TestCase, ProblemComment
+
+loginRedirectMessage = urlencode({'msg': 'Please Login'})
 
 '''
     Function for Role based authorization of Problem; upon provided the pid to the request parameter 
@@ -294,7 +297,7 @@ def testDelete(request):
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def list(request):
     # If classroom not exist and If Classroom is not belonging to Faculty or Student
     result, objectId, object, isItLab = getContestOrLab(request)
@@ -321,6 +324,9 @@ def list(request):
         if timezone.now() >= object.deadline:
             isOver = True
     else:
+        if request.user.isStudent and timezone.now() < object.startTime:
+            return render(request, 'accessDenied.html', {})
+
         idName = "contestId"
         problems = Problem.objects.filter(contest=object, doesBelongToContest=True)
         if timezone.now() >= object.endTime:
@@ -385,7 +391,7 @@ def create(request):
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def view(request):
     result, objectId, object, isItLab = getContestOrLab(request)
     if not result:
@@ -412,6 +418,9 @@ def view(request):
             isOver = True
     else:
         idName = "contestId"
+
+        if request.user.isStudent and timezone.now() < object.startTime:
+            return render(request, 'accessDenied.html', {})
         if timezone.now() >= object.endTime:
             isOver = True
     return render(request, 'problem/view.html',
@@ -507,7 +516,7 @@ def delete(request):
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def comments(request):
     # If problem not exist and If Contest/Lab is not belonging to Faculty or Student
     result, pid, problem = getProblem(request)
@@ -522,6 +531,10 @@ def comments(request):
     if problem.doesBelongToContest:
         objectName = "contestId"
         objectId = problem.contest.contestId
+
+        if request.user.isStudent and timezone.now() < problem.contest.startTime:
+            return render(request, 'accessDenied.html', {})
+
     else:
         objectName = "labId"
         objectId = problem.lab.labId
@@ -535,7 +548,7 @@ def comments(request):
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def commentCreate(request):
     # If problem not exist and If Contest/Lab is not belonging to Faculty or Student
     result, pid, problem = getProblem(request)

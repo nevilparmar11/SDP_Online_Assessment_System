@@ -42,8 +42,8 @@
         <div class="header-banner-text col-md-6">
             <p class="colored-text">Are you ready to learn?</p>
             <h1 class="white-text">Learn with fun<br> on <span>any schedule</span></h1>
-            <p class="white-text">Lorem ipsum dolor sit amet consectetur <br> adipisicing elit. Voluptatem, iure! Neque, eius repudiandae.
-            </p>
+            <p class="white-text">STOP APPLYING PATCHES.
+              RECODE YOURSELF NOW.</p>
             <button class="btn green-btn">Get Started</button>
         </div>
         <div class="col-md-6 header-banner-img">
@@ -62,29 +62,29 @@
          <div class="col-lg-3 col-md-6 col-sm-12">
             <div class="single-card d-flex flex-column align-items-center justify-content-center">
               <img class="img-fluid" src="{% static 'images/icon/book.png' %}" alt="book icon image">
-              <h5>1500+ Topics</h5>
-              <small>Learn Anything</small>
+              <h5>Automatic Grading</h5>
+              <small>OAS</small>
             </div>
          </div>
          <div class="col-lg-3 col-md-6 col-sm-12">
           <div class="single-card d-flex flex-column align-items-center justify-content-center">
             <img class="img-fluid" src="{% static 'images/icon/Student.png' %}" alt="student icon image">
-            <h5>1800+ Students</h5>
-            <small>Learn Anything</small>
+            <h5>Leaderboard in contest</h5>
+            <small>OAS</small>
           </div>
          </div>
          <div class="col-lg-3 col-md-6 col-sm-12">
           <div class="single-card d-flex flex-column align-items-center justify-content-center">
             <img class="img-fluid" src="{% static 'images/icon/Test.png' %}" alt="test icon image">
-            <h5>9K+ Test Token</h5>
-            <small>Learn Anything</small>
+            <h5>Classroom</h5>
+            <small>OAS</small>
           </div>
          </div>
          <div class="col-lg-3 col-md-6 col-sm-12">
           <div class="single-card d-flex flex-column align-items-center justify-content-center">
             <img class="img-fluid" src="{% static 'images/icon/Students.png' %}" alt="student icon image">
-            <h5>2000+ Students</h5>
-            <small>Learn Anything</small>
+            <h5>Submissions</h5>
+            <small>OAS</small>
           </div>
          </div>
        </div>
@@ -287,8 +287,8 @@
           the world are improving their lives with us</p>
       </div>
       <h4>Give your Feedback</h4>
-      <input class="form-control input-box" type="text" name="" id="">
-      <button class="btn send-btn">Send</button>
+      <input class="form-control input-box" type="text" name="feedbackinput" id="feedbackinput">
+      <a class="btn send-btn" id="btnFeedback" href="mailto:onlineassessment.sdp@gmail.com?subject=Feedback OAS&body=">Send</a>
     </div>
     <div class="col-md-7">
       <div class="footer-right d-flex justify-content-center justify-content-between">
@@ -310,9 +310,11 @@
         </div> -->
         <div class="column link-column d-flex flex-column ">
           <h5>Developed By</h5>
-          <a href="mailto:nevilparmar24@gmail.com">Nevil Parmar</a>
-          <a href="mahammadayan18@gmail.com">Ayan Shaikh</a>
-          <a href="jollyshah2q@gmail.com">Jwalit Shah</a>
+            <div class="float-md-right">
+                <a href="mailto:nevilparmar24@gmail.com">Nevil Parmar</a>&nbsp;&nbsp;|
+                <a href="mailto:mahammadayan18@gmail.com">Ayan Shaikh</a>&nbsp;&nbsp;|
+                <a href="mailto:jwalitshah2q@gmail.com">Jwalit Shah</a>
+            </div>
         </div>
       </div>
     </div>
@@ -325,8 +327,8 @@
         <a href="#"><img class="img-fluid" src="{% static 'images/social-icon/linkedin.png' %}" alt="linkedin icon"></a>
       </div>
       <div class="copyright">
-      <p class="text-center">&copy;Copyright 2021 | All rights reserved by OAS</p>
-    </div>
+        <p class="text-center" style="color: white">&copy&copy;Copyright {{ year }}</p>
+      </div>
   </div>
   </div>
 </footer>
@@ -337,5 +339,15 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+<script>
+  $('#btnFeedback').click(function() {
+    var feedbackText = $('#feedbackinput').val();
+    var oldhref = $(this).attr('href');
+    oldhref += feedbackText;
+    $(this).attr('href', oldhref);
+  });
+</script>
+
 </body>
 </html>

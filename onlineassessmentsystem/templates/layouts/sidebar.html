@@ -9,23 +9,23 @@
     {#    </div>#}
     <ul class="list-unstyled components">
         <li>
-            <a href="/users/home"><i class="fa fa-home"></i> &nbsp;Home</a>
+            <a href="/users/home">&nbsp;<i class="fa fa-home"></i> &nbsp;Home</a>
         </li>
         {% if not user.isStudent %}
         <li>
-            <a href="/users/register"><i class="fa fa-user-plus"></i> &nbsp;Register Students</a>
+            <a href="/users/register">&nbsp;<i class="fa fa-user-plus"></i> &nbsp;Register Students</a>
         </li>
         {% endif %}
         <li>
-            <a href="/blogs/"><i class="fa fa-book" aria-hidden="true"></i>
+            <a href="/blogs/">&nbsp;<i class="fa fa-book" aria-hidden="true"></i>
                 &nbsp;Blogs</a>
         </li>
         <li>
-            <a href="#"><i class="fa fa-user" aria-hidden="true"></i>
+            <a href="/users/viewProfile">&nbsp;<i class="fa fa-user" aria-hidden="true"></i>
                 &nbsp;My Profile</a>
         </li>
         <li>
-            <a href="/users/logout"><i class="fa fa-power-off" aria-hidden="true"></i>
+            <a href="/users/logout">&nbsp;<i class="fa fa-power-off" aria-hidden="true"></i>
                 &nbsp;Logout</a>
         </li>
     </ul>

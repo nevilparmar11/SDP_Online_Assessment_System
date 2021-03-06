@@ -35,9 +35,19 @@
                             <div class="h5 card-header card-header-own font-weight-semibold"
                                  style="background-image: url('{% static 'images/classroom-bg.jpg' %}');color: white;">
                                 {{ classroomStudent.classroom.name }}
+                                <div>
+                                    <div class="small float-left text-white ">
+                                        - {{ classroomStudent.classroom.user.username }}
+                                    </div>
+                                    <div class="float-right">
+                                        <img class=""
+                                             src="/uploads/{{ classroomStudent.classroom.user.profilePicture }}"
+                                             height="75px" width="75px">
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-body justify-content-center" style="height: 200px;">
-                                <div class="card-text">{{ classroomStudent.classroom.description }}</div>
+                                <div class="card-text mt-3">{{ classroomStudent.classroom.description }}</div>
                             </div>
                         </div>
                     </a>

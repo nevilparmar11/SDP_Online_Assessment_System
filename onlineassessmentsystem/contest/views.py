@@ -1,9 +1,11 @@
 from datetime import datetime
+from urllib.parse import urlencode
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Max
 from django.shortcuts import render, redirect
+from django.utils import timezone
 from django.utils.datastructures import MultiValueDictKeyError
 
 from classroom.models import ClassroomStudents, Classroom
@@ -11,6 +13,10 @@ from problem.models import Problem
 from submissions.models import Submission
 from users.decorators import faculty_required
 from .models import Contest
+from django.utils import timezone
+
+# To encode a login redirect message string into query string parameter
+loginRedirectMessage = urlencode({'msg': 'Please Login'})
 
 '''
     Function for Role based authorization of Classroom; upon provided the classId to the request parameter 
@@ -109,13 +115,16 @@ def convertDjangoDateTimeToHTMLDateTime(contest):
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def leaderboard(request):
     # If contest not exist and If Contest is not belonging to Faculty or Student
     result, contestId, contest = getContest(request)
     if not result:
         return render(request, '404.html', {})
     if not customRoleBasedContestAuthorization(request, contest):
+        return render(request, 'accessDenied.html', {})
+
+    if request.user.isStudent and timezone.now() < contest.startTime:
         return render(request, 'accessDenied.html', {})
 
     problems = Problem.objects.filter(contest=contest)
@@ -144,7 +153,7 @@ def leaderboard(request):
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def list(request):
     # If classroom not exist and If Classroom is not belonging to Faculty or Student
     result, classId, classroom = getClassroom(request)
@@ -161,8 +170,9 @@ def list(request):
     except (ObjectDoesNotExist, MultiValueDictKeyError, ValueError):
         msg = ""
 
+    currentTime = timezone.now()
     return render(request, 'contest/list.html',
-                  {'contests': contests, 'classId': classId, 'classroom': classroom, 'msg': msg})
+                  {'contests': contests, 'classId': classId, 'classroom': classroom, 'msg': msg, 'currentTime': currentTime})
 
 
 '''
@@ -214,7 +224,7 @@ def create(request):
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def view(request):
     # If contest not exist and If Contest is not belonging to Faculty or Student
     result, contestId, contest = getContest(request)
