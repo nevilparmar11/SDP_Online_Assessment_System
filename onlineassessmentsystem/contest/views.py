@@ -1,4 +1,5 @@
 from datetime import datetime
+from urllib.parse import urlencode
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
@@ -13,6 +14,9 @@ from submissions.models import Submission
 from users.decorators import faculty_required
 from .models import Contest
 from django.utils import timezone
+
+# To encode a login redirect message string into query string parameter
+loginRedirectMessage = urlencode({'msg': 'Please Login'})
 
 '''
     Function for Role based authorization of Classroom; upon provided the classId to the request parameter 
@@ -111,7 +115,7 @@ def convertDjangoDateTimeToHTMLDateTime(contest):
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def leaderboard(request):
     # If contest not exist and If Contest is not belonging to Faculty or Student
     result, contestId, contest = getContest(request)
@@ -149,7 +153,7 @@ def leaderboard(request):
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def list(request):
     # If classroom not exist and If Classroom is not belonging to Faculty or Student
     result, classId, classroom = getClassroom(request)
@@ -220,7 +224,7 @@ def create(request):
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def view(request):
     # If contest not exist and If Contest is not belonging to Faculty or Student
     result, contestId, contest = getContest(request)

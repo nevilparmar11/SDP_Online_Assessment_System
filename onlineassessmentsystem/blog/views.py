@@ -1,3 +1,5 @@
+from urllib.parse import urlencode
+
 from django.shortcuts import render, redirect
 from .models import Blog, BlogComments
 from users.decorators import faculty_required
@@ -5,12 +7,14 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.utils.datastructures import MultiValueDictKeyError
 
+loginRedirectMessage = urlencode({'msg': 'Please Login'})
+
 '''
     Function to get all blog list details
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def list(request):
     blogs = Blog.objects.all()
     return render(request, './blog/list.html', {'blogs': blogs})
@@ -21,7 +25,7 @@ def list(request):
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def create(request):
     if request.method == "GET":
         return render(request, "blog/create.html")
@@ -39,7 +43,7 @@ def create(request):
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def view(request):
     user = request.user
 
@@ -61,7 +65,7 @@ def view(request):
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def edit(request):
     if request.method == "GET":
         try:
@@ -93,7 +97,7 @@ def edit(request):
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def delete(request):
     if request.method == "GET":
         try:
@@ -123,7 +127,7 @@ def delete(request):
 '''
 
 
-@login_required(login_url='/users/login')
+@login_required(login_url='/users/login?' + loginRedirectMessage)
 def commentCreate(request):
     # if requested classroom not exists then
     try:

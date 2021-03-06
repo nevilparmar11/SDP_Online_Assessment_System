@@ -8,9 +8,9 @@
     <meta charset="UTF-8">
     <title>Online Lab Assessment</title>
 
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-      <script type="text/javascript" src="{% static 'js/jQuery.countdownTimer.js' %}"></script>
-      <link rel="stylesheet" type="text/css" href="{% static 'css/jQuery.countdownTimer.css' %}" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/jQuery.countdownTimer.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jQuery.countdownTimer.css' %}"/>
 
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
@@ -115,6 +115,7 @@
         </div>
         {% include 'layouts/footer.html' %}
     </div>
+    <div class="overlay"></div>
 </div>
 
 {#<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>#}
@@ -146,6 +147,15 @@
             $('#sidebar, #content').toggleClass('active');
             $('.collapse.in').toggleClass('in');
             $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            $('.overlay').toggleClass('active');
+            $('.collapse.in').toggleClass('in');
+        });
+
+        $('#dismiss, .overlay,.dismiss').on('click', function () {
+            // hide sidebar
+            $('#sidebar').removeClass('active');
+            // hide overlay
+            $('.overlay').removeClass('active');
         });
     });
 </script>
