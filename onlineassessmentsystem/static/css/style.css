@@ -4,14 +4,9 @@
 
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 
-/* body {
-  font-family: "Poppins", sans-serif;
-  background: #fafafa;
-} */
-
 body {
     font-family: "Poppins", sans-serif;
-    background: #F3F3F3
+    background: #F3F3F3;
 }
 
 p {
@@ -66,8 +61,8 @@ a:focus {
     left: 0;
     height: 100vh;
     z-index: 999;
-    background: #1026de;
-    color: #fff;
+    background: rgb(71, 71, 207);
+    color: white;
     transition: all 0.3s;
 }
 
@@ -77,7 +72,7 @@ a:focus {
 
 #sidebar .sidebar-header {
     padding: 20px;
-    background: #1026de;
+    background: rgb(71, 71, 207);
 }
 
 #sidebar ul.components {
@@ -163,22 +158,32 @@ a.article:hover {
 }
 
 .main {
-    padding: 40px;
+    padding: 40px 40px 0px 40px;
 }
 
 #content.active {
     width: 100%;
 }
-
-#dismiss {
+#dismiss{
     display: none;
 }
-
+#projects{
+    padding: 40px;
+}
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */
 
 @media (max-width: 768px) {
+    .navbar-brand{
+        margin-left: 0px !important;
+    }
+    #projects{
+        padding: 0px !important;
+    }
+    #intro{
+        width: 100% !important;
+    }
     #sidebar {
         margin-left: -270px;
         position: fixed !important;
@@ -197,7 +202,6 @@ a.article:hover {
     #sidebarCollapse span {
         display: none;
     }
-
     .wrapper {
         display: block;
     }
@@ -227,7 +231,6 @@ a.article:hover {
         /* animate the transition */
         transition: all 0.5s ease-in-out;
     }
-
     /* display .overlay when it has the .active class */
     .overlay.active {
         display: block;
@@ -243,7 +246,6 @@ a.article:hover {
         top: 10px;
         right: 10px;
     }
-
 }
 
 .footer {
@@ -266,9 +268,15 @@ a.article:hover {
 }
 
 @media (max-width: 991px) {
+    .navbar-brand{
+        margin-left: 200px;
+    }
     .footer {
         margin-left: 0;
         width: 100%;
+    }
+    #projects{
+        padding: 40px;
     }
 }
 
