@@ -1,6 +1,9 @@
 {% load static %}
 
 <nav id="sidebar">
+    <div id="dismiss">
+        <i class="fa fa-arrow-left"></i>
+    </div>
     <div class="sidebar-header">
         <h3>Lab Assessment</h3>
     </div>
@@ -9,23 +12,23 @@
     {#    </div>#}
     <ul class="list-unstyled components">
         <li>
-            <a href="/users/home">&nbsp;<i class="fa fa-home"></i> &nbsp;Home</a>
+            <a href="/users/home" class="dismiss">&nbsp;<i class="fa fa-home"></i> &nbsp;Home</a>
         </li>
         {% if not user.isStudent %}
-        <li>
-            <a href="/users/register">&nbsp;<i class="fa fa-user-plus"></i> &nbsp;Register Students</a>
-        </li>
+            <li>
+                <a href="/users/register" class="dismiss">&nbsp;<i class="fa fa-user-plus"></i> &nbsp;Register Students</a>
+            </li>
         {% endif %}
         <li>
-            <a href="/blogs/">&nbsp;<i class="fa fa-book" aria-hidden="true"></i>
+            <a href="/blogs/" class="dismiss">&nbsp;<i class="fa fa-book" aria-hidden="true"></i>
                 &nbsp;Blogs</a>
         </li>
         <li>
-            <a href="/users/viewProfile">&nbsp;<i class="fa fa-user" aria-hidden="true"></i>
+            <a href="/users/viewProfile" class="dismiss">&nbsp;<i class="fa fa-user" aria-hidden="true"></i>
                 &nbsp;My Profile</a>
         </li>
         <li>
-            <a href="/users/logout">&nbsp;<i class="fa fa-power-off" aria-hidden="true"></i>
+            <a href="/users/logout" class="dismiss">&nbsp;<i class="fa fa-power-off" aria-hidden="true"></i>
                 &nbsp;Logout</a>
         </li>
     </ul>
