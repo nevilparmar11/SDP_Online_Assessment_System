@@ -24,7 +24,7 @@
     <div class="row">
         <div class="col-sm-6">
             <a href="/labs/?classId={{ classroom.classId }}">
-                <div class="card rounded">
+                <div class="card rounded border-primary border-top-0 border-bottom-0 border-right-0" style="border-width:5px !important">
                     <div class="card-body h5" style="text-align: center;">
                         View Labs
                     </div>
@@ -33,7 +33,7 @@
         </div>
         <div class="col-sm-6">
             <a href="/contests/?classId={{ classroom.classId }}">
-                <div class="card rounded">
+                <div class="card rounded border-success border-top-0 border-bottom-0 border-right-0" style="border-width:5px !important">
                     <div class="card-body h5" style="text-align: center;">
                         View Contests
                     </div>
@@ -131,7 +131,7 @@
                 <div class="card card-white post round-border">
                     <div class="post-heading">
                         <div class="float-left image">
-                            <img src="/uploads/{{ user.profilePicture }}" class="img-circle avatar"
+                            <img src="/uploads/{{ comment.user.profilePicture }}" class="img-circle avatar"
                                  alt="user profile image">
                         </div>
                         <div class="float-left meta">
