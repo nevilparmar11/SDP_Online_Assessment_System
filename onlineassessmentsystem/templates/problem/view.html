@@ -1,15 +1,14 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
+{% load markdown_extras %}
 
 {% block headContent %}
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        #description > * {
-            color: black !important;
+        #editor {
             font-size: 17px;
         }
-
-        #editor {
+        #description > p{
+            color: black;
             font-size: 17px;
         }
     </style>
@@ -59,11 +58,8 @@
                 </div>
                 <div class="card-body">
                     <div class="card-text"
-                         style="white-space: pre-wrap;" id="description"></div>
-                    <script>
-                        document.getElementById('description').innerHTML =
-                            marked(`{{ problem.description }}`);
-                    </script>
+                         style="white-space: pre-wrap;" id="description">{{ problem.description | markdown | safe }}
+                    </div>
                 </div>
             </div>
         </div>

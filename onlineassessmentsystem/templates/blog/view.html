@@ -1,10 +1,12 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
+{% load markdown_extras %}
+
 {% block headContent %}
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        #description > * {
-            color: black !important;
+
+        #description > p{
+            color: black;
             font-size: 17px;
         }
     </style>
@@ -31,12 +33,11 @@
                     {% endif %}
                 </div>
                 <div class="card-body">
-                    <div class="card-text"
-                         style="white-space: pre-wrap;" id="description"></div>
-                    <script>
-                        document.getElementById('description').innerHTML =
-                            marked(`{{ blog.description }}`);
-                    </script>
+                    <div class="card-text" id="description">{{ blog.description | markdown | safe }}</div>
+{#                    <script>#}
+{#                        document.getElementById('description').innerHTML =#}
+{#                            marked(`{{ blog.description }}`);#}
+{#                    </script>#}
                     <hr>
 
                     {% for comment in comments %}

@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 {% load static %}
+{% load markdown_extras %}
 {% block headContent %}
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         #description > * {
             color: black !important;
@@ -37,10 +37,9 @@
             <div class="card-body">
                 <h3 class="blog-title text-center">{{ blog.title }}</h3>
                 <hr>
-                <div style="font-weight: bolder" id="description{{ blog.blogId }}"></div>
-                <script>
-                    $("#description{{ blog.blogId }}").html(marked(`{{ blog.description | truncatechars:200 }}`))
-                </script>
+                <div style="font-weight: bolder">
+                    {{ blog.description | markdown | safe | truncatechars:200 }}
+                </div>
                 <div class="text-muted mt-1">Posted By :- {{ blog.user.username }}</div>
                 <div class="float-right">
                     <a href="/blogs/view?id={{ blog.blogId }}" class="coloured-link font-weight-bold">Read
