@@ -1,0 +1,202 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block headContent %}
+
+
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card round-border">
+                <div class="card-header"
+                     style="height: 150px !important;background: url('/static/images/img.jpg')">
+                    <img class="mt-5 border-white"
+                         style="border: 5px solid white  !important;border-radius: 50% !important;"
+                         src="/uploads/{{ user.profilePicture }}" height="120px" width="120px">
+                </div>
+                <div class="card-body">
+                    <div class="mt-4 float-left">
+                        <h3>{{ user.username }}</h3>
+                        <h5 class="text-muted">
+                            {% if user.isStudent %}
+                                Student
+                            {% else %}
+                                Faculty
+                            {% endif %}
+                        </h5>
+                        <button id="editButton" class="btn btn-secondary btn-sm ">
+                            <i class="fa fa-pencil" aria-hidden="true"></i> &nbsp;Edit Profile
+                        </button>&nbsp;
+                        <button id="pwdButton" class="btn btn-primary btn-sm ">
+                            <i class="fa fa-key" aria-hidden="true"></i> &nbsp;Change Password
+                        </button>
+
+                    </div>
+                    <div class="mr-5 h5 mt-4 float-right text-muted">
+                        <div class="p-2">First Name :- {{ user.first_name }}</div>
+                        <div class="p-2">Last Name :- {{ user.last_name }}</div>
+                        <div class="p-2">Email :- {{ user.email }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row" id="editFormDiv" style="display: none">
+        <div class="col-sm-12">
+            <div class="card round-border">
+                <div class="card-body">
+                    <h3 class="text-center font-weight-bold">Edit Profile</h3><br>
+                    <form method="post" action="/users/editProfile" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="text-danger font-weight-bold text-center form-group">
+                            {{ errorMessage }}
+                        </div>
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" required autofocus name="username" id="username" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" required autofocus name="email" id="email">
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <label for="firstName">First Name</label>
+                                <input class="form-control" required autofocus type="text" name="firstName"
+                                       id="firstName">
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="lastName">Last Name</label>
+                                <input class="form-control" required autofocus type="text" name="lastName"
+                                       id="lastName">
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="custom-file">
+                                <input class="custom-file-input" id="profilePic" type="file"
+                                       value="{{ inputFile }}"
+                                       name="profilePic" value="" autofocus
+                                       accept="image/*">
+                                <label class="custom-file-label" for="inputGroupFile02"
+                                       aria-describedby="inputGroupFileAddon02">Choose Input
+                                    file</label>
+                            </div>
+                        </div>
+                        <div class="form-group float-right">
+                            <button id="cancelButton" class="btn btn-secondary">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row" id="changePwdDiv" style="display: none">
+        <div class="col-sm-12">
+            <div class="card round-border">
+                <div class="card-body">
+                    <h3 class="font-weight-bold text-center">Change Password</h3>
+                    <form method="post" action="/users/changePassword">
+                        {% csrf_token %}
+                        <div class="text-danger font-weight-bold text-center form-group">
+                            {{ pwdErrorMessage }}
+                        </div>
+                        <div class="form-group">
+                            <label for="oldPassword">Old Password</label>
+                            <input type="password" class="form-control"
+                                   placeholder="Enter Old Password" required autofocus name="oldPassword" id="oldPassword">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">New Password</label>
+                            <input type="password" class="form-control"
+                                   placeholder="Enter New Password" required autofocus name="password" id="password">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Conform New Password</label>
+                            <input type="password" class="form-control"
+                                   placeholder="Confirm New Password" required autofocus name="confirmPassword" id="confirmPassword">
+                            <span id="err" class="text-danger"></span>
+                        </div>
+                        <div class="form-group float-right">
+                            <button id="pwdCancelButton" class="btn btn-secondary">Cancel</button>
+                            <button type="submit" onclick="return validate()" class="btn btn-primary">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+            $(".custom-file-input").on("change", function () {
+                var fnm = $(this).val().split("\\").pop();
+                $(this).next('.custom-file-label').html(fnm);
+            })
+            if ('{{ errorMessage }}' != '') {
+                $("#editFormDiv").css({
+                    "display": "block"
+                })
+                $("#username").val('{{ user.username }}')
+                $("#email").val('{{ user.email }}')
+                $("#firstName").val('{{ user.first_name }}')
+                $("#lastName").val('{{ user.last_name }}')
+            }
+            if ('{{ pwdErrorMessage }}' != '') {
+                $("#changePwdDiv").css({
+                    "display": "block"
+                })
+            }
+        })
+        $("#editButton").click(function () {
+            $("#editFormDiv").css({
+                "display": "block"
+            })
+            $("#username").val('{{ user.username }}')
+            $("#email").val('{{ user.email }}')
+            $("#firstName").val('{{ user.first_name }}')
+            $("#lastName").val('{{ user.last_name }}')
+            scrollToID("editFormDiv",1000)
+        })
+        $("#cancelButton").click(function () {
+            $("#editFormDiv").css({
+                "display": "none"
+            })
+        })
+
+        $("#pwdButton").click(function () {
+            $("#changePwdDiv").css({
+                "display": "block"
+            })
+            scrollToID("changePwdDiv",1000)
+        })
+        $("#pwdCancelButton").click(function () {
+            $("#changePwdDiv").css({
+                "display": "none"
+            })
+        })
+
+        function scrollToID(id, speed) {
+            var offSet = 70;
+            var obj = $('#' + id);
+            if (obj.length) {
+                var offs = obj.offset();
+                var targetOffset = offs.top - offSet;
+                $('html,body').animate({scrollTop: targetOffset}, speed);
+            }
+        }
+        function validate(){
+            if ($("#password").val() == $("#confirmPassword").val())
+                return true
+            $("#err").text("Passwords don't match")
+            $("#confirmPassword").addClass("is-invalid")
+            return false
+        }
+    </script>
+{% endblock %}

@@ -1,11 +1,353 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 <head>
     <meta charset="UTF-8">
-    <title>Welcome to online Assessment System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Assessment System</title>
+    <!-- Bootstrap Css File -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <!-- Custom Css File -->
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <!-- Responsive Css File -->
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <!-- Fav-Icon -->
+    <link rel="shortcut icon" href="{% static 'images/icon/favicon.png' %}" type="image/x-icon">
 </head>
+
 <body>
-<p> Login Page : </p>
-<a href="/users/login"> Go To Login</a>
+ <header class="header-bg">
+   <div class="container">
+       <!-- navbar -->
+       <nav class="navbar navbar-expand-lg navbar-light">
+          <a class="navbar-brand flex-grow-1" href="#"><img src="{% static 'images/logo/Logo.png' %}" alt="logo image" id="logo"></a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+          </button>
+        <div class="my-navbar justify-content-end">
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link" style="color: white;" href="#">Home</a>
+              </li>
+            </ul>
+              <form action="/users/login">
+            <button class="btn btn-outline-success my-2 my-sm-0 sign-in-button" type="submit">Sign in</button>
+                  </form>
+          </div>
+        </div>
+      </nav>
+      <!-- header banner -->
+      <div class="row align-items-center">
+        <div class="header-banner-text col-md-6">
+            <p class="colored-text">Are you ready to learn?</p>
+            <h1 class="white-text">Learn with fun<br> on <span>any schedule</span></h1>
+            <p class="white-text">STOP APPLYING PATCHES.
+              RECODE YOURSELF NOW.</p>
+            <button class="btn green-btn">Get Started</button>
+        </div>
+        <div class="col-md-6 header-banner-img">
+            <img src="{% static 'images/banner-img/Illustration.png' %}" alt="banner image">
+        </div>
+      </div>
+   </div>
+ </header>
+
+    <!-- ========== Main Content Goes Here========== -->
+<main>
+  <!-- Top-Card-Section -->
+<section>
+    <div class="container">
+       <div class="row">
+         <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="single-card d-flex flex-column align-items-center justify-content-center">
+              <img class="img-fluid" src="{% static 'images/icon/book.png' %}" alt="book icon image">
+              <h5>Automatic Grading</h5>
+              <small>OAS</small>
+            </div>
+         </div>
+         <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="single-card d-flex flex-column align-items-center justify-content-center">
+            <img class="img-fluid" src="{% static 'images/icon/Student.png' %}" alt="student icon image">
+            <h5>Leaderboard in contest</h5>
+            <small>OAS</small>
+          </div>
+         </div>
+         <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="single-card d-flex flex-column align-items-center justify-content-center">
+            <img class="img-fluid" src="{% static 'images/icon/Test.png' %}" alt="test icon image">
+            <h5>Classroom</h5>
+            <small>OAS</small>
+          </div>
+         </div>
+         <div class="col-lg-3 col-md-6 col-sm-12">
+          <div class="single-card d-flex flex-column align-items-center justify-content-center">
+            <img class="img-fluid" src="{% static 'images/icon/Students.png' %}" alt="student icon image">
+            <h5>Submissions</h5>
+            <small>OAS</small>
+          </div>
+         </div>
+       </div>
+    </div>
+</section>
+
+<!---------- Online Course Section ---------->
+<!-- <section class="online-courses">
+  <div class="container">
+    <h2 class="text-center">Online Courses</h2>
+      <div class="card-deck">
+        <div class="card">
+          <img class="card-img-top course-img" src="images/course/course-1.png" alt="Course Card image cap">
+          <div class="card-body">
+            <h5 class="card-title">Modern Psychology</h5>
+            <p class="card-text">Designation</p>
+            <button class="btn btn-outline-success my-2 my-sm-0 green-btn" type="submit">Buy Course</button>
+          </div>
+          <div class="card-footer d-flex justify-content-between">
+            <div class="d-flex justify-content-start">
+              <img class="img-fluid card-footer-icon" src="images/icon/calendar.png" alt="Calender icon image">
+            <h6>Start 20 April, 2021</h6>
+            </div>
+            <div class="d-flex  justify-content-end">
+              <img class="img-fluid card-footer-icon" src="images/icon/people.png" alt="People icon image">
+            <h6>60 seats</h6>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top course-img" src="images/course/course-2.png" alt="Course Card image cap">
+          <div class="card-body">
+            <h5 class="card-title">Modern Psychology</h5>
+            <p class="card-text">Designation</p>
+            <button class="btn btn-outline-success my-2 my-sm-0 green-btn" type="submit">Buy Course</button>
+          </div>
+          <div class="card-footer d-flex justify-content-between">
+            <div class="d-flex justify-content-start">
+              <img class="img-fluid card-footer-icon" src="images/icon/calendar.png" alt="Calender icon image">
+            <h6>Start 20 April, 2021</h6>
+            </div>
+            <div class="d-flex  justify-content-end">
+              <img class="img-fluid card-footer-icon" src="images/icon/people.png" alt="People icon image">
+            <h6>60 seats</h6>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <img class="card-img-top course-img" src="images/course/course-3.png" alt="Course Card image cap">
+          <div class="card-body">
+            <h5 class="card-title">Modern Psychology</h5>
+            <p class="card-text">Designation</p>
+            <button class="btn btn-outline-success my-2 my-sm-0 green-btn" type="submit">Buy Course</button>
+          </div>
+          <div class="card-footer d-flex justify-content-between">
+            <div class="d-flex justify-content-start">
+              <img class="img-fluid card-footer-icon" src="images/icon/calendar.png" alt="Calender icon image">
+            <h6>Start 20 April, 2021</h6>
+            </div>
+            <div class="d-flex  justify-content-end">
+              <img class="img-fluid card-footer-icon" src="images/icon/people.png" alt="People icon image">
+            <h6>60 seats</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+<!---------- Admission Section---------->
+<!-- <section class="admission">
+  <div class="container">
+    <h3 class="text-center">Get Admitted</h3>
+      <div class="row">
+        <div class="col-lg-6 col-md-12 admit-img d-flex justify-content-center align-items-center">
+          <img class="img-fluid" src="images/banner-img/admit.png" alt="Admission image">
+        </div>
+        <div class="col-lg-6 col-md-12 admit-form">
+          <form>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="firstName">First Name</label>
+                <input type="text" class="form-control" id="inputEmail4" placeholder="First Name">
+              </div>
+              <div class="form-group col-md-6">
+                <label for="lastName">Last Name</label>
+                <input type="text" class="form-control" id="inputPassword4" placeholder="Last Name">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputEmail4">Email</label>
+              <input type="text" class="form-control" id="inputEmail4" placeholder="Email">
+            </div>
+            <div class="form-group">
+              <label for="inputAddress2">Address</label>
+              <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="inputCity">Phone</label>
+                <input type="text" class="form-control" id="inputCity">
+              </div>
+              <div class="form-group col-md-4">
+                <label for="inputState">City</label>
+                <select id="inputState" class="form-control">
+                  <option selected>Dhaka</option>
+                  <option>Chattagram</option>
+                  <option>Khulna</option>
+                  <option>Barisal</option>
+                </select>
+              </div>
+              <div class="form-group col-md-2">
+                <label for="inputZip">Zip</label>
+                <input type="text" class="form-control" id="inputZip">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="gridCheck">
+                <label class="form-check-label" for="gridCheck">
+                  <small>I am agree with all terms and conditions.</small>
+                </label>
+              </div>
+            </div>
+            <button type="submit" class="btn send-btn">Submit</button>
+          </form>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+<!---------- Testimonial Section---------->
+<!-- <section class="testimonial">
+  <div class="container">
+    <h2 class="text-center">Testimonial</h2>
+    <div class="testimonial-carousel">
+      <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators my-indicator">
+          <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+          <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+          <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner"> -->
+          <!-- client-1 -->
+            <!-- <div class="carousel-item active">
+              <div class="row align-items-center">
+                <div class="col-md-3 d-flex justify-content-end">
+                  <img class="img-fluid client-img" src="images/client/client-1.png" alt="Client image">
+                </div>
+                <div class="col-md-7 client-review">
+                  <p id="client-text">"Farjana Islam is a great designer/developer and a reliable resource. She has consistently helped bring significant value to a lot of our projects in a timely manner."</p>
+                  <img  id="star-rating"  src="images/icon/star.png" alt="">
+                  <h5>David Marcus</h5>
+                  <h6> Founder & CEO Alies</h6>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="row align-items-center">
+                <div class="col-md-3 d-flex justify-content-end">
+                  <img class="img-fluid client-img" src="images/client/client-2.png" alt="Client image">
+                </div>
+                <div class="col-md-7 client-review">
+                  <p id="client-text">"Farjana Islam is a great designer/developer and a reliable resource. She has consistently helped bring significant value to a lot of our projects in a timely manner."</p>
+                  <img  id="star-rating"  src="images/icon/star.png" alt="">
+                  <h5>Ritchel Novella</h5>
+                  <h6>Founder & CEO Alies</h6>
+                </div>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <div class="row align-items-center">
+                <div class="col-md-3 d-flex justify-content-end">
+                  <img class="img-fluid client-img" src="images/client/client-3.png" alt="Client image">
+                </div>
+                <div class="col-md-7 client-review">
+                    <p id="client-text">"Farjana Islam is a great designer/developer and a reliable resource. She has consistently helped bring significant value to a lot of our projects in a timely manner."</p>
+                    <img  id="star-rating"  src="images/icon/star.png" alt="">
+                    <h5>JM De Leone</h5>
+                    <h6>Founder & CEO Alies</h6>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
+</main>
+    <!-- ========== Footer Section========== -->
+<footer class="footer-bg">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-5 footer-left">
+      <div id="footer-logo">
+        <img class="img-fluid" src="{% static 'images/logo/footer-logo.png' %}" alt="footer logo image">
+       </div>
+       <div class="footer-left-text">
+        <p>Millions of people of all ages and from around
+          the world are improving their lives with us</p>
+      </div>
+      <h4>Give your Feedback</h4>
+      <input class="form-control input-box" type="text" name="feedbackinput" id="feedbackinput">
+      <a class="btn send-btn" id="btnFeedback" href="mailto:onlineassessment.sdp@gmail.com?subject=Feedback OAS&body=">Send</a>
+    </div>
+    <div class="col-md-7">
+      <div class="footer-right d-flex justify-content-center justify-content-between">
+        <!-- <div class="column d-flex flex-column">
+          <h5>Course</h5>
+          <p>Graphic Design</p>
+          <p>Web Design</p>
+          <p>Business</p>
+          <p>Marketing</p>
+          <p>Engineering</p>
+        </div>
+        <div class="column d-flex flex-column ">
+          <h5>Terms</h5>
+          <p>Graphic Design</p>
+          <p>Web Design</p>
+          <p>Business</p>
+          <p>Marketing</p>
+          <p>Engineering</p>
+        </div> -->
+        <div class="column link-column d-flex flex-column ">
+          <h5>Developed By</h5>
+            <div class="float-md-right">
+                <a href="mailto:nevilparmar24@gmail.com">Nevil Parmar</a>&nbsp;&nbsp;|
+                <a href="mailto:mahammadayan18@gmail.com">Ayan Shaikh</a>&nbsp;&nbsp;|
+                <a href="mailto:jwalitshah2q@gmail.com">Jwalit Shah</a>
+            </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    <div class="footer-bottom d-flex justify-content-center ">
+      <div class="social-icon">
+        <a href="#"><img class="img-fluid" src="{% static 'images/social-icon/fb-icon.png' %}" alt="facebook icon"></a>
+        <a href="#"><img class="img-fluid" src="{% static 'images/social-icon/instagram.png' %}" alt="instagram icon"></a>
+        <a href="#"><img class="img-fluid" src="{% static 'images/social-icon/twt-icon.png' %}" alt="twtter icon"></a>
+        <a href="#"><img class="img-fluid" src="{% static 'images/social-icon/linkedin.png' %}" alt="linkedin icon"></a>
+      </div>
+      <div class="copyright">
+        <p class="text-center" style="color: white">&copy&copy;Copyright {{ year }}</p>
+      </div>
+  </div>
+  </div>
+</footer>
+<!-- Ending of html Markup -->
+
+
+<!-- Bootstrap link -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
+<script>
+  $('#btnFeedback').click(function() {
+    var feedbackText = $('#feedbackinput').val();
+    var oldhref = $(this).attr('href');
+    oldhref += feedbackText;
+    $(this).attr('href', oldhref);
+  });
+</script>
+
 </body>
 </html>

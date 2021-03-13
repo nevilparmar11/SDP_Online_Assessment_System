@@ -1,0 +1,130 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12" style="text-align: right">
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+                <i class="fa fa-info"></i>&nbsp;Guidelines for input file
+            </button>
+        </div>
+    </div>
+    <br>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-primary font-weight-medium" id="exampleModalLabel">
+                        Guidelines</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-2">Adding New File : (Only .xlsx files are allowed)</div>
+                    <hr>
+                    <div class="mb-2">
+                        Below one Sample file is provided please provide the excel file in similar file format.
+                    </div>
+                    <hr>
+                    <div>
+                        <a href="/uploads/samples/Contact%20Information%20(Responses).xlsx" class="text-primary"
+                           data-title="Contact Information Response File"> See Sample Contact Information File </a>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <br>
+    <div class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-header" style="text-align: center;">
+                    <div class="h6 mt-3 text-primary font-weight-bold">Register Students (provide .xlsx file only)</div>
+                </div>
+                <div class="card-body">
+                    <form id="addFileForm" method="POST" name="form" action="/users/register/"
+                          novalidate="" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                {% if errorMessage %}
+                                    <div class="text-danger">{{ errorMessage }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="custom-file">
+                                <input class="custom-file-input" id="inputFile" type="file"
+                                       value="{{ inputFile }}"
+                                       name="inputFile" value="" required autofocus>
+                                <label class="custom-file-label" for="inputGroupFile02"
+                                       aria-describedby="inputGroupFileAddon02">Choose Input
+                                    file</label>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <button type="submit" form="addFileForm"
+                                    onClick="return validate();" type="submit"
+                                    class="btn btn-primary btn-md btn-block mr-2">Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3"></div>
+    </div>
+    <br>
+    <div id="resultArea">
+        <hr>
+        <h5 class="font-weight-bold">Result</h5>
+        <h6 class="text-success">Registration Status of Students sent successfully to the students via Mail</h6>
+        <br>
+        <textarea rows="5" style="width: 100%; background-color: #e5e5e5" class="mb-4" id="customOutput"
+                  name="customOutput"
+                  disabled>{{ msg }}</textarea>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function validate() {
+            let inputFile = form.inputFile.value;
+            if (inputFile == "") {
+                alert("File is not selected");
+                return false;
+            }
+
+            let reg = /(.*?)\.(xlsx)$/;
+            if (!inputFile.match(reg)) {
+                alert("Invalid File format");
+                return false;
+            }
+        }
+
+        $(document).ready(function () {
+            if($("#customOutput").val()=="")
+                $("#resultArea").css({"display": "none"});
+            else
+                $("#resultArea").css({"display": "block"});
+
+            $(".custom-file-input").on("change", function () {
+                var fnm = $(this).val().split("\\").pop();
+                $(this).next('.custom-file-label').html(fnm);
+            })
+        })
+    </script>
+{% endblock %}

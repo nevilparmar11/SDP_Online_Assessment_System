@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{# Static Assets #}
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Online Lab Assessment</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'js/jQuery.countdownTimer.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jQuery.countdownTimer.css' %}"/>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+          integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/comment.css' %}">
+
+    {% block headContent %}{% endblock headContent %}
+
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+
+    <style>
+        a {
+            text-decoration: none;
+        }
+
+        .breadcrumb-item a {
+            color: blue;
+        }
+
+        .coloured-link {
+            color: blue !important;
+        {#border-bottom: #0c83e2 0.125em solid;#}
+        }
+
+        a:hover {
+            text-decoration: none;
+            color: #5b8796;
+        }
+
+        .col-md-4 {
+            padding: 20px;
+        }
+
+        .card-header-own {
+            height: 80px;
+        }
+
+        .profile-pic {
+            height: 40px !important;
+            width: 40px !important;
+        }
+
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        .classroom-wrapper {
+            height: 10%;
+            width: 10%;
+        }
+
+        .round-border {
+            border-radius: 20px !important;
+        }
+
+        #loader {
+            border: 12px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 12px solid #444444;
+            width: 70px;
+            height: 70px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .center-loading {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+
+
+    </style>
+</head>
+<body>
+<div id="loader" class="center-loading"></div>
+<div class="wrapper">
+    {% include 'layouts/sidebar.html' %}
+    <div id="content">
+        {% include 'layouts/navbar.html' %}
+        <div class="main">
+            <div class="container">
+                {% block content %}
+
+                {% endblock content %}
+                <br><br>
+            </div>
+        </div>
+        <br><br>
+        {% include 'layouts/footer.html' %}
+    </div>
+    <div class="overlay"></div>
+</div>
+
+{#<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>#}
+<!-- jQuery CDN - Slim version (=without AJAX) -->
+{#<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"#}
+{#        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"#}
+{#        crossorigin="anonymous"></script>#}
+<!-- Popper.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+        integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+        crossorigin="anonymous"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
+        integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+        crossorigin="anonymous"></script>
+<!-- jQuery Custom Scroller CDN -->
+<script
+        src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+<script src="https://use.fontawesome.com/a3df2a278d.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#sidebar").mCustomScrollbar({
+            theme: "minimal"
+        });
+
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar, #content').toggleClass('active');
+            $('.collapse.in').toggleClass('in');
+            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            $('.overlay').toggleClass('active');
+            $('.collapse.in').toggleClass('in');
+        });
+
+        $('#dismiss, .overlay,.dismiss').on('click', function () {
+            // hide sidebar
+            $('#sidebar').removeClass('active');
+            // hide overlay
+            $('.overlay').removeClass('active');
+        });
+    });
+</script>
+<script>
+    document.onreadystatechange = function () {
+        if (document.readyState !== "complete") {
+            document.querySelector(
+                "body").style.visibility = "hidden";
+            document.querySelector(
+                "#loader").style.visibility = "visible";
+        } else {
+            document.querySelector(
+                "#loader").style.display = "none";
+            document.querySelector(
+                "body").style.visibility = "visible";
+        }
+    };
+</script>
+{% block javascripts %}{% endblock javascripts %}
+</body>
+</html>

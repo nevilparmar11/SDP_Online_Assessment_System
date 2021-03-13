@@ -1,0 +1,264 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block headContent %}
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        #description > * {
+            color: black !important;
+            font-size: 17px;
+        }
+
+        #editor {
+            font-size: 17px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/users/home">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/classroom">My Classrooms</a></li>
+                    {% if problem.doesBelongToContest %}
+                        <li class="breadcrumb-item"><a
+                                href="/classroom/view/?id={{ problem.contest.classroom.classId }}">{{ problem.contest.classroom.name }}</a>
+                        </li>
+                        <li class="breadcrumb-item"><a
+                                href="/contests/?classId={{ problem.contest.classroom.classId }}">Contests</a></li>
+                        <li class="breadcrumb-item"><a
+                                href="/problems/?contestId={{ problem.contest.contestId }}">{{ problem.contest.title }}</a>
+                        </li>
+                    {% else %}
+                        <li class="breadcrumb-item"><a
+                                href="/classroom/view/?id={{ problem.lab.classroom.classId }}">{{ problem.lab.classroom.name }}</a>
+                        </li>
+                        <li class="breadcrumb-item"><a
+                                href="/labs/?classId={{ problem.lab.classroom.classId }}">Labs</a></li>
+                        <li class="breadcrumb-item"><a
+                                href="/problems/?labId={{ problem.lab.labId }}">{{ problem.lab.title }}</a></li>
+                    {% endif %}
+                    <li class="breadcrumb-item active" aria-current="page">{{ problem.title }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-sm-9">
+            <div class="card">
+                <div class="card-header p-5 bg-light" style="background-color: white !important;">
+                    <div class="row">
+                        <div class="col-sm-12 text-center">
+                            <div class="h3 text-primary font-weight-bold">{{ problem.title }}</div>
+                            <div class="text-muted">{{ problem.points }} points, {{ problem.difficulty }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card-text"
+                         style="white-space: pre-wrap;" id="description"></div>
+                    <script>
+                        document.getElementById('description').innerHTML =
+                            marked(`{{ problem.description }}`);
+                    </script>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <br>
+            <h6 class="text-muted">Difficulty :- {{ problem.difficulty }}</h6>
+            <br>
+            <h6 class="text-muted">Max Score :- {{ problem.points }}</h6>
+            <br><hr>
+            <h5 class="text-muted">Need Help ?</h5><br>
+            <a class="coloured-link"
+               href="/submissions/list/?problemId={{ problem.problemId }}&&username={{ user.username }}">
+                <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+                View My Submissions
+            </a>
+            <br><br>
+            <a class="coloured-link" href="/submissions/list/?problemId={{ problem.problemId }}">
+                <i class="fa fa-code" aria-hidden="true"></i>
+                View All Submissions
+            </a>
+            <br><br>
+            <a class="coloured-link" href="/problems/comments/?pid={{ problem.problemId }}">
+                <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                Discussion
+            </a>
+            {% if not user.isStudent %}
+                <br><br>
+                <a href="/problems/tests/?pid={{ problem.problemId }}" class="coloured-link">
+                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                    Manage Test Cases
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    <br>
+    <input type="hidden" name="problemId" id="problemId" value="{{ problem.problemId }}">
+    {#  Code Editor  #}
+    <div class="row">
+        <div class="col-sm-11">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row h4">
+                        <div class="col-12" style="text-align: center;">
+                            <b class="text-primary">Submit Code</b>
+                        </div>
+                    </div>
+                    <div id="editor">#include &lt;stdio.h&gt;
+
+int main(){
+    return 0;
+}</div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-sm-7">
+                            <label for="file">Open File :- </label>
+                            <input type="file" id="file" name="file">
+                        </div>
+                        <div class="col-sm-5" style="text-align: right">
+                            <input type="checkbox" id="customInputCb" name="customInputCb"> <label for="customInputCb">Custom Input </label>&nbsp;
+                            <button id="runButton" class="btn btn-secondary">Run</button>
+                            {% if isOver %}
+                                <button id="submitButton" class="btn btn-primary disabled">Submit</button>
+                            {% else %}
+                                <button id="submitButton" class="btn btn-primary">Submit</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div id="customInputDiv" style="display: none">
+                <textarea rows="4"  style="width: 100%" class="form-control" id="customInput" name="customInput" placeholder="Provide Custom Input Here..."></textarea>
+            </div>
+            <br>
+            <div id="customOutputDiv" style="display: none">
+                <h5 class="font-weight-bold">Output :- </h5><br>
+                <textarea rows="4"  style="width: 100%" class="form-control" id="customOutput" name="customOutput" disabled></textarea>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row" id="loader1" style="display: none">
+        <div class="col-sm-12">
+            <div class="jumbotron text-center">
+                <img src="{% static 'images/loader1.jpg' %}" height="130" width="130"><br><br>
+                <h3 class="font-weight-bold">Evaluating Result</h3>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div id="output1" class="row" style="display: none">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4 class="text-primary font-weight-bold">Result</h4><br>
+                    <h5 class="font-weight-bold" id="result"></h5>
+                    <div class="progress">
+                        <div class="progress-bar" id="tc-progress-bar" role="progressbar" style="width: 60%"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <br>
+                    <h5 class="font-weight-bold" id="score"></h5>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{% static 'js/ace-builds/src-noconflict/ace.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'js/ace-builds/src-noconflict/ext-language_tools.js' %}" type="text/javascript"
+            charset="utf-8"></script>
+    <script>
+        var editor = ace.edit("editor");
+        editor.setOptions({
+            autoScrollEditorIntoView: true,
+            maxLines: 100,
+            minLines: 25,
+            enableBasicAutocompletion: true
+        });
+        editor.renderer.setScrollMargin(10, 10, 10, 10);
+        editor.setTheme("ace/theme/tomorrow");
+        editor.session.setMode("ace/mode/c_cpp");
+        editor.setAutoScrollEditorIntoView(true);
+        editor.HighlightRules = 'ace/mode/c_cpp_highlight_rules';
+        console.log(editor.getValue())
+    </script>
+    <script>
+        $("#submitButton").click(function () {
+            if (!$("#submitButton").hasClass("disabled")) {
+                $(this).text("Submitting")
+                $("#submitButton").prop('disabled', true);
+                $("#loader1").css({"display": "block"})
+                $("#output1").css({"display": "none"})
+                var code = editor.getValue()
+                $.ajax({
+                        type: "GET",
+                        url: "/submissions/submit/",
+                        data: {
+                            'code': code,
+                            'problemId': $("#problemId").val()
+                        },
+                        success: function (data) {
+                            $("#loader1").css({"display": "none"})
+                            $("#output1").css({"display": "block"})
+                            $("#submitButton").text("Submit")
+                            $("#submitButton").prop('disabled', false);
+                            $("#result").text(data['passed'] + "/" + data['total'] + " test cases passed!!!")
+                            var pct = data['passed'] / data['total'] * 100
+                            $("#tc-progress-bar").attr("aria-valuenow", pct)
+                            $("#tc-progress-bar").css({"width": pct + "%"})
+                            $("#score").text("Score :- " + data['score'])
+                        }
+                    }
+                )
+            }
+        })
+        $("#file").change(function (){
+            var fr=new FileReader();
+            fr.onload=function(){
+                editor.setValue(fr.result)
+            }
+            fr.readAsText(this.files[0]);
+        })
+        $("#customInputCb").change(function (){
+            if($("#customInputCb").prop('checked') == true){
+                $("#customInputDiv").css({"display": "block"})
+            }
+            else {
+                $("#customInputDiv").css({"display": "none"})
+                $("#customOutputDiv").css({"display": "none"})
+            }
+        })
+        $("#runButton").click(function () {
+            $(this).text("Running")
+            $(this).prop('disabled', true);
+            $("#customOutputDiv").css({"display": "none"})
+            var code = editor.getValue()
+            $.ajax({
+                        type: "GET",
+                        url: "/submissions/run/",
+                        data: {
+                            'code': code,
+                            'stdin' : $("#customInput").val()
+                        },
+                        success: function (data) {
+                            $("#runButton").text("Run")
+                            $("#runButton").prop('disabled', false);
+
+                            $("#customOutputDiv").css({"display": "block"})
+                            $("#customOutput").val(data['output'])
+                        }
+                    }
+                )
+        })
+    </script>
+{% endblock %}

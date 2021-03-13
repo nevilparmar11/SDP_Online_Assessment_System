@@ -1,0 +1,252 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header" style="background-color: white !important;">
+                    <div class="h3 text-primary text-center">Manage Test Cases</div>
+                    <div class="h4 p-2 text-center">{{ problem.title }}</div>
+                    <div class="h6 text-center">{{ problem.points }} Points, {{ problem.difficulty }}</div>
+                </div>
+                <div class="card-body">
+                    <div class="float-right">
+                        {% if isOver %}
+                            <button type="button" class="btn btn-primary disabled">
+                                <i class="fa fa-plus"></i>&nbsp;Add Test Case
+                            </button>
+                        {% else %}
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#exampleModal">
+                                <i class="fa fa-plus"></i>&nbsp;Add Test Case
+                            </button>
+                        {% endif %}
+
+                        <br><br>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-primary font-weight-medium" id="exampleModalLabel">
+                                            Add Test Case</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="addTestForm" method="POST" name="form" action="/problems/testCreate/"
+                                              novalidate=""
+                                              enctype="multipart/form-data">
+                                            {% csrf_token %}
+                                            <div class="mb-2">Add New Test Case : (Only .txt files are allowed)</div>
+                                            <div>
+                                                {% if errorMessage %}
+                                                    {{ errorMessage }}
+                                                {% endif %}
+                                            </div>
+                                            <div>
+                                                <input type="hidden" name="pid" id="pid"
+                                                       value="{{ pid }}">
+                                            </div>
+                                            <div class="input-group mb-3">
+                                                <div class="custom-file">
+                                                    <input class="custom-file-input" id="inputFile" type="file"
+                                                           value="{{ inputFile }}"
+                                                           name="inputFile" value="" required autofocus
+                                                           accept="text/plain">
+                                                    <label class="custom-file-label" for="inputGroupFile02"
+                                                           aria-describedby="inputGroupFileAddon02">Choose Input
+                                                        file</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="input-group mb-3">
+                                                <div class="custom-file">
+                                                    <input class="custom-file-input" id="outputFile" type="file"
+                                                           value="{{ outputFile }}"
+                                                           name="outputFile" value="" required autofocus
+                                                           accept="text/plain">
+                                                    <label class="custom-file-label" for="outputFile"
+                                                           aria-describedby="inputGroupFileAddon02">Choose Output
+                                                        File</label>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                        </button>
+                                        <button type="submit" form="addTestForm" class="btn btn-primary"
+                                                onClick="return validate();">Add
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-responsive table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Input File</th>
+                            <th>Output File</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for test in tests %}
+                            <div class="modal fade" id="editModal{{ test.testCaseId }}" tabindex="-1"
+                                 role="dialog"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title text-primary font-weight-medium"
+                                                id="exampleModalLabel">
+                                                Edit Test Case</h5>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="editTestForm{{ test.testCaseId }}" method="POST" name="form"
+                                                  action="/problems/testEdit/"
+                                                  novalidate=""
+                                                  enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                                <div class="font-weight-bold mb-2">Edit Test Case
+                                                    : {{ test.testCaseId }}
+                                                </div>
+                                                <br>
+                                                <div>
+                                                    {% if errorMessage %}
+                                                        {{ errorMessage }}
+                                                    {% endif %}
+                                                </div>
+                                                <div>
+                                                    <input type="hidden" name="tid" id="tid"
+                                                           value="{{ test.testCaseId }}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Input</label>
+                                                    <textarea style="white-space: pre-wrap;" name="input" id="input{{ test.testCaseId }}"
+                                                              class="form-control"></textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Output</label>
+                                                    <textarea style="white-space: pre-wrap;" name="output" id="output{{ test.testCaseId }}"
+                                                              class="form-control"></textarea>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">Close
+                                            </button>
+                                            <button type="submit" form="editTestForm{{ test.testCaseId }}" class="btn btn-primary">
+                                                Update
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td><a class="coloured-link" href="{{ test.inputFile.url }}">{{ test.inputFile }}</a>
+                                </td>
+                                <td><a class="coloured-link" href="{{ test.outputFile.url }}">{{ test.outputFile }}</a>
+                                </td>
+                                <td>
+                                    {% if isOver %}
+                                        <a href="#" class="btn btn-secondary disabled">Edit Test Case</a>
+                                    {% else %}
+                                        <a href="#" data-toggle="modal"
+                                           data-target="#editModal{{ test.testCaseId }}" tid="{{ test.testCaseId }}"
+                                           class="btn btn-secondary editTC"
+                                           input-url="{{ test.inputFile.url }}" output-url="{{ test.outputFile.url }}">Edit
+                                            Test Case</a>
+                                    {% endif %}
+
+                                </td>
+                                <td>
+                                    <form method="POST" action="/problems/testDelete/" novalidate="">
+                                        {% csrf_token %}
+                                        <div>
+                                            {% if errorMessage %}
+                                                {{ errorMessage }}
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <input type="hidden" name="tid" id="tid"
+                                                   value="{{ test.testCaseId }}">
+                                        </div>
+                                        <div>
+                                            {% if isOver %}
+                                                <a class="btn btn-danger disabled" style="color: white">
+                                                    Remove Test Case
+                                                </a>
+                                            {% else %}
+                                                <button type="submit" class="btn btn-danger">
+                                                    Remove Test Case
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function validate() {
+            let inputFile = form.inputFile.value;
+            let outputFile = form.outputFile.value;
+            if (inputFile == "" || outputFile == "") {
+                alert("Files are not selected");
+                return false;
+            }
+
+            let reg = /(.*?)\.(txt)$/;
+            if (!inputFile.match(reg) || !outputFile.match(reg)) {
+                alert("Invalid File format");
+                return false;
+            }
+        }
+
+        $(document).ready(function () {
+            $(".custom-file-input").on("change", function () {
+                var fnm = $(this).val().split("\\").pop();
+                $(this).next('.custom-file-label').html(fnm);
+            })
+        })
+        $(".editTC").click(function () {
+            var testCaseId = $(this).attr("tid")
+            var inputUrl = $(this).attr("input-url")
+            var outputUrl = $(this).attr("output-url")
+            $.get(inputUrl, function (data) {
+                $("#input" + testCaseId).val(data)
+            });
+            $.get(outputUrl, function (data) {
+                $("#output" + testCaseId).val(data)
+            });
+
+            {#$("#input"+testCaseId)#}
+        })
+
+    </script>
+{% endblock %}

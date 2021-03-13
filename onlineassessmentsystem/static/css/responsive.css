@@ -1,0 +1,229 @@
+/* Extra small devices (portrait phones, less than 576px)*/
+@media (max-width: 575.98px) {
+    .header-bg{
+        height: 700px;
+    }
+    .header-banner-text{
+        padding-top: 50px;
+        margin-bottom: 20px;
+    }
+   
+    .header-banner-text h1{
+        font-size: 35px;
+        line-height: 40px;
+        font-weight: 600;
+     }
+     .header-banner-text p{
+        font-size: 15px;
+        line-height: 26px;
+     }
+     .green-btn{
+        background: #21B573;
+        border-radius: 33px;
+        width: 120px;
+        height: 35px;
+        font-size: 14px;
+        color: #fff;
+    }
+    .header-banner-img img{
+        width: 90%;
+    }
+    /* card area */
+    .single-card{
+        height: 250px;
+        width: 250px;
+        margin-bottom: 30px;
+        margin-left: 20%;
+        margin-right: auro;
+    }
+    /* Course area */
+    .online-courses h2{
+        padding-bottom: 59px;
+        margin-top: -100px;
+    }
+    .card{
+        padding-bottom: 20px;
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .card-title{
+        font-size: 30px;
+    }
+    .card-text{
+        font-size: 20px;
+    }
+    .card-footer{
+        border: none;
+        background: none;
+        height: 45px;
+    }
+       /* testimonial area */
+   
+       .client-img{
+        text-align: center;
+        display: inline-block;
+        margin: auto;
+    }
+    /* footer area */
+    .footer-bg{
+        background-color: #282531;
+        height: 760px;
+    }
+    .social-icon a{
+        padding: 2px;
+    }
+    .my-indicator{
+        position: relative;
+        top: 380px;
+        left: -5px;
+    }
+     
+}
+
+/* Small devices (landscape phones, 576px and up)*/
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .header-bg{
+        height: 700px;
+    }
+    .header-banner-text{
+        padding-top: 60px;
+        margin-bottom: 30px;
+    }
+   
+    .header-banner-text h1{
+        font-size: 40px;
+        line-height: 40px;
+        font-weight: 600;
+     }
+     .header-banner-text p{
+        font-size: 15px;
+        line-height: 26px;
+     }
+     .green-btn{
+        background: #21B573;
+        border-radius: 33px;
+        width: 120px;
+        height: 35px;
+        font-size: 14px;
+        color: #fff;
+    }
+    .header-banner-img img{
+        width: 90%;
+    }
+    /* card area */
+      .single-card{
+         height: 250px;
+         width: 250px;
+         margin-bottom: 30px;
+         position: relative;
+         left: 120px;
+     }
+          /* course area */
+          .online-courses h2{
+            font-weight: 600;
+            padding-bottom: 69px;
+            margin-top: -80px;
+        }
+        .card{
+            padding-bottom: 20px;
+        }
+        .card-title{
+            font-size: 15px;
+        }
+        .card-text{
+            font-size: 12px;
+        }
+       
+        .card-footer-icon{
+           padding: 0 2px;
+           margin-left: -15px;
+        }
+        .card-footer h6{
+           font-size: 10px; 
+           padding-top: 5px;
+          
+        }
+        .card-footer{
+            border: none;
+            background: none;
+            height: 45px;
+        }
+        .green-btn{
+            font-size: 10px;
+            width: 100px;
+            height: 25px;
+            
+        }
+        /* testimonial area */
+        .client-img{
+            text-align: center;
+            display: inline-block;
+            margin: auto;
+        }
+            /* footer area */
+            .footer-bg{
+                background-color: #282531;
+                height: 760px;
+            }
+            .social-icon a{
+                padding: 3px;
+            }
+                /* carousel indicator */
+    .my-indicator{
+        position: relative;
+        top: 380px;
+        left: 3px;
+    }
+     
+
+}
+
+/* Medium devices (tablets, 768px and up)*/
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .header-bg{
+        height: 476px;
+    }
+    .header-banner-text{
+        padding-top: 80px;
+    }
+     .header-banner-text h1{
+        font-size: 35px;
+        line-height: 40px;
+        font-weight: 600;
+     }
+     .header-banner-text p{
+        font-size: 15px;
+        line-height: 26px;
+     }
+     /* course area */
+    .card-footer-icon{
+      padding: 0 2px;
+      margin-top: 8px;
+    }
+    .card-footer h6{
+       font-size: 13px; 
+       padding-top: 5px;
+    }
+    .card-footer{
+        height: 55px;
+    }
+    /* carousel indicator */
+    .my-indicator{
+        position: relative;
+        top: 280px;
+        left: 25px;
+    }
+     
+}
+
+
+/* Large devices (desktops, 992px and up)*/
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  
+}
+
+ 
+
+/* Extra large devices (large desktops, 1200px and up)*/
+@media (min-width: 1200px) { }

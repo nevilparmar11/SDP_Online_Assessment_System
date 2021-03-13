@@ -1,0 +1,106 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block headContent %}
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        #description > * {
+            color: black !important;
+            font-size: 17px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12 grid-margin">
+            <div class="card">
+                <div class="card-header font-weight-semibold"
+                     style="background-image: url('{% static 'images/img.jpg' %}');color: white;height: 200px;text-align: center;">
+
+                    <h2 class="mt-lg-5 mt-sm-1">{{ blog.title }}</h2>
+                    <div class="float-right mt-sm-1">
+                        <b>Posted By :- {{ blog.user.username }}</b>
+                        <img src="/uploads/{{ blog.user.profilePicture }}" style="border-radius: 50%"
+                             class="mt-lg-5 mt-sm-5" height="100px" width="100px">
+                    </div>
+                    {% if blog.user == user %}
+                        <div class="mt-5 float-left">
+                            <a href="/blogs/edit/?id={{ blog.blogId }}" class="btn btn-light">Edit</a>
+                            <a href="/blogs/delete/?id={{ blog.blogId }}" class="btn btn-danger">Delete</a>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <div class="card-text"
+                         style="white-space: pre-wrap;" id="description"></div>
+                    <script>
+                        document.getElementById('description').innerHTML =
+                            marked(`{{ blog.description }}`);
+                    </script>
+                    <hr>
+
+                    {% for comment in comments %}
+                        <div class="row">
+                            <div class="col-sm-1">
+                                <img src="/uploads/{{ comment.user.profilePicture }}" height="50px"
+                                     width="50px" style="border-radius: 50%">
+                            </div>
+                            <div class="col-sm-10">
+                                <div class="font-weight-bold">{{ comment.user.username }}</div>
+                                <div>{{ comment.comment }}</div>
+                            </div>
+                        </div>
+                        <br>
+                    {% endfor %}
+                    <div class="row">
+                        <div class="col-sm-1">
+                            <img src="/uploads/{{ user.profilePicture }}" height="50px"
+                                 width="50px" style="border-radius: 50%">
+                        </div>
+                        <div class="col-sm-10">
+                            <div class="font-weight-bold">{{ user.username }}</div>
+                            <div class="form-group mt-2">
+                                <form method="post" action="/blogs/commentCreate/" novalidate=""
+                                      enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="blogId" id="blogId" value="{{ blog.blogId }}">
+                                    <div class="form-group">
+                                        <textarea required id="comment" name="comment" class="form-control" rows="3"
+                                                  required
+                                                  placeholder="Enter Your Comment"
+                                                  aria-label="With textarea"></textarea>
+                                    </div>
+
+                                    <div class="float-right">
+                                        <button type="reset" class="btn btn-secondary btn-md">Clear</button>
+                                        <button type="submit" class="btn btn-primary btn-md">Post</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><br>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function validate() {
+            form.inputFile.value = "";
+            $("#filename").html("");
+            $('.custom-file-label').html("");
+        }
+
+        $(document).ready(function () {
+            $(".custom-file-input").on("change", function () {
+                var fnm = $(this).val().split("\\").pop();
+                $(this).next('.custom-file-label').html(fnm);
+                $("#filename").html(fnm);
+            })
+        });
+
+
+    </script>
+{% endblock %}

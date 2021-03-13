@@ -1,0 +1,31 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+    <form method="post" action="/blogs/delete/" novalidate="">
+        {% csrf_token %}
+
+        <input id="blogId" type="hidden" value="{{ blog.blogId }}"
+               name="blogId">
+
+        <div class="row mt-5">
+            <div class="col-sm-12">
+                <div class="jumbotron">
+                    <h4 class="text-danger ml-2">
+                        Are You Sure you want to delete '{{ blog.title }}' blog ?
+                    </h4><br>
+                    {% if errorMessage %}
+                        <h5 class="text-danger">{{ errorMessage }}</h5>
+                    {% endif %}
+                    <div class="float-right">
+                        <a class="btn btn-secondary"
+                           href="/blogs/view/?id={{ blog.blogId }}">Cancel</a>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+

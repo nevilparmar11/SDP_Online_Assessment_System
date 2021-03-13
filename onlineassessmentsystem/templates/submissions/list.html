@@ -1,0 +1,157 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/users/home">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/classroom">My Classrooms</a></li>
+                    {% if problem.doesBelongToContest %}
+                        <li class="breadcrumb-item"><a
+                                href="/classroom/view/?id={{ problem.contest.classroom.classId }}">{{ problem.contest.classroom.name }}</a>
+                        </li>
+                        <li class="breadcrumb-item"><a
+                                href="/contests/?classId={{ problem.contest.classroom.classId }}">Contests</a></li>
+                        <li class="breadcrumb-item"><a
+                                href="/problems/?contestId={{ problem.contest.contestId }}">{{ problem.contest.title }}</a>
+                        </li>
+                    <li class="breadcrumb-item"><a href="/problems/view/?pid={{ problem.problemId }}&&contestId={{ problem.contest.contestId }}">{{ problem.title }}</a></li>
+                    {% else %}
+                        <li class="breadcrumb-item"><a
+                                href="/classroom/view/?id={{ problem.lab.classroom.classId }}">{{ problem.lab.classroom.name }}</a>
+                        </li>
+                        <li class="breadcrumb-item"><a
+                                href="/labs/?classId={{ problem.lab.classroom.classId }}">Labs</a></li>
+                        <li class="breadcrumb-item"><a
+                                href="/problems/?labId={{ problem.lab.labId }}">{{ problem.lab.title }}</a></li>
+                    <li class="breadcrumb-item"><a href="/problems/view/?pid={{ problem.problemId }}&&labId={{ problem.lab.labId }}">{{ problem.title }}</a></li>
+                    {% endif %}
+                    <li class="breadcrumb-item active">Submissions</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header" style="background-color: white">
+                    <div style="text-align: center" class="h3 text-primary text-center">Submissions
+                        For "{{ problem.title }}"</div>
+                </div>
+                <div class="card-body">
+                    <table class="mt-5 table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>User</th>
+                            <th>Date Time</th>
+                            <th>Score</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for submission in submissions %}
+                            <tr>
+                                <td>{{ forloop.counter0 | add:submissions.start_index }}</td>
+                                <td>{{ submission.user.username }}</td>
+                                <td>{{ submission.submissionTime }}</td>
+                                <td>{{ submission.score }}</td>
+                                <td>
+                                    {% if not isOver %}
+                                        {% if user.username != submission.user.username %}
+                                            <a href="/submissions/view/?submissionId={{ submission.submissionId }}"
+                                               class="btn btn-primary disabled">View</a></td>
+                                        {% else %}
+                                            <a href="/submissions/view/?submissionId={{ submission.submissionId }}"
+                                                class="btn btn-primary">View</a></td>
+                                        {% endif %}
+                                    {% else %}
+                                        <a href="/submissions/view/?submissionId={{ submission.submissionId }}"
+                                       class="btn btn-primary">View</a></td>
+                                    {% endif %}
+                                </td>
+                                <td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <nav aria-label="...">
+                        <ul class="pagination justify-content-center">
+                            {% if username is not None %}
+                                {% if submissions.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="/submissions/list/?problemId={{ problem.problemId }}&&page={{ submissions.previous_page_number }}&&username={{ username }}">Previous</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled"><a class="page-link" href="#"
+                                                                      tabindex="-1">Previous</a>
+                                    </li>
+                                {% endif %}
+                                {% for i in submissions.paginator.page_range %}
+                                    {% if submissions.number == i %}
+                                        <li class="page-item active">
+                                            <a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                               href="/submissions/list/?problemId={{ problem.problemId }}&&page={{ i }}&&username={{ username }}">{{ i }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if submissions.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="/submissions/list/?problemId={{ problem.problemId }}&&page={{ submissions.next_page_number }}&&username={{ username }}">Next</a>
+                                    </li>
+                                {% else %}
+                                    <li class="disabled page-item">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                {% endif %}
+                            {% else %}
+
+                                {% if submissions.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="/submissions/list/?problemId={{ problem.problemId }}&&page={{ submissions.previous_page_number }}">Previous</a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled"><a class="page-link" href="#"
+                                                                      tabindex="-1">Previous</a>
+                                    </li>
+                                {% endif %}
+                                {% for i in submissions.paginator.page_range %}
+                                    {% if submissions.number == i %}
+                                        <li class="page-item active">
+                                            <a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                               href="/submissions/list/?problemId={{ problem.problemId }}&&page={{ i }}">{{ i }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if submissions.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="/submissions/list/?problemId={{ problem.problemId }}&&page={{ submissions.next_page_number }}">Next</a>
+                                    </li>
+                                {% else %}
+                                    <li class="disabled page-item">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                {% endif %}
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
