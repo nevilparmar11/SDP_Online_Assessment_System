@@ -34,7 +34,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body container">
-                        {% if grade is not None %}
+                        {% if grade is not None and currentTime >= lab.deadline %}
                             <div class="float-right">
                                 <div class="btn btn-sm btn-light">
                                     Graded &nbsp;<span class="badge badge-success badge-pill">{{ grade }}</span>

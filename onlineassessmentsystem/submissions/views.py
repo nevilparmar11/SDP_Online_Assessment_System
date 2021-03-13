@@ -104,7 +104,18 @@ def runCode(request):
 def submitCode(request, update=False, submission=None):
     code = request.GET.get('code')
     problemId = request.GET.get('problemId')
-    problem = Problem.objects.get(problemId=problemId)
+
+    if problemId is None:
+        return render(request, '404.html')
+
+    try:
+        problem = Problem.objects.get(problemId=problemId)
+    except ObjectDoesNotExist:
+        return render(request, '404.html')
+
+    if not customRoleBasedProblemAuthorization(request, problem, not problem.doesBelongToContest):
+        return render(request, 'accessDenied.html')
+
     filePath = getSubmissionFilePath(request, request.user, problem)
     uploadDirectory = settings.MEDIA_ROOT
 

@@ -8,13 +8,8 @@
   font-family: "Poppins", sans-serif;
   background: #fafafa;
 } */
-html {
-    position: relative;
-    min-height: 100%;
-}
 
 body {
-    bottom: 100px;
     font-family: "Poppins", sans-serif;
     background: #F3F3F3
 }
@@ -175,6 +170,10 @@ a.article:hover {
     width: 100%;
 }
 
+#dismiss {
+    display: none;
+}
+
 /* ---------------------------------------------------
     MEDIAQUERIES
 ----------------------------------------------------- */
@@ -182,6 +181,7 @@ a.article:hover {
 @media (max-width: 768px) {
     #sidebar {
         margin-left: -270px;
+        position: fixed !important;
     }
 
     #sidebar.active {
@@ -190,6 +190,37 @@ a.article:hover {
 
     #content {
         width: 100%;
+    }
+
+    .overlay {
+        display: none;
+        position: fixed;
+        /* full screen */
+        width: 100vw;
+        height: 100vh;
+        /* transparent black */
+        background: rgba(0, 0, 0, 0.7);
+        /* middle layer, i.e. appears below the sidebar */
+        z-index: 998;
+        opacity: 0;
+        /* animate the transition */
+        transition: all 0.5s ease-in-out;
+    }
+
+    /* display .overlay when it has the .active class */
+    .overlay.active {
+        display: block;
+        opacity: 1;
+    }
+
+    #dismiss {
+        display: block;
+        width: 35px;
+        height: 35px;
+        position: absolute;
+        /* top right corner of the sidebar */
+        top: 10px;
+        right: 10px;
     }
 
     #content.active {
@@ -203,25 +234,19 @@ a.article:hover {
 
 .footer {
     position: absolute;
-    bottom: 0;
     width: 100%;
-    white-space: nowrap;
-    line-height: 60px; /* Vertically center the text there */
+    bottom: 0 !important;
+    background: #dbdbdb;
+    padding: 20px 1rem;
+    transition: all 0.25s ease;
+    -moz-transition: all 0.25s ease;
+    -webkit-transition: all 0.25s ease;
+    -ms-transition: all 0.25s ease;
+    border-top: 1px solid #cdd6dc;
+    font-size: calc(0.875rem - 0.05rem);
+    font-family: "roboto", sans-serif;
 }
 
-/*.footer {*/
-/*  position: relative;*/
-/*  bottom: 0 !important;*/
-/*  background: #dbdbdb;*/
-/*  padding: 20px 1rem;*/
-/*  transition: all 0.25s ease;*/
-/*  -moz-transition: all 0.25s ease;*/
-/*  -webkit-transition: all 0.25s ease;*/
-/*  -ms-transition: all 0.25s ease;*/
-/*  border-top: 1px solid #cdd6dc;*/
-/*  font-size: calc(0.875rem - 0.05rem);*/
-/*  font-family: "roboto", sans-serif;*/
-/*}*/
 .footer a {
     font-size: inherit;
 }
