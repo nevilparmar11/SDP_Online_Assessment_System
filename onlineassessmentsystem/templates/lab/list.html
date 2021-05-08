@@ -29,6 +29,11 @@
         </div>
         <br>
     {% endif %}
+    {% if not gradedLabs %}
+        <div class="jumbotron w-100 text-center">
+            No Lab is added yet.
+        </div>
+    {% endif %}
     {% for lab,grade in gradedLabs.items %}
         <div class="row">
             <div class="col-12">
@@ -69,7 +74,7 @@
                                 Status : <span class="small text-success">Assigned</span>
                             {% else %}
                                 Status : <span class="small text-danger">Over!</span>
-                            {%  endif %}
+                            {% endif %}
                         </div>
                     </div>
                 </div>

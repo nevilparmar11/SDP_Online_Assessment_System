@@ -35,6 +35,11 @@
         <br>
     {% endif %}
 
+    {% if not gradedLabs %}
+        <div class="jumbotron w-100 text-center">
+            No Contest is added yet.
+        </div>
+    {% endif %}
     {% for contest in contests %}
         <div class="row">
             <div class="col-12">

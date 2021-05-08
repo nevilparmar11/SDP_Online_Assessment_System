@@ -5,10 +5,11 @@
 {% block headContent %}
     <style>
 
-        #description > p{
+        p{
             color: black;
             font-size: 17px;
         }
+
     </style>
 {% endblock %}
 
@@ -23,7 +24,7 @@
                     <div class="float-right mt-sm-1">
                         <b>Posted By :- {{ blog.user.username }}</b>
                         <img src="/uploads/{{ blog.user.profilePicture }}" style="border-radius: 50%"
-                             class="mt-lg-5 mt-sm-5" height="100px" width="100px">
+                             class="mt-lg-3 mt-sm-5" height="100px" width="100px">
                     </div>
                     {% if blog.user == user %}
                         <div class="mt-5 float-left">
@@ -33,7 +34,7 @@
                     {% endif %}
                 </div>
                 <div class="card-body">
-                    <div class="card-text" id="description">{{ blog.description | markdown | safe }}</div>
+                    <div class="card-text text-dark" id="description">{{ blog.description | markdown | safe }}</div>
 {#                    <script>#}
 {#                        document.getElementById('description').innerHTML =#}
 {#                            marked(`{{ blog.description }}`);#}

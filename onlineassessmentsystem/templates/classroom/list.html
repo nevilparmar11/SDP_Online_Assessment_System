@@ -28,6 +28,12 @@
     </div>
     <div class="row">
         {% if user.isStudent %}
+            {% if not classroomStudent %}
+                <div class="jumbotron w-100 mt-3 text-center">
+                    You have not joined any class yet.
+                </div>
+
+            {% endif %}
             {% for classroomStudent in classroomStudents %}
                 <div class="col-md-4 grid-margin">
                     <a href="/classroom/view?id={{ classroomStudent.classroom.classId }}">
@@ -54,6 +60,13 @@
                 </div>
             {% endfor %}
         {% else %}
+
+            {% if not classrooms %}
+                <div class="jumbotron w-100 mt-3 text-center">
+                    You have not created any class yet.
+                </div>
+
+            {% endif %}
             {% for classroom in classrooms %}
                 <div class="col-md-4 grid-margin">
                     <a href="/classroom/view?id={{ classroom.classId }}">
